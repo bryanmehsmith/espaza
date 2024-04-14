@@ -1,11 +1,11 @@
 {
   "name": "espaza",
   "version": "1.0.0",
-  "description": "espaza is an online service that provides online shopping to spaza customers",
+  "description": "espaza is an online service that provides online shopping to customers",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"No test specified!\""
+    "test": "jest --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,12 @@
   },
   "homepage": "https://github.com/bryanmehsmith/espaza#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "supertest": "^6.3.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
