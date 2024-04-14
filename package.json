@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "espaza is an online service that provides online shopping to spaza customers",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "start": "node index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bryanmehsmith/espaza.git"
