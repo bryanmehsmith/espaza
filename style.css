@@ -34,18 +34,39 @@ footer {
 
 .navContainer{
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
 }
 
-.navTitle{
-    display: flex;
-    justify-content: flex-start;
-}
 .navLinks{
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
+    padding: 5px;
 }
 
 .navIcons{
-    align-self: auto;
+    padding: 5px;
+}
+
+.bodyContainer{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+}
+
+.productItems{
+    background: rgb(174, 170, 189);
+    padding: 5px;
+    width: 200px;
+    height: 150px;
+    margin-top: 10px;
+    line-height: 150px;
+    color: white;
+    font-weight: bold;
+    font-size: 3em;
+    text-align: center;
+}
+
+ul{
+    list-style-type: none;
 }
