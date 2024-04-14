@@ -4,7 +4,8 @@
   "description": "espaza is an online service that provides online shopping to spaza customers",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "echo \"No test specified!\""
   },
   "repository": {
     "type": "git",
