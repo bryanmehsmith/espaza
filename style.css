@@ -8,12 +8,13 @@ body {
 header {
     background-color: #333;
     color: #fff;
-    padding: 20px 0;
+    padding: 20px;
     text-align: center;
 }
 
 header h1 {
     margin: 0;
+    color: #fff;
 }
 
 main {
@@ -29,4 +30,22 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
+}
+
+.navContainer{
+    display: flex;
+}
+
+.navTitle{
+    display: flex;
+    justify-content: flex-start;
+}
+.navLinks{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.navIcons{
+    align-self: auto;
 }
