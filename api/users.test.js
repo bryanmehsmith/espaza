@@ -3,7 +3,7 @@ const express = require('express');
 const users = require('./users');
 const app = express();
 app.use(express.json());
-app.use('/users', users);
+app.use('/api/users', users);
 
 beforeEach(async () => {
     newUser = {
@@ -12,15 +12,15 @@ beforeEach(async () => {
         password: 'testpassword'
     };
 
-    const response = await request(app).post('/users').send(newUser);
+    const response = await request(app).post('/api/users/register').send(newUser);
     createdUser = response.body;
 });
 
 afterEach(async () => {
-    await request(app).delete(`/users/${createdUser.id}`);
+    await request(app).delete(`/api/users/${createdUser.id}`);
 });
 
-describe('POST /users', () => {
+describe('POST /api/users/register', () => {
     it('should create a new user', async () => {
         newUser2 = {
             name: 'Test User2',
@@ -29,7 +29,7 @@ describe('POST /users', () => {
         };
 
         await request(app)
-            .post('/users')
+            .post('/api/users/register')
             .send(newUser2)
             .expect(201)
             .then(response => {
@@ -44,7 +44,7 @@ describe('POST /users', () => {
 
     it('should return an error', async () => {
         await request(app)
-            .post('/users')
+            .post('/api/users/register')
             .send(newUser)
             .expect(400)
             .then(response => {
@@ -55,10 +55,10 @@ describe('POST /users', () => {
     });
 });
 
-describe('GET /users', () => {
+describe('GET /api/users', () => {
     it('should return all users', async () => {
         await request(app)
-        .get('/users')
+        .get('/api/users')
         .expect(200)
         .then(response => {
             // Check the response body
@@ -68,10 +68,10 @@ describe('GET /users', () => {
     });
 });
 
-describe('GET /users/:id', () => {
+describe('GET /api/users/:id', () => {
     it('should return the Test User', async () => {
         await request(app)
-        .get(`/users/${createdUser.id}`)
+        .get(`/api/users/${createdUser.id}`)
         .expect(200)
         .then(response => {
             expect(response.body.name).toBe(newUser.name);
@@ -81,10 +81,26 @@ describe('GET /users/:id', () => {
     });
 });
 
-describe('DELETE /users/:id', () => {
+describe('POST /api/users/login', () => {
+    it('should return Success', async () => {
+        await request(app)
+        .post('/api/users/login')
+        .send({ email: newUser.email, password: newUser.password })
+        .expect(200)
+    });
+
+    it('should return Cannot find user', async () => {
+        await request(app)
+        .post('/api/users/login')
+        .send({ email: 'doesn\'t exist', password: 'doesn\'t matter' })
+        .expect(400)
+    });
+});
+
+describe('DELETE /api/users/:id', () => {
     it('should delete the Test User', async () => {
         await request(app)
-        .delete(`/users/${createdUser.id}`)
+        .delete(`/api/users/${createdUser.id}`)
         .expect(204);
     });
 });
