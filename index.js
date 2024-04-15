@@ -5,20 +5,22 @@ const fs = require('fs');
 const app = express();
 app.use(express.json());
 
+dir = __dirname || '/home/site/wwwroot';
+
 function addHF(filePath) {
-    const head = fs.readFileSync(path.join('/home/site/wwwroot', 'views', 'head.html'), 'utf8');
-    const header = fs.readFileSync(path.join('/home/site/wwwroot', 'views', 'header.html'), 'utf8');
-    const footer = fs.readFileSync(path.join('/home/site/wwwroot', 'views', 'footer.html'), 'utf8');
+    const head = fs.readFileSync(path.join(dir, 'views', 'head.html'), 'utf8');
+    const header = fs.readFileSync(path.join(dir, 'views', 'header.html'), 'utf8');
+    const footer = fs.readFileSync(path.join(dir, 'views', 'footer.html'), 'utf8');
     const originalContent = fs.readFileSync(filePath, 'utf8');
     return head + header + originalContent + footer;
 }
 
 // app.use('/', express.static('/home/site/wwwroot', {index: 'index.html'}));
-app.use(express.static(path.join('/home/site/wwwroot')));
+app.use(express.static(path.join(dir)));
 
 // Routes
-app.get('/', (req, res) => {res.send(addHF(path.join('/home/site/wwwroot', 'views', 'index.html')));});
-app.get('/login', (req, res) => {res.send(addHF(path.join('/home/site/wwwroot', 'views', 'login.html')));});
+app.get('/', (req, res) => {res.send(addHF(path.join(dir, 'views', 'index.html')));});
+app.get('/login', (req, res) => {res.send(addHF(path.join(dir, 'views', 'login.html')));});
 
 // API routes
 const users = require('./api/users');
