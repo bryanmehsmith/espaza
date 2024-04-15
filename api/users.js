@@ -63,7 +63,7 @@ router.get('/:id', (req, res) => {
 router.post('/login', (req, res) => {
     const user = users.find(user => user.email === req.body.email.toLowerCase());
     if (user == null) {
-        return res.status(400).send('Cannot find user');
+        return res.status(400).send();
     }
     try {
         if (bcrypt.compareSync(req.body.password, user.password)) {
