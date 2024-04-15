@@ -5,8 +5,8 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "command": "npm start",
-            "name": "Run npm start",
+            "command": "npm run start:watch",
+            "name": "Local Development",
             "request": "launch",
             "type": "node-terminal"
         },
@@ -16,13 +16,12 @@
             "type": "msedge",
             "url": "http://localhost:8080",
             "webRoot": "${workspaceFolder}"
-        },
-
+        }
     ],
     "compounds": [
         {
             "name": "Launch Edge and Debug Node.js",
-            "configurations": ["Launch Edge", "Run npm start"]
+            "configurations": ["Launch Edge", "Local Development"]
         }
     ]
 }

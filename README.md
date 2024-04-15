@@ -16,5 +16,10 @@ To install e-Spaza, follow these steps:
 
 To use e-Spaza, follow these steps:
 
+### Development:
+1. Run: `npm run start:watch`
+2. Goto: http://localhost:8080
+
+### Production:
 1. Goto https://espaza.azurewebsites.net
 2. Enjoy!
