@@ -8,12 +8,13 @@ body {
 header {
     background-color: #333;
     color: #fff;
-    padding: 20px 0;
+    padding: 20px;
     text-align: center;
 }
 
 header h1 {
     margin: 0;
+    color: #fff;
 }
 
 main {
@@ -29,4 +30,43 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
+}
+
+.navContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.navLinks{
+    padding: 5px;
+}
+
+.navIcons{
+    padding: 5px;
+}
+
+.bodyContainer{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+}
+
+.productItems{
+    background: rgb(174, 170, 189);
+    padding: 0px;
+    width: 250px;
+    height: 150px;
+    margin-top: 10px;
+    line-height: 150px;
+    color: white;
+    font-weight: bold;
+    font-size: 3em;
+    text-align: center;
+}
+
+ul{
+    list-style-type: none;
 }
