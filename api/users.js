@@ -1,12 +1,14 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
 
 const users = require('../db/users.json');
 
-router.post('/', (req, res) => {
+router.post('/register', (req, res) => {
     if (!req.body.email || !req.body.password || !req.body.name) {
         message = "";
         if (!req.body.email) message += "Email is required. ";
@@ -15,7 +17,8 @@ router.post('/', (req, res) => {
         res.status(400).json({ error: message });
         return;
     }
-    const index = users.findIndex(user => user.email === req.body.email);
+    email = req.body.email.toLowerCase()
+    const index = users.findIndex(user => user.email === email);
     if (index !== -1) {
         res.status(400).json({ error: 'User already exists' });
         return;
@@ -29,10 +32,10 @@ router.post('/', (req, res) => {
                 password: hash
             };
             users.push(newUser);
-            delete newUser.password;
-            const index = users.findIndex(user => user.email === req.body.email);
+            const index = users.findIndex(user => user.email === email);
             newUser.id = index;
-            res.status(201).json(newUser);
+            const { password, ...userWithoutPassword } = newUser;
+            res.status(201).json(userWithoutPassword);
         }
     });
 });
@@ -44,12 +47,32 @@ router.delete('/:id', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-    res.json(users);
+    const usersWithoutPasswords = users.map(user => {
+        const { password, ...userWithoutPassword } = user;
+        return userWithoutPassword;
+    });
+    res.json(usersWithoutPasswords);
 });
 
 router.get('/:id', (req, res) => {
     const user = users.find(user => user.id === Number(req.params.id));
-    res.json(user);
+    const { password, ...userWithoutPassword } = user;
+    res.json(userWithoutPassword);
+});
+
+router.post('/login', (req, res) => {
+    const user = users.find(user => user.email === req.body.email.toLowerCase());
+    if (user == null) {
+        return res.status(400).send();
+    }
+    try {
+        if (bcrypt.compareSync(req.body.password, user.password)) {
+            const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, { expiresIn: '1h' });
+            res.json({ token: token });
+        }
+    } catch {
+        res.status(500).send();
+    }
 });
 
 module.exports = router;
