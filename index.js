@@ -15,7 +15,6 @@ function addHF(filePath) {
     return head + header + originalContent + footer;
 }
 
-// app.use('/', express.static('/home/site/wwwroot', {index: 'index.html'}));
 app.use(express.static(path.join(dir)));
 
 // Routes
