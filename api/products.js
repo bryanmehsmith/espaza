@@ -22,15 +22,17 @@ if (!fs.existsSync(productsFilePath)) {
 
 const products = require(productsFilePath);
 
-setInterval(() => {
-    fs.writeFile(path.join(dir, 'db', 'products.json'), JSON.stringify(products), (err) => {
-        if (err) {
-            console.error('Error saving products to JSON file:', err);
-        } else {
-            console.log('Saved products to JSON file');
-        }
-    });
-}, 60000);
+if (process.env.NODE_ENV !== 'test') {
+    setInterval(() => {
+        fs.writeFile(path.join(dir, 'db', 'products.json'), JSON.stringify(products), (err) => {
+            if (err) {
+                console.error('Error saving products to JSON file:', err);
+            } else {
+                console.log('Saved products to JSON file');
+            }
+        });
+    }, 60000);
+}
 
 router.post('/', (req, res) => {
     if (!req.body.name || !req.body.serial || !req.body.price) {

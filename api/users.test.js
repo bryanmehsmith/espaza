@@ -35,6 +35,7 @@ describe('POST /api/users/register', () => {
             .then(response => {
             // Check the response body
             expect(response.body).toBeInstanceOf(Object);
+            expect(response.body.id).toBeDefined();
             expect(response.body.name).toBe(newUser2.name);
             expect(response.body.email).toBe(newUser2.email);
             expect(response.body.password).toBeUndefined();
@@ -77,6 +78,12 @@ describe('GET /api/users/:id', () => {
             expect(response.body.email).toBe(newUser.email);
             expect(response.body.password).toBeUndefined();
         });
+    });
+
+    it('should return Cannot find user', async () => {
+        await request(app)
+        .get('/api/users/999')
+        .expect(400);
     });
 });
 
