@@ -8,6 +8,13 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 
+const dbDirPath = path.join(__dirname, '../db');
+
+// Check if the db directory exists, if not, create it
+if (!fs.existsSync(dbDirPath)) {
+    fs.mkdirSync(dbDirPath);
+}
+
 const usersFilePath = path.join(__dirname, '../db/users.json');
 
 // Check if the file exists, if not, create it
