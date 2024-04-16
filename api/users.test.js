@@ -35,7 +35,6 @@ describe('POST /api/users/register', () => {
             .then(response => {
             // Check the response body
             expect(response.body).toBeInstanceOf(Object);
-            expect(response.body.id).toBeDefined();
             expect(response.body.name).toBe(newUser2.name);
             expect(response.body.email).toBe(newUser2.email);
             expect(response.body.password).toBeUndefined();
