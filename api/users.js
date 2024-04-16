@@ -5,8 +5,27 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 
-const users = require('../db/users.json');
+const usersFilePath = path.join(__dirname, '../db/users.json');
+
+// Check if the file exists, if not, create it
+if (!fs.existsSync(usersFilePath)) {
+    fs.writeFileSync(usersFilePath, JSON.stringify([]));
+}
+
+const users = require(usersFilePath);
+
+setInterval(() => {
+    fs.writeFile(path.join(dir, 'db', 'users.json'), JSON.stringify(users), (err) => {
+        if (err) {
+            console.error('Error saving products to JSON file:', err);
+        } else {
+            console.log('Saved users to JSON file');
+        }
+    });
+}, 60000);
 
 router.post('/register', (req, res) => {
     if (!req.body.email || !req.body.password || !req.body.name) {
@@ -29,11 +48,10 @@ router.post('/register', (req, res) => {
         } else {
             const newUser = {
                 ...req.body,
-                password: hash
+                password: hash,
+                role: 'Shopper'
             };
             users.push(newUser);
-            const index = users.findIndex(user => user.email === email);
-            newUser.id = index;
             const { password, ...userWithoutPassword } = newUser;
             res.status(201).json(userWithoutPassword);
         }
