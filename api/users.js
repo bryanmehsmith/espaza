@@ -12,7 +12,13 @@ const usersFilePath = path.join(__dirname, '../db/users.json');
 
 // Check if the file exists, if not, create it
 if (!fs.existsSync(usersFilePath)) {
-    fs.writeFileSync(usersFilePath, JSON.stringify([]));
+    const defaultUser = {
+        name: "admin",
+        email: "admin@espaza.net",
+        password: "$2b$10$JH8n63OU2.N2kF/JwfNM8./0chyqVUiqplAsEslfWuXSLyvTUlR1q",
+        role: "Shopper"
+    };
+    fs.writeFileSync(usersFilePath, JSON.stringify([defaultUser]));
 }
 
 const users = require(usersFilePath);
