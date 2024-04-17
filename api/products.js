@@ -3,8 +3,36 @@ const saltRounds = 10;
 
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 
-const products = require('../db/products.json');
+const dbDirPath = path.join(__dirname, '../db');
+
+// Check if the db directory exists, if not, create it
+if (!fs.existsSync(dbDirPath)) {
+    fs.mkdirSync(dbDirPath);
+}
+
+const productsFilePath = path.join(__dirname, '../db/products.json');
+
+// Check if the file exists, if not, create it
+if (!fs.existsSync(productsFilePath)) {
+    fs.writeFileSync(productsFilePath, JSON.stringify([]));
+}
+
+const products = require(productsFilePath);
+
+if (process.env.NODE_ENV !== 'test') {
+    setInterval(() => {
+        fs.writeFile(path.join(dir, 'db', 'products.json'), JSON.stringify(products), (err) => {
+            if (err) {
+                console.error('Error saving products to JSON file:', err);
+            } else {
+                console.log('Saved products to JSON file');
+            }
+        });
+    }, 60000);
+}
 
 router.post('/', (req, res) => {
     if (!req.body.name || !req.body.serial || !req.body.price) {

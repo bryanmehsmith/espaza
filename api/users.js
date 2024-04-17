@@ -5,8 +5,43 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 
-const users = require('../db/users.json');
+const dbDirPath = path.join(__dirname, '../db');
+
+// Check if the db directory exists, if not, create it
+if (!fs.existsSync(dbDirPath)) {
+    fs.mkdirSync(dbDirPath);
+}
+
+const usersFilePath = path.join(__dirname, '../db/users.json');
+
+// Check if the file exists, if not, create it
+if (!fs.existsSync(usersFilePath)) {
+    const defaultUser = {
+        id: 0,
+        name: "admin",
+        email: "admin@espaza.net",
+        password: "$2b$10$JH8n63OU2.N2kF/JwfNM8./0chyqVUiqplAsEslfWuXSLyvTUlR1q",
+        role: "Shopper"
+    };
+    fs.writeFileSync(usersFilePath, JSON.stringify([defaultUser]));
+}
+
+const users = require(usersFilePath);
+
+if (process.env.NODE_ENV !== 'test') {
+    setInterval(() => {
+        fs.writeFile(path.join(dir, 'db', 'users.json'), JSON.stringify(users), (err) => {
+            if (err) {
+                console.error('Error saving products to JSON file:', err);
+            } else {
+                console.log('Saved users to JSON file');
+            }
+        });
+    }, 60000);
+}
 
 router.post('/register', (req, res) => {
     if (!req.body.email || !req.body.password || !req.body.name) {
@@ -29,7 +64,8 @@ router.post('/register', (req, res) => {
         } else {
             const newUser = {
                 ...req.body,
-                password: hash
+                password: hash,
+                role: 'Shopper'
             };
             users.push(newUser);
             const index = users.findIndex(user => user.email === email);
@@ -56,8 +92,12 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     const user = users.find(user => user.id === Number(req.params.id));
-    const { password, ...userWithoutPassword } = user;
-    res.json(userWithoutPassword);
+    if (user) {
+        const { password, ...userWithoutPassword } = user;
+        res.json(userWithoutPassword);
+    } else {
+        res.status(400).json();
+    }
 });
 
 router.post('/login', (req, res) => {

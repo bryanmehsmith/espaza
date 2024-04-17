@@ -79,6 +79,12 @@ describe('GET /api/users/:id', () => {
             expect(response.body.password).toBeUndefined();
         });
     });
+
+    it('should return Cannot find user', async () => {
+        await request(app)
+        .get('/api/users/999')
+        .expect(400);
+    });
 });
 
 describe('POST /api/users/login', () => {
