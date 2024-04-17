@@ -4,8 +4,10 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ "dev" ]
+  pull_request:
+    branches:
+      - dev
+  workflow_dispatch:
 
 env:
   SECRET_KEY: 'test-key'
@@ -14,8 +16,16 @@ env:
   CALLBACK_URL: 'https://espaza.azurewebsites.net/auth/google/callback'
 
 jobs:
-  build:
+  check_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch
+        if: github.base_ref == 'dev' && startsWith(github.head_ref, 'dev-')
+        run: |
+          echo "ERROR: You can only merge to dev from dev-* branches."
+          exit 1
 
+  build:
     runs-on: ubuntu-latest
 
     strategy:

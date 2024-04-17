@@ -4,7 +4,7 @@
 name: Build and deploy Node.js app to Azure Web App - espaza
 
 on:
-  push:
+  pull_request:
     branches:
       - main
   workflow_dispatch:
@@ -16,6 +16,15 @@ env:
   CALLBACK_URL: 'https://espaza.azurewebsites.net/auth/google/callback'
 
 jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check branch
+        if: github.base_ref == 'main' && github.head_ref != 'dev'
+        run: |
+          echo "ERROR: You can only merge to main from dev."
+          exit 1
+
   build:
     runs-on: ubuntu-latest
 
