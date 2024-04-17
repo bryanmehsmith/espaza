@@ -11,6 +11,9 @@ on:
 
 env:
   SECRET_KEY: 'test-key'
+  GOOGLE_CLIENT_ID: ''
+  GOOGLE_CLIENT_SECRET: ''
+  CALLBACK_URL: 'https://espaza.azurewebsites.net/auth/google/callback'
 
 jobs:
   build:

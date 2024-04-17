@@ -22,7 +22,7 @@ if (!fs.existsSync(productsFilePath)) {
 
 const products = require(productsFilePath);
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' && process.env.npm_lifecycle_event !== 'start:watch') {
     setInterval(() => {
         fs.writeFile(path.join(dir, 'db', 'products.json'), JSON.stringify(products), (err) => {
             if (err) {
