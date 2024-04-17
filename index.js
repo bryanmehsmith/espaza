@@ -8,21 +8,21 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
-__dirname = __dirname || '/home/site/wwwroot';
+dir = __dirname || '/home/site/wwwroot';
 
 function addHF(filePath) {
-    const head = fs.readFileSync(path.join(__dirname, 'views', 'head.html'), 'utf8');
-    const header = fs.readFileSync(path.join(__dirname, 'views', 'header.html'), 'utf8');
-    const footer = fs.readFileSync(path.join(__dirname, 'views', 'footer.html'), 'utf8');
+    const head = fs.readFileSync(path.join(dir, 'views', 'head.html'), 'utf8');
+    const header = fs.readFileSync(path.join(dir, 'views', 'header.html'), 'utf8');
+    const footer = fs.readFileSync(path.join(dir, 'views', 'footer.html'), 'utf8');
     const originalContent = fs.readFileSync(filePath, 'utf8');
     return head + header + originalContent + footer;
 }
 
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(dir)));
 
 // Routes
-app.get('/', (req, res) => {res.send(addHF(path.join(__dirname, 'views', 'index.html')));});
-app.get('/login', (req, res) => {res.send(addHF(path.join(__dirname, 'views', 'login.html')));});
+app.get('/', (req, res) => {res.send(addHF(path.join(dir, 'views', 'index.html')));});
+app.get('/login', (req, res) => {res.send(addHF(path.join(dir, 'views', 'login.html')));});
 
 // API routes
 app.use(session({
