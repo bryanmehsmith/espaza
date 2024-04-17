@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check branch
-        if: github.base_ref == 'dev' && startsWith(github.head_ref, 'dev-')
+        if: github.base_ref == 'dev' && !startsWith(github.head_ref, 'dev-')
         run: |
           echo "ERROR: You can only merge to dev from dev-* branches."
           exit 1
