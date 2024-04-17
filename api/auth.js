@@ -22,7 +22,6 @@ passport.use(new GoogleStrategy({
   },
   function(accessToken, refreshToken, profile, cb) {
     let user = users.find(user => user.id === profile.id);
-    console.log(profile);
     let role = profile.id == 118139987500403906696 ? 'Admin' : 'Shopper';
     if (!user) {
       user = {
@@ -45,33 +44,35 @@ passport.use(new GoogleStrategy({
 router.get('/google',
   passport.authenticate('google', { scope: ['profile'] }));
 
-router.get('/google/callback', 
+router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     res.cookie('access_token', req.user.accessToken, { httpOnly: true, sameSite: 'strict' });
     res.redirect('/');
   });
 
-  passport.serializeUser(function(user, done) {
-    done(null, user.id);
-  });
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
 
-  passport.deserializeUser(function(id, done) {
-    const user = users.find(user => user.id === id);
-    done(null, user);
-  });
+passport.deserializeUser(function(id, done) {
+  const user = users.find(user => user.id === id);
+  done(null, user);
+});
 
 router.get('/isLoggedIn', (req, res) => {
-    if (req.cookies.access_token) {
-      res.json({ loggedIn: true });
-    } else {
-      res.json({ loggedIn: false });
-    }
-  });
+  res.set('X-Robots-Tag', 'noindex');
+  if (req.cookies.access_token) {
+    res.json({ loggedIn: true });
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
 
 router.get('/logout', (req, res) => {
-    res.clearCookie('access_token');
-    res.json({ loggedOut: true });
-  });
+  res.set('X-Robots-Tag', 'noindex');
+  res.clearCookie('access_token');
+  res.json({ loggedOut: true });
+});
 
 module.exports = router;
