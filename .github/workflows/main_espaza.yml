@@ -26,6 +26,7 @@ jobs:
           exit 1
 
   build:
+    needs: check_branch
     runs-on: ubuntu-latest
 
     steps:
