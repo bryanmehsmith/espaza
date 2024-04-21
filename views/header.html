@@ -1,27 +1,46 @@
-<header> 
-    <nav class="navContainer">
-        <h1>e-spaza</h1>
-        <div class="position-relative mx-auto">
-            <input type="number" placeholder="Search">
-            <button type="submit">
-                <i class="fas fa-search text-primary"></i>
-            </button>
-        </div>
-        <div class="navItem">
-           <a href="/" style="color: white;" class="navLinks">home</a> 
-           <a href="#" style="color: white;" class="navLinks">shop</a>
-           <a href="#" style="color: white;"class="navLinks">contact</a>
-        </div>
-        <div>
-            <a href="#" style="color: white;" class="navIcons">
-                <i class="fas fa-shopping-bag fa-2x"></i>
-            </a>
-            <a href="/login" style="color: white;" class="navIcons">
-                <i class="fas fa-user fa-2x"></i>
-            </a>
-       </div>
-    </nav>
-        
+<header>
+    <!-- Navigation bar -->
+<nav class="navbar navbar-expand-sm bg-body">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand text-center" href="#">
+            <img src="./e-spaza_transparent_red.png" width="150" height="150" alt="">
+        </a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Shop</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link">Contact</a>
+          </li>
+        </ul>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2 border-1 w-100 py-3 px-4 rounded-pill" type="search" placeholder="Search" aria-label="Search">
+          
+          <button type="submit" class = "btn btn-search bg-body">
+            <i class="fas fa-search fa-2x" style="color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class ="navIconsContainer">
+        <a href="#" class="navIcons" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
+            <i class="bi bi-cart4"></i>
+        </a>
+    </div>
+    <div class ="navIconsContainer">
+        <a href="./login.html" class="navIcons" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
+            <i class="bi bi-person-fill"></i>
+        </a>
+    </div>
+  </nav>
 </header>
+
 
 <script src="../scripts/header.js"></script>
