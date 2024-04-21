@@ -5,67 +5,11 @@ body {
     background-color: #f7f7f7;
 }
 
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-}
-
-header h1 {
-    margin: 0;
-    color: #fff;
-}
-
-main {
-    padding: 20px 0;
-}
-
 footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
     /* stick at bottom */
     position: fixed;
     bottom: 0;
     width: 100%;
-}
-
-
-.navContainer{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-}
-
-.navLinks{
-    padding: 5px;
-}
-
-.navIcons{
-    padding: 5px;
-}
-
-.bodyContainer{
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-evenly;
-}
-
-.productItems{
-    background: rgb(174, 170, 189);
-    padding: 0px;
-    width: 250px;
-    height: 150px;
-    margin-top: 10px;
-    line-height: 150px;
-    color: white;
-    font-weight: bold;
-    font-size: 3em;
-    text-align: center;
 }
 
 ul{
@@ -80,9 +24,24 @@ login {
     margin: 0;
 }
 
-.container {
+*{
+    padding: 0;
+    margin: 5px;
+    box-sizing: border-box;
+}
+
+.navIconsContainer{
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+}
+
+.navbar-brand{
+    font-size: 3rem;
+    color: rgb(175, 21, 21);
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #9b9b9b;;
+    
+}
+
+.navbar-brand:hover{
+    color: rgb(175, 21, 21);
 }
