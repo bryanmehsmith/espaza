@@ -12,12 +12,15 @@
     <link rel="stylesheet" href="../static/style.css">
     </head>
     <body>
+        <section>
+            <div>
+                <h1>
+                    User Management Console
+                </h1>
+            </div>
 
-        <div>
-            <h1>
-                User Management Console
-            </h1>
-        </div>
+        </section>
+        
         <table class="table table-hover">
             <thead>
               <tr>
@@ -30,19 +33,49 @@
             <tbody>
               <tr>
                 <th scope="row">1</th>
-                <td>12345</td>
                 <td>Test</td>
                 <td>User 1</td>
-                <td>TBD</td>
+                <td>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Staff">
+                        <label class="form-check-label" for="inlineCheckbox1">Staff</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Admin">
+                        <label class="form-check-label" for="inlineCheckbox2">Admin</label>
+                      </div>
+                </td>
+                <td>
+                    <button class="btn d-flex m-2 py-2 bg-light rounded-pill active">
+                        Edit
+                    </button>
+                </td>
               </tr>
               <tr>
-                <th scope="row">1</th>
-                <td>12345</td>
+                <th scope="row">2</th>
                 <td>Test</td>
                 <td>User 2</td>
-                <td>TBD</td>
+                <td>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="Staff">
+                        <label class="form-check-label" for="inlineCheckbox1">Staff</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="Admin">
+                        <label class="form-check-label" for="inlineCheckbox2">Admin</label>
+                      </div>
+                </td>
+                <td>
+                    <button class="btn d-flex m-2 py-2 bg-light rounded-pill active">
+                        Edit
+                    </button>
+                </td>
               </tr>
             </tbody>
           </table>
+
+          <div>
+            <button class="btn d-flex m-2 py-2 bg-light rounded-pill active">Add Users</button>
+          </div>
     </body>
 </html>
