@@ -34,7 +34,5 @@ login {
 
 .footer{
     color: rgb(175, 21, 21);
-     /* stick at bottom */
-     position: fixed;
-     bottom: 0;
+
 }
