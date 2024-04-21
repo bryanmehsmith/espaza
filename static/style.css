@@ -5,13 +5,6 @@ body {
     background-color: #f7f7f7;
 }
 
-footer {
-    /* stick at bottom */
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-
 ul{
     list-style-type: none;
 }
