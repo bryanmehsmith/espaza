@@ -1,77 +1,51 @@
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const express = require('express');
-const path = require('path');
-const fs = require('fs');
+const sqlite3 = require('sqlite3').verbose();
 const cookieParser = require('cookie-parser');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 const router = express.Router();
 router.use(cookieParser());
 
-const usersFilePath = path.join(__dirname, '../db/users.json');
-if (!fs.existsSync(usersFilePath)) {
-    fs.writeFileSync(usersFilePath, JSON.stringify([]));
+const dir = './db';
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
 }
-const users = require(usersFilePath);
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.CALLBACK_URL
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    let user = users.find(user => user.id === profile.id);
-    console.log(profile);
-    let role = profile.id == 118139987500403906696 ? 'Admin' : 'Shopper';
-    if (!user) {
-      user = {
-        provider: profile.provider,
-        id: profile.id,
-        name: profile.displayName,
-        role: role };
-      users.push(user);
-    } else {
-      user.provider = profile.provider;
-      user.name = profile.displayName;
-      user.role = role;
-    }
-    fs.writeFileSync(usersFilePath, JSON.stringify(users));
-    user.accessToken = accessToken;
-    return cb(null, user);
-  }
-));
+const db = new sqlite3.Database(path.join(dir, 'users.db'));
+db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)");
 
 router.get('/google',
   passport.authenticate('google', { scope: ['profile'] }));
 
-router.get('/google/callback', 
+router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
-    res.cookie('access_token', req.user.accessToken, { httpOnly: true, sameSite: 'strict' });
-    res.redirect('/');
-  });
-
-  passport.serializeUser(function(user, done) {
-    done(null, user.id);
-  });
-
-  passport.deserializeUser(function(id, done) {
-    const user = users.find(user => user.id === id);
-    done(null, user);
+    db.get("SELECT * FROM users WHERE googleId = ?", req.user.googleId, function(err, user) {
+      if (user) {
+        res.cookie('access_token', user.accessToken, { httpOnly: true, sameSite: 'strict' });
+        res.redirect('/');
+      } else {
+        res.redirect('/login');
+      }
+    });
   });
 
 router.get('/isLoggedIn', (req, res) => {
-    if (req.cookies.access_token) {
-      res.json({ loggedIn: true });
-    } else {
-      res.json({ loggedIn: false });
-    }
-  });
+  res.set('X-Robots-Tag', 'noindex');
+  if (req.cookies.access_token) {
+    res.json({ loggedIn: true });
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
 
 router.get('/logout', (req, res) => {
-    res.clearCookie('access_token');
-    res.json({ loggedOut: true });
-  });
+  res.set('X-Robots-Tag', 'noindex');
+  res.clearCookie('access_token');
+  res.json({ loggedOut: true });
+});
 
 module.exports = router;
