@@ -131,3 +131,4 @@ dist
 
 # Ignore DB to prevent overwrites
 db/*.json
+db/*.db
