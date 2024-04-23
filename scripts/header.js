@@ -7,7 +7,7 @@ fetch('/auth/isLoggedIn')
             document.querySelector('#user-link').onclick = function() {
                 fetch('/auth/logout')
             };
-            fetch('/auth/userRole')
+            fetch('/users/userRole')
                 .then(response => response.json())
                 .then(data => {
                     if (data.role !== 'Staff' && data.role !== 'Admin') {

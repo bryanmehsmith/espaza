@@ -55,7 +55,7 @@ router.get('/', ensureAdmin, async (req, res) => {
                 resolve(users);
             });
         });
-        res.json(users);
+        res.json({ users, requestingUserId: req.user });
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ message: 'An error occurred' });
