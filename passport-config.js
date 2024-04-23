@@ -40,7 +40,7 @@ function(accessToken, refreshToken, profile, cb) {
       user.provider = profile.provider;
       user.name = profile.displayName;
       user.role = role;
-      db.run("UPDATE users SET name = ?, role = ? WHERE id = ?", user.name, user.role, user.id, function(err) {
+      db.run("UPDATE users SET name = ? WHERE id = ?", user.name, user.id, function(err) {
         if (err) return cb(err);
         user.accessToken = accessToken;
         return cb(null, user);
