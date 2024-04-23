@@ -44,6 +44,7 @@ router.get('/logout', (req, res) => {
   res.set('X-Robots-Tag', 'noindex');
   res.clearCookie('access_token');
   res.json({ loggedOut: true });
+  req.session.destroy();
 });
 
 module.exports = router;

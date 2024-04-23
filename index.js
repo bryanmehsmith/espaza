@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 const fs = require('fs');
-const passport = require('./passport-config'); 
+const passport = require('./passport-config');
 require('dotenv').config();
 
 dir = __dirname || '/home/site/wwwroot';
@@ -28,7 +28,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 function setUser(req, res, next) {
-  // console.log(req.session);
   if (req.session && req.session.passport && req.session.passport.user) {
     req.user = req.session.passport.user;
   }
@@ -49,17 +48,18 @@ function addHF(filePath) {
 
 app.use(express.static('.'));
 
-// Routes
-app.get('/', (req, res) => {res.send(addHF('./views/index.html'));});
-app.get('/user-management', setUser, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
-
 // API routes
-
 const auth = require('./api/auth');
 app.use('/auth', auth);
 
 const users = require('./api/users');
 app.use('/users', setUser, users);
+
+// Routes
+app.get('/', setUser, (req, res) => {res.send(addHF('./views/index.html'));});
+// Admin Routes
+const { ensureAdmin } = require('./api/users');
+app.get('/user-management', setUser, ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
 
 port = process.env.PORT || 8080
 app.listen(port, () => {

@@ -21,6 +21,10 @@ fetch('/users')
         <td>${user.name}</td>
         <td>
           <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="user-${user.id}-Permission" id="user-${user.id}-Shopper" value="Shopper">
+            <label class="form-check-label" for="user-${user.id}-Shopper">Shopper</label>
+          </div>
+          <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="user-${user.id}-Permission" id="user-${user.id}-Staff" value="Staff">
             <label class="form-check-label" for="user-${user.id}-Staff">Staff</label>
           </div>
