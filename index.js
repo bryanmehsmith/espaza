@@ -1,23 +1,21 @@
 const express = require('express');
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
-const path = require('path');
 const fs = require('fs');
-const passport = require('./passport-config'); 
+const passport = require('./passport-config');
 require('dotenv').config();
 
 dir = __dirname || '/home/site/wwwroot';
 const app = express();
 
 // Middleware
-db_dir = './db'
-if (!fs.existsSync(db_dir)){
-  fs.mkdirSync(db_dir);
+if (!fs.existsSync('./db')){
+  fs.mkdirSync('./db');
 }
 
 app.use(session({
   store: new SQLiteStore({
-    dir: path.join(dir, 'db'),
+    dir: './db',
     db: 'session.db'
   }),
   secret: process.env.SECRET_KEY,
@@ -30,7 +28,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 function setUser(req, res, next) {
-  // console.log(req.session);
   if (req.session && req.session.passport && req.session.passport.user) {
     req.user = req.session.passport.user;
   }
@@ -42,27 +39,27 @@ app.use(setUser);
 app.use(express.json());
 
 function addHF(filePath) {
-    const head = fs.readFileSync(path.join(dir, 'views', 'head.html'), 'utf8');
-    const header = fs.readFileSync(path.join(dir, 'views', 'header.html'), 'utf8');
-    const footer = fs.readFileSync(path.join(dir, 'views', 'footer.html'), 'utf8');
+    const head = fs.readFileSync('./views/head.html', 'utf8');
+    const header = fs.readFileSync('./views/header.html', 'utf8');
+    const footer = fs.readFileSync('./views/footer.html', 'utf8');
     const originalContent = fs.readFileSync(filePath, 'utf8');
     return head + header + originalContent + footer;
 }
 
-app.use(express.static(path.join(dir)));
-
-// Routes
-app.get('/', (req, res) => {res.send(addHF(path.join(dir, 'views', 'index.html')));});
-app.get('/login', (req, res) => {res.send(addHF(path.join(dir, 'views', 'login.html')));});
-app.get('/user-management', setUser, (req, res) => {res.send(addHF(path.join(dir, 'views', 'internal', 'user-management.html')));});
+app.use(express.static('.'));
 
 // API routes
-
 const auth = require('./api/auth');
 app.use('/auth', auth);
 
 const users = require('./api/users');
 app.use('/users', setUser, users);
+
+// Routes
+app.get('/', setUser, (req, res) => {res.send(addHF('./views/index.html'));});
+// Admin Routes
+const { ensureAdmin } = require('./api/users');
+app.get('/user-management', setUser, ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
 
 port = process.env.PORT || 8080
 app.listen(port, () => {
