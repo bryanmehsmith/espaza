@@ -29,6 +29,11 @@ router.use(ensureAdmin);
 
 router.delete('/:id', ensureAdmin, async (req, res) => {
     try {
+        if (req.user === req.params.id) {
+            res.status(400).json({ message: 'You cannot delete your own user' });
+            return;
+        }
+
         await new Promise((resolve, reject) => {
             db.run("DELETE FROM users WHERE id = ?", req.params.id, function(err) {
                 if (err) reject(err);
@@ -69,6 +74,11 @@ router.get('/userRole', (req, res) => {
 
 router.put('/:id', ensureAdmin, async (req, res) => {
     try {
+        if (req.user === req.params.id) {
+            res.status(400).json({ message: 'You cannot update your own role' });
+            return;
+        }
+
         const validRoles = ['Shopper', 'Staff', 'Admin'];
         if (!validRoles.includes(req.body.role)) {
             res.status(400).json({ message: 'Invalid role' });
