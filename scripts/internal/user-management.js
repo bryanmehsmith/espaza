@@ -36,6 +36,11 @@ fetch('/users')
         <td>
           <button class="btn d-flex m-2 py-2 bg-light rounded-pill active" onclick="saveChanges('${user.id}')">Save Changes</button>
         </td>
+        <td>
+        <button type="submit" class = "btn d-flex m-2 py-2 fa-2x" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
+            <i class="bi bi-trash" onclick="deleteUser('${user.id}')"></i>
+          </button>
+        </td>
       </tr>
     `).join('');
 
