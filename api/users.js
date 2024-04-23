@@ -27,6 +27,7 @@ async function ensureAdmin(req, res, next) {
 
 router.use(ensureAdmin);
 
+// Admin routes
 router.delete('/:id', ensureAdmin, async (req, res) => {
     try {
         if (req.user === req.params.id) {
@@ -62,16 +63,6 @@ router.get('/', ensureAdmin, async (req, res) => {
     }
 });
 
-router.get('/userRole', (req, res) => {
-    db.get("SELECT role FROM users WHERE id = ?", req.user, function(err, row) {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        res.json({ role: row ? row.role : null });
-    });
-});
-
 router.put('/:id', ensureAdmin, async (req, res) => {
     try {
         if (req.user === req.params.id) {
@@ -96,6 +87,17 @@ router.put('/:id', ensureAdmin, async (req, res) => {
         console.error(err.message);
         res.status(500).json({ message: 'An error occurred' });
     }
+});
+
+// Self routes
+router.get('/self/userRole', (req, res) => {
+    db.get("SELECT role FROM users WHERE id = ?", req.user, function(err, row) {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json({ role: row ? row.role : null });
+    });
 });
 
 module.exports = router;

@@ -5,7 +5,6 @@ const fs = require('fs');
 const passport = require('./passport-config');
 require('dotenv').config();
 
-dir = __dirname || '/home/site/wwwroot';
 const app = express();
 
 // Middleware
@@ -23,7 +22,6 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false }
 }));
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -35,31 +33,26 @@ function setUser(req, res, next) {
 }
 
 app.use(setUser);
-
 app.use(express.json());
-
-function addHF(filePath) {
-    const head = fs.readFileSync('./views/head.html', 'utf8');
-    const header = fs.readFileSync('./views/header.html', 'utf8');
-    const footer = fs.readFileSync('./views/footer.html', 'utf8');
-    const originalContent = fs.readFileSync(filePath, 'utf8');
-    return head + header + originalContent + footer;
-}
-
 app.use(express.static('.'));
 
 // API routes
-const auth = require('./api/auth');
-app.use('/auth', auth);
-
-const users = require('./api/users');
-app.use('/users', setUser, users);
+app.use('/auth', require('./api/auth'));
+app.use('/users', setUser, require('./api/users'));
 
 // Routes
+function addHF(filePath) {
+  const head = fs.readFileSync('./views/head.html', 'utf8');
+  const header = fs.readFileSync('./views/header.html', 'utf8');
+  const footer = fs.readFileSync('./views/footer.html', 'utf8');
+  const originalContent = fs.readFileSync(filePath, 'utf8');
+  return head + header + originalContent + footer;
+}
+
 app.get('/', setUser, (req, res) => {res.send(addHF('./views/index.html'));});
 // Admin Routes
 const { ensureAdmin } = require('./api/users');
-app.get('/user-management', setUser, ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
+app.get('/internal/user-management', setUser, ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
 
 port = process.env.PORT || 8080
 app.listen(port, () => {
