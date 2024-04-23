@@ -1,16 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
-const path = require('path');
 
-const dbDirPath = path.join(__dirname, '../db');
+const dbDirPath = '../db';
 
 // Check if the db directory exists, if not, create it
 if (!fs.existsSync(dbDirPath)) {
     fs.mkdirSync(dbDirPath);
 }
 
-const productsFilePath = path.join(__dirname, '../db/products.json');
+const productsFilePath = '../db/products.json';
 
 // Check if the file exists, if not, create it
 if (!fs.existsSync(productsFilePath)) {
@@ -21,7 +20,7 @@ const products = require(productsFilePath);
 
 if (process.env.NODE_ENV !== 'test' && process.env.npm_lifecycle_event !== 'start:watch') {
     setInterval(() => {
-        fs.writeFile(path.join(dir, 'db', 'products.json'), JSON.stringify(products), (err) => {
+        fs.writeFile('./db/products.json', JSON.stringify(products), (err) => {
             if (err) {
                 console.error('Error saving products to JSON file:', err);
             } else {

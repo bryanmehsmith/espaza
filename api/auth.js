@@ -3,18 +3,16 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
-const path = require('path');
 require('dotenv').config();
 
 const router = express.Router();
 router.use(cookieParser());
 
-const dir = './db';
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
+if (!fs.existsSync('./db')){
+    fs.mkdirSync('./db');
 }
 
-const db = new sqlite3.Database(path.join(dir, 'users.db'));
+const db = new sqlite3.Database('./db/users.db');
 db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)");
 
 router.get('/google',
