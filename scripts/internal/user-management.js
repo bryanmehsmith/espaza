@@ -8,7 +8,10 @@ function saveChanges(userId) {
         body: JSON.stringify({ role }),
     })
     .then(response => response.json())
-    .then(data => console.log('Success:', data))
+    .then(data => {
+      console.log('Success:', data);
+      location.reload()
+  })
     .catch((error) => console.error('Error:', error));
 }
 
