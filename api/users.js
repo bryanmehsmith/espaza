@@ -5,7 +5,12 @@ const db = new sqlite3.Database('./db/users.db');
 
 db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)");
 
-async function ensureAdmin(req, res, next) {
+// Permissions middleware
+async function ensureExists(req, res, next) {
+    if (!req.user) {
+        res.status(404).json();
+        return;
+    }
     try {
         const user = await new Promise((resolve, reject) => {
             db.get("SELECT * FROM users WHERE id = ?", req.user, function(err, user) {
@@ -14,7 +19,7 @@ async function ensureAdmin(req, res, next) {
             });
         });
 
-        if (user && user.role === 'Admin') {
+        if (user) {
             next();
         } else {
             res.status(404);
@@ -25,7 +30,55 @@ async function ensureAdmin(req, res, next) {
     }
 }
 
-router.use(ensureAdmin);
+async function ensureInternal(req, res, next) {
+    if (!req.user) {
+        res.status(404).json();
+        return;
+    }
+    try {
+        const user = await new Promise((resolve, reject) => {
+            db.get("SELECT * FROM users WHERE id = ?", req.user, function(err, user) {
+                if (err) reject(err);
+                resolve(user);
+            });
+        });
+
+        const roles = ['Admin', 'Staff'];
+        if (user && roles.includes(user.role)) {
+            next();
+        } else {
+            res.status(404);
+        }
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+}
+
+async function ensureAdmin(req, res, next) {
+    if (!req.user) {
+        res.status(404).json();
+        return;
+    }
+    try {
+        const user = await new Promise((resolve, reject) => {
+            db.get("SELECT * FROM users WHERE id = ?", req.user, function(err, user) {
+                if (err) reject(err);
+                resolve(user);
+            });
+        });
+
+        const roles = ['Admin'];
+        if (user && roles.includes(user.role)) {
+            next();
+        } else {
+            res.status(404);
+        }
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'An error occurred' });
+    }
+}
 
 // Admin routes
 router.delete('/:id', ensureAdmin, async (req, res) => {
@@ -89,8 +142,10 @@ router.put('/:id', ensureAdmin, async (req, res) => {
     }
 });
 
+// Internal Routes
+
 // Self routes
-router.get('/self/userRole', (req, res) => {
+router.get('/self/userRole', ensureExists, (req, res) => {
     db.get("SELECT role FROM users WHERE id = ?", req.user, function(err, row) {
         if (err) {
             res.status(500).json({ error: err.message });
@@ -102,3 +157,5 @@ router.get('/self/userRole', (req, res) => {
 
 module.exports = router;
 module.exports.ensureAdmin = ensureAdmin;
+module.exports.ensureInternal = ensureInternal;
+module.exports.ensureExists = ensureExists;

@@ -6,6 +6,8 @@ const passport = require('./passport-config');
 require('dotenv').config();
 
 const app = express();
+app.use(express.json());
+app.use(express.static('.'));
 
 // Middleware
 if (!fs.existsSync('./db')){
@@ -31,14 +33,11 @@ function setUser(req, res, next) {
   }
   next();
 }
-
 app.use(setUser);
-app.use(express.json());
-app.use(express.static('.'));
 
 // API routes
 app.use('/auth', require('./api/auth'));
-app.use('/users', setUser, require('./api/users'));
+app.use('/users', require('./api/users'));
 
 // Routes
 function addHF(filePath) {
@@ -49,10 +48,18 @@ function addHF(filePath) {
   return head + header + originalContent + footer;
 }
 
-app.get('/', setUser, (req, res) => {res.send(addHF('./views/index.html'));});
+// Public Routes
+app.get('/', (req, res) => {res.send(addHF('./views/index.html'));})
+
+// Logged in Routes
+
+// Internal Routes
+const { ensureInternal } = require('./api/users');
+app.get('/internal', ensureInternal, (req, res) => {res.send(addHF('./views/internal/internal-landing.html'));});
+
 // Admin Routes
 const { ensureAdmin } = require('./api/users');
-app.get('/internal/user-management', setUser, ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
+app.get('/internal/user-management', ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
 
 port = process.env.PORT || 8080
 app.listen(port, () => {
