@@ -55,6 +55,9 @@ app.use(express.static(path.join(dir)));
 app.get('/', (req, res) => {res.send(addHF(path.join(dir, 'views', 'index.html')));});
 app.get('/login', (req, res) => {res.send(addHF(path.join(dir, 'views', 'login.html')));});
 app.get('/user-management', setUser, (req, res) => {res.send(addHF(path.join(dir, 'views', 'internal', 'user-management.html')));});
+app.get('/internal-home', (req, res) => {res.send(addHF(path.join(dir, 'views', 'internal','internal-home.html')));});
+app.get('/stock-management', (req, res) => {res.send(addHF(path.join(dir, 'views', 'internal','stock-management.html')));});
+
 
 // API routes
 
