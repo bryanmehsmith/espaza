@@ -10,11 +10,6 @@ login {
     margin: 0;
 }
 
-*{
-    padding: 0;
-    margin: 5px;
-    box-sizing: border-box;
-}
 
 .navIconsContainer{
     display: flex;
