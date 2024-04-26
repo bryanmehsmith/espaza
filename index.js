@@ -34,24 +34,6 @@ function setUser(req, res, next) {
 
 app.use(setUser);
 app.use(express.json());
-
-function addHF(filePath) {
-    const head = fs.readFileSync(path.join(dir, 'views', 'head.html'), 'utf8');
-    const header = fs.readFileSync(path.join(dir, 'views', 'header.html'), 'utf8');
-    const footer = fs.readFileSync(path.join(dir, 'views', 'footer.html'), 'utf8');
-    const originalContent = fs.readFileSync(filePath, 'utf8');
-    return head + header + originalContent + footer;
-}
-
-app.use(express.static(path.join(dir)));
-
-// Routes
-app.get('/', (req, res) => {res.send(addHF(path.join(dir, 'views', 'index.html')));});
-app.get('/login', (req, res) => {res.send(addHF(path.join(dir, 'views', 'login.html')));});
-app.get('/user-management', setUser, (req, res) => {res.send(addHF(path.join(dir, 'views', 'internal', 'user-management.html')));});
-app.get('/internal-home', (req, res) => {res.send(addHF(path.join(dir, 'views', 'internal','internal-home.html')));});
-app.get('/stock-management', (req, res) => {res.send(addHF(path.join(dir, 'views', 'internal','stock-management.html')));});
-
 app.use(express.static('.'));
 
 // API routes
@@ -71,6 +53,7 @@ app.get('/', setUser, (req, res) => {res.send(addHF('./views/index.html'));});
 // Admin Routes
 const { ensureAdmin } = require('./api/users');
 app.get('/internal/user-management', setUser, ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
+
 
 port = process.env.PORT || 8080
 app.listen(port, () => {
