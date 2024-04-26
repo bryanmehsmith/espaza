@@ -54,6 +54,7 @@ app.get('/', setUser, (req, res) => {res.send(addHF('./views/index.html'));});
 const { ensureAdmin } = require('./api/users');
 app.get('/internal/user-management', setUser, ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
 
+
 port = process.env.PORT || 8080
 app.listen(port, () => {
     console.log('Server is running on port ' + port);
