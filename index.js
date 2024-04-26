@@ -1,23 +1,20 @@
 const express = require('express');
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
-const path = require('path');
 const fs = require('fs');
-const passport = require('./passport-config'); 
+const passport = require('./passport-config');
 require('dotenv').config();
 
-dir = __dirname || '/home/site/wwwroot';
 const app = express();
 
 // Middleware
-db_dir = './db'
-if (!fs.existsSync(db_dir)){
-  fs.mkdirSync(db_dir);
+if (!fs.existsSync('./db')){
+  fs.mkdirSync('./db');
 }
 
 app.use(session({
   store: new SQLiteStore({
-    dir: path.join(dir, 'db'),
+    dir: './db',
     db: 'session.db'
   }),
   secret: process.env.SECRET_KEY,
@@ -25,12 +22,10 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false }
 }));
-
 app.use(passport.initialize());
 app.use(passport.session());
 
 function setUser(req, res, next) {
-  // console.log(req.session);
   if (req.session && req.session.passport && req.session.passport.user) {
     req.user = req.session.passport.user;
   }
@@ -38,8 +33,8 @@ function setUser(req, res, next) {
 }
 
 app.use(setUser);
-
 app.use(express.json());
+<<<<<<< HEAD
 
 function addHF(filePath) {
     const head = fs.readFileSync(path.join(dir, 'views', 'head.html'), 'utf8');
@@ -58,14 +53,27 @@ app.get('/user-management', setUser, (req, res) => {res.send(addHF(path.join(dir
 app.get('/internal-home', (req, res) => {res.send(addHF(path.join(dir, 'views', 'internal','internal-home.html')));});
 app.get('/stock-management', (req, res) => {res.send(addHF(path.join(dir, 'views', 'internal','stock-management.html')));});
 
+=======
+app.use(express.static('.'));
+>>>>>>> d1c01817ffae7a134da701ff081011dc40b12ac7
 
 // API routes
+app.use('/auth', require('./api/auth'));
+app.use('/users', setUser, require('./api/users'));
 
-const auth = require('./api/auth');
-app.use('/auth', auth);
+// Routes
+function addHF(filePath) {
+  const head = fs.readFileSync('./views/head.html', 'utf8');
+  const header = fs.readFileSync('./views/header.html', 'utf8');
+  const footer = fs.readFileSync('./views/footer.html', 'utf8');
+  const originalContent = fs.readFileSync(filePath, 'utf8');
+  return head + header + originalContent + footer;
+}
 
-const users = require('./api/users');
-app.use('/users', setUser, users);
+app.get('/', setUser, (req, res) => {res.send(addHF('./views/index.html'));});
+// Admin Routes
+const { ensureAdmin } = require('./api/users');
+app.get('/internal/user-management', setUser, ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
 
 port = process.env.PORT || 8080
 app.listen(port, () => {
