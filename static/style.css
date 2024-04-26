@@ -2,6 +2,11 @@ ul{
     list-style-type: none;
 }
 
+body { 
+    padding-top: 150px; 
+}
+
+
 login {
     display: flex;
     justify-content: center;
