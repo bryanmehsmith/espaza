@@ -34,7 +34,6 @@ function setUser(req, res, next) {
 
 app.use(setUser);
 app.use(express.json());
-<<<<<<< HEAD
 
 function addHF(filePath) {
     const head = fs.readFileSync(path.join(dir, 'views', 'head.html'), 'utf8');
@@ -53,9 +52,7 @@ app.get('/user-management', setUser, (req, res) => {res.send(addHF(path.join(dir
 app.get('/internal-home', (req, res) => {res.send(addHF(path.join(dir, 'views', 'internal','internal-home.html')));});
 app.get('/stock-management', (req, res) => {res.send(addHF(path.join(dir, 'views', 'internal','stock-management.html')));});
 
-=======
 app.use(express.static('.'));
->>>>>>> d1c01817ffae7a134da701ff081011dc40b12ac7
 
 // API routes
 app.use('/auth', require('./api/auth'));
