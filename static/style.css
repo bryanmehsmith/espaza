@@ -18,6 +18,7 @@ login {
 
 .navIconsContainer{
     display: flex;
+    align-items: center;
 }
 
 .navbar-brand{
