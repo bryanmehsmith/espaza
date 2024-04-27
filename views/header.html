@@ -1,54 +1,52 @@
 <header>
-    <!-- Navigation bar -->
-  <nav class="navbar navbar-expand-sm bg-light fixed-top">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-        <a class="navbar-brand text-center" href="/">
-            <img src="../static/images/e-spaza_transparent_red.png" width="100" height="100" alt="">
-        </a>
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Shop</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link">Contact</a>
-          </li>
-        </ul>
-        <form class="d-flex align-self-center" role="search">
-          <input class="form-control rounded-pill" type="search" placeholder="Search" aria-label="Search">
-          
-          <button type="submit" class = "btn btn-search bg">
-            <i class="fas fa-search fa-2x" style="color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;"></i>
-          </button>
-        </form>
-      </div>
-
-      <div class="hstack gap-1 d-flex align-self-center">
-        <div class ="navIconsContainer">
-          <a href="#" class="navIcons" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-              <i class="bi bi-cart4"></i>
-          </a>
-      </div>
-      <div class ="navIconsContainer">
-          <a href="/auth/google" class="navIcons" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-              <i class="bi bi-person-fill"></i>
-          </a>
-      </div>
-  
-      <div class ="navIconsContainer">
-        <a href="/internal-landing" class="navIcons" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-            <i class="fas fa-users-cog	"></i>
-        </a>
-      </div>
-
+  <!-- Navigation bar -->
+<nav class="navbar navbar-expand-sm bg-body">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand text-center" href="#">
+          <img src="../static/images/e-spaza_transparent_red.png" width="150" height="150" alt="">
+      </a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Shop</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Contact</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2 border-1 w-100 py-3 px-4 rounded-pill" type="search" placeholder="Search" aria-label="Search">
+        
+        <button type="submit" class = "btn btn-search bg-body">
+          <i class="fas fa-search fa-2x" style="color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;"></i>
+        </button>
+      </form>
     </div>
-  </nav>
+  </div>
+  <div class ="navIconsContainer">
+      <a href="#" class="navIcons" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
+          <i class="bi bi-cart4"></i>
+      </a>
+  </div>
+  <div class ="navIconsContainer">
+      <a class="navIcons" id="user-link" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
+          <i class="bi bi-person-fill"></i>
+      </a>
+  </div>
+
+  <div class ="navIconsContainer">
+    <a href="/internal/user-management" id="internal-link" class="navIcons" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
+        <i class="fas fa-users-cog	"></i>
+    </a>
+</div>
+  </div>
+</nav>
 </header>
 
 <script src="../scripts/header.js"></script>
