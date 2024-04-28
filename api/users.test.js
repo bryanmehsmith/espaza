@@ -30,7 +30,7 @@ beforeAll((done) => {
             });
         });
     });
-});
+}, 10000);
 
 afterAll((done) => {
   db.run('DELETE FROM users where id = ?', ['1'], () => {
