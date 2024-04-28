@@ -1,7 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const express = require('express');
-const sqlite3 = require('sqlite3');
+const sqlite3 = require('sqlite3').verbose();
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const uuid = require('uuid');
@@ -90,10 +90,10 @@ router.get('/google/callback',
         res.cookie('access_token', user.accessToken, { httpOnly: true, sameSite: 'strict' });
         res.redirect('/');
       } else {
-        res.redirect('/login');
+        res.redirect('/');
       }
     } catch (err) {
-      res.redirect('/login');
+      res.redirect('/');
     }
   });
 
