@@ -61,7 +61,8 @@ app.get('/internal', ensureInternal, (req, res) => {res.send(addHF('./views/inte
 
 // Admin Routes
 const { ensureAdmin } = require('./api/users');
-app.get('/internal/user-management', ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
+
+app.get('/internal/internal-landing', setUser, ensureAdmin, (req, res) => {res.send(addHF('./views/internal/internal-landing.html'));});
 
 port = process.env.PORT || 8080
 app.listen(port, () => {
