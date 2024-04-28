@@ -1,7 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const uuid = require('uuid');
@@ -73,7 +73,7 @@ passport.deserializeUser(async function(id, done) {
 router.get('/google', passport.authenticate('google', { scope: ['profile'] }));
 
 router.get('/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', { failureRedirect: '/' }),
   async (req, res) => {
     try {
       const user = await new Promise((resolve, reject) => {
