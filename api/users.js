@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('./db/users.db');
 
 db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)");
@@ -22,7 +22,7 @@ async function ensureExists(req, res, next) {
         if (user) {
             next();
         } else {
-            res.status(404);
+            res.status(404).send('User not found');
         }
     } catch (err) {
         console.error(err.message);
@@ -47,7 +47,7 @@ async function ensureInternal(req, res, next) {
         if (user && roles.includes(user.role)) {
             next();
         } else {
-            res.status(404);
+            res.status(404).send('User not found');
         }
     } catch (err) {
         console.error(err.message);
@@ -72,7 +72,7 @@ async function ensureAdmin(req, res, next) {
         if (user && roles.includes(user.role)) {
             next();
         } else {
-            res.status(404);
+            res.status(404).send('User not found');
         }
     } catch (err) {
         console.error(err.message);
@@ -94,7 +94,7 @@ router.delete('/:id', ensureAdmin, async (req, res) => {
                 resolve();
             });
         });
-        res.status(204).json({ message: 'User deleted successfully' });
+        res.status(200).send({ message: 'User deleted successfully' });
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ message: 'An error occurred' });
