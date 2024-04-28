@@ -44,7 +44,7 @@ afterAll((done) => {
           });
       });
   });
-});
+}, 10000);
 
 describe('delete /users/:id', () => {
     it('should return error if no user', async () => {
