@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 const fs = require('fs');
-const passport = require('./passport-config');
+const { passport } = require('./api/auth')
 require('dotenv').config();
 
 const app = express();
@@ -36,7 +36,8 @@ function setUser(req, res, next) {
 app.use(setUser);
 
 // API routes
-app.use('/auth', require('./api/auth'));
+const auth = require('./api/auth')
+app.use('/auth', auth);
 app.use('/users', require('./api/users'));
 
 // Routes
@@ -52,6 +53,7 @@ function addHF(filePath) {
 app.get('/', (req, res) => {res.send(addHF('./views/index.html'));})
 
 // Logged in Routes
+const { ensureExists } = require('./api/users');
 
 // Internal Routes
 const { ensureInternal } = require('./api/users');

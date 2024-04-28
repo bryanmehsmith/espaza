@@ -145,14 +145,22 @@ router.put('/:id', ensureAdmin, async (req, res) => {
 // Internal Routes
 
 // Self routes
-router.get('/self/userRole', ensureExists, (req, res) => {
-    db.get("SELECT role FROM users WHERE id = ?", req.user, function(err, row) {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
+router.get('/self/userRole', ensureExists, async (req, res) => {
+    try {
+        const row = await new Promise((resolve, reject) => {
+            db.get("SELECT role FROM users WHERE id = ?", req.user, function(err, row) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(row);
+                }
+            });
+        });
+
         res.json({ role: row ? row.role : null });
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 module.exports = router;
