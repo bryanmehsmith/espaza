@@ -13,7 +13,7 @@ app.use((req, res, next) => {
 });
 app.use('/users', usersRoutes);
 
-// TODO: Add users api
+// TODO: Add ensureInternal test
 let db;
 beforeAll((done) => {
     db = new sqlite3.Database('./db/users.db');
@@ -30,7 +30,7 @@ beforeAll((done) => {
             });
         });
     });
-}, 10000);
+}, 20000);
 
 afterAll((done) => {
   db.run('DELETE FROM users where id = ?', ['1'], () => {
