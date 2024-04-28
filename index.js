@@ -58,11 +58,12 @@ const { ensureExists } = require('./api/users');
 // Internal Routes
 const { ensureInternal } = require('./api/users');
 app.get('/internal', ensureInternal, (req, res) => {res.send(addHF('./views/internal/internal-landing.html'));});
+app.get('/internal/stock-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/stock-management.html'));});
 
 // Admin Routes
 const { ensureAdmin } = require('./api/users');
 
-app.get('/internal/internal-landing', setUser, ensureAdmin, (req, res) => {res.send(addHF('./views/internal/internal-landing.html'));});
+app.get('/internal/user-management', ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
 
 port = process.env.PORT || 8080
 app.listen(port, () => {
