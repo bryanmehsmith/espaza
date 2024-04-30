@@ -146,6 +146,39 @@ describe('put /users/:id', () => {
     });
 });
 
+describe('get /me', () => {
+    it('should return error if no user', async () => {
+        await request(app)
+        .get('/users/me')
+        .expect(404)
+    });
+
+    it('should return error for non-existing user', async () => {
+        await request(app)
+        .get('/users/me')
+        .set('x-user-id', '0')
+        .expect(404)
+    });
+
+    it('should return error for non-staff user', async () => {
+        await request(app)
+        .get('/users/me')
+        .set('x-user-id', '1')
+        .expect(404)
+    });
+
+    it('should return the user', async () => {
+        await request(app)
+        .get('/users/me')
+        .set('x-user-id', '2')
+        .expect(200)
+        .then(response => {
+            expect(response.body.user.id).toBe('2');
+            expect(response.body.user.role).toBe('Staff');
+        });
+    });
+});
+
 describe('get /self/userRole', () => {
     it('should return error if no user', async () => {
         await request(app)
