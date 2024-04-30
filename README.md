@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/bryanmehsmith/espaza/graph/badge.svg?token=9CKVAVF52T)](https://codecov.io/gh/bryanmehsmith/espaza)
 # e-Spaza
 
 ## Description
