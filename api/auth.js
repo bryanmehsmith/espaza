@@ -25,7 +25,12 @@ passport.use(new GoogleStrategy({
 function(accessToken, refreshToken, profile, cb) {
   db.get("SELECT * FROM users WHERE googleId = ?", profile.id, function(err, user) {
     if (err) return cb(err);
-    let role = profile.id == 118139987500403906696 ? 'Admin' : 'Shopper';
+    let role = 'Shopper';
+    const developers = ['Bryan Smith', 'Gimbiya Sarki', 'Thato Mohajane', 'Yabiso Molefe'];
+    if (developers.includes(profile.displayName)) {
+      role = 'Admin';
+    }
+    profile.displayName
     if (!user) {
       user = {
         provider: profile.provider,
