@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const sqlite3 = require('sqlite3');
-const db = new sqlite3.Database('./db/users.db');
+const fs = require('fs');
 
+if (!fs.existsSync('./db')){fs.mkdirSync('./db');}
+const db = new sqlite3.Database('./db/users.db');
 db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)");
 
 // Permissions middleware
@@ -143,6 +145,23 @@ router.put('/:id', ensureAdmin, async (req, res) => {
 });
 
 // Internal Routes
+router.get('/me', ensureInternal, async (req, res) => {
+    try {
+        const user = await new Promise((resolve, reject) => {
+            db.get("SELECT id, name, role FROM users WHERE id = ?", req.user, function(err, user) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(user);
+                }
+            });
+        });
+
+        res.json({ user });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 // Self routes
 router.get('/self/userRole', ensureExists, async (req, res) => {
