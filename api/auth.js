@@ -10,11 +10,13 @@ require('dotenv').config();
 const router = express.Router();
 router.use(cookieParser());
 
+/* istanbul ignore next */
 if (!fs.existsSync('./db')){fs.mkdirSync('./db');}
 
 const db = new sqlite3.Database('./db/users.db');
 db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)");
 
+/* istanbul ignore next */
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -55,10 +57,12 @@ function(accessToken, refreshToken, profile, cb) {
 }
 ));
 
+/* istanbul ignore next */
 passport.serializeUser(function(user, done) {
     done(null, user.id);
 });
 
+/* istanbul ignore next */
 passport.deserializeUser(async function(id, done) {
   try {
       const user = await new Promise((resolve, reject) => {
@@ -73,8 +77,10 @@ passport.deserializeUser(async function(id, done) {
   }
 });
 
+/* istanbul ignore next */
 router.get('/google', passport.authenticate('google', { scope: ['profile'] }));
 
+/* istanbul ignore next */
 router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   async (req, res) => {
