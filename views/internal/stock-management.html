@@ -24,47 +24,81 @@
         <table class="table table-hover align-middle">
             <thead>
               <tr>
+                <th scope="col">Product Id</th>
                 <th scope="col">Product Name</th>
                 <th scope="col">Category</th>
-                <th scope="col">Quantity</th>
                 <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
                 <th scope="col">Status</th>
-                <th scope="col">Action</th>
+                <th scope="col">Update Details</th>
+                <th scope="col">Delete Product</th>
               </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Apples</td>
-                    <td>Fruits</td>
-                    <td>2000</td>
+                    <td>#PA12</td>
+                    <td>Red Apples</td>
+                    <td>
+                        <form>
+                            <select id="productCategory" class="form-select">
+                                <option>Vegetables</option>
+                                <option selected>Fruits</option>
+                                <option>Bread</option>
+                                <option>Meat</option>
+                              </select>
+                        </form>  
+                    </td>
                     <td>R10</td>
-                    <td>In Stock</td>
-                    <td class="d-flex flex-row">
-                        <button type="submit" class = "btn d-flex m-2 py-2" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
-                        <button type="submit" class = "btn d-flex m-2 py-2" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-                            <i class="bi bi-eye-fill"></i>
-                        </button>
-                        <button type="submit" class = "btn d-flex m-2 py-2" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
+                    <td>1000</td>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inStockOption" value="inStockOption">
+                            <label class="form-check-label" for="inStockOption">In Stock</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="outOfStockOption" value="outOfStockOption">
+                            <label class="form-check-label" for="outOfStockOption">Out of Stock</label>
+                          </div>
+                    </td>
+                    <td>
+                        <button class="btn d-flex m-2 py-2 bg-light rounded-pill active">Save Changes</button>
+                    </td>
+                    <td>
+                        <button type="submit" class = "btn d-flex m-2 py-2 fa-2x" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
                             <i class="bi bi-trash"></i>
                         </button>
                     </td>
                 </tr>
                 <tr>
+                    <td>#PV05</td>
                     <td>Beetroot</td>
-                    <td>Vegetables</td>
-                    <td>0</td>
+                    <td>
+                        <form>
+                            <select id="productCategory" class="form-select">
+                                <option selected>Vegetables</option>
+                                <option>Fruits</option>
+                                <option>Bread</option>
+                                <option>Meat</option>
+                              </select>
+                        </form> 
+                    </td>
                     <td>R5</td>
-                    <td>Out of Stock</td>
-                    <td class="d-flex flex-row">
-                        <button type="submit" class = "btn d-flex m-2 py-2" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
-                        <button type="submit" class = "btn d-flex m-2 py-2" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-                            <i class="bi bi-eye-fill"></i>
-                        </button>
-                        <button type="submit" class = "btn d-flex m-2 py-2" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
+                    <td>200</td>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inStockOption" value="inStockOption">
+                            <label class="form-check-label" for="inStockOption">In Stock</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="outOfStockOption" value="outOfStockOption">
+                            <label class="form-check-label" for="outOfStockOption">Out of Stock</label>
+                          </div>
+                    </td>
+                    <td>
+                        <button class="btn d-flex m-2 py-2 bg-light rounded-pill active">Save Changes</button>
+                    </td>
+                    <td>
+                        <button type="submit" class = "btn d-flex m-2 py-2 fa-2x" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
                             <i class="bi bi-trash"></i>
                         </button>
                     </td>
