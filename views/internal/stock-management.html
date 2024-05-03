@@ -36,66 +36,73 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>#PA12</td>
-                    <td>Red Apples</td>
-                    <td>
-                        <form>
-                            <select id="productCategory" class="form-select">
-                                <option>Vegetables</option>
-                                <option selected>Fruits</option>
-                                <option>Bread</option>
-                                <option>Meat</option>
-                              </select>
-                        </form>  
-                    </td>
-                    <td>R10</td>
-                    <td>1000</td>
-                    <td>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inStockOption" value="inStockOption">
-                            <label class="form-check-label" for="inStockOption">In Stock</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="outOfStockOption" value="outOfStockOption">
-                            <label class="form-check-label" for="outOfStockOption">Out of Stock</label>
-                          </div>
-                    </td>
-                    <td>
-                        <button class="btn d-flex m-2 py-2 bg-light rounded-pill active">Save Changes</button>
-                    </td>
-                    <td>
-                        <button type="submit" class = "btn d-flex m-2 py-2 fa-2x" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
                     <td>#PV05</td>
                     <td>Beetroot</td>
-                    <td>
-                        <form>
-                            <select id="productCategory" class="form-select">
-                                <option selected>Vegetables</option>
-                                <option>Fruits</option>
-                                <option>Bread</option>
-                                <option>Meat</option>
-                              </select>
-                        </form> 
-                    </td>
+                    <td>Vegetables</td>
                     <td>R5</td>
                     <td>200</td>
+                    <td>In Stock</td>
                     <td>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inStockOption" value="inStockOption">
-                            <label class="form-check-label" for="inStockOption">In Stock</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="outOfStockOption" value="outOfStockOption">
-                            <label class="form-check-label" for="outOfStockOption">Out of Stock</label>
-                          </div>
-                    </td>
-                    <td>
-                        <button class="btn d-flex m-2 py-2 bg-light rounded-pill active">Save Changes</button>
+                        <!-- Button trigger edit modal -->
+                        <button class = "btn d-flex m-2 py-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
+                            <i class="bi bi-pencil-square fa-2x"></i>
+                        </button>
+  
+                        <!-- Modal -->
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Update Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <form class="row g-3">
+                                    <div class="col-md-6">
+                                      <label for="proudctName" class="form-label">Product Name</label>
+                                      <input type="text" class="form-control" id="productName">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="productCategory" class="form-label">Product Category</label>
+                                        <select id="productCategory" class="form-select">
+                                          <option selected>Vegetables</option>
+                                          <option>Fruits</option>
+                                          <option>Bread</option>
+                                          <option>Meat</option>
+                                        </select>
+                                    </div>
+                    
+                                    <div class="col-md-6">
+                                        <label for="productQuantity" class="form-label">Total Quantity</label>
+                                        <input type="number" id="productQuantity" class="form-control" />
+                                    </div>
+                    
+                                    <div class="col-md-6">
+                                        <label for="price" class="form-label">Unit Price</label>
+                                        <input type="number" id="price" class="form-control" />
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inStockOption" value="inStockOption">
+                                        <label class="form-check-label" for="inStockOption">In Stock</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="outOfStockOption" value="outOfStockOption">
+                                        <label class="form-check-label" for="outOfStockOption">Out of Stock</label>
+                                      </div>
+                    
+                                  </form>
+
+        
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save Changes</button>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
                     </td>
                     <td>
                         <button type="submit" class = "btn d-flex m-2 py-2 fa-2x" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
@@ -105,6 +112,7 @@
                 </tr>
             </tbody>
           </table>
+
           <br>
 
           <div>
@@ -113,7 +121,6 @@
             </a>
            
         </div> 
-
     </div>
      
 </body>
