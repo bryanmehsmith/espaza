@@ -59,6 +59,7 @@ const { ensureExists } = require('./api/users');
 const { ensureInternal } = require('./api/users');
 app.get('/internal', ensureInternal, (req, res) => {res.send(addHF('./views/internal/internal-landing.html'));});
 app.get('/internal/stock-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/stock-management.html'));});
+app.get('/internal/order-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/order-management.html'));});
 
 // Admin Routes
 const { ensureAdmin } = require('./api/users');
