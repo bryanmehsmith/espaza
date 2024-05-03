@@ -20,12 +20,6 @@ login {
     margin: 0;
 }
 
-
-.navIconsContainer{
-    display: flex;
-    align-items: center;
-}
-
 .navbar-brand{
     font-size: 3rem;
     color: rgb(175, 21, 21);
