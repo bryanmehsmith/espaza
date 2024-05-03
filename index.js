@@ -60,6 +60,8 @@ const { ensureInternal } = require('./api/users');
 app.get('/internal', ensureInternal, (req, res) => {res.send(addHF('./views/internal/internal-landing.html'));});
 app.get('/internal/stock-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/stock-management.html'));});
 app.get('/internal/order-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/order-management.html'));});
+app.get('/internal/add-product', ensureInternal, (req, res) => {res.send(addHF('./views/internal/add-product.html'));});
+
 
 // Admin Routes
 const { ensureAdmin } = require('./api/users');
