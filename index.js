@@ -40,6 +40,15 @@ const auth = require('./api/auth')
 app.use('/auth', auth);
 app.use('/users', require('./api/users'));
 
+// Shopping routes
+const products = require('./api/products'); 
+const cart = require('./api/cart'); 
+const orders = require('./api/orders'); 
+
+app.use('/products', products);
+app.use('/cart', cart);
+app.use('/orders', orders);
+
 // Routes
 function addHF(filePath) {
   const head = fs.readFileSync('./views/head.html', 'utf8');

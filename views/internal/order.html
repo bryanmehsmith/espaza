@@ -1,0 +1,23 @@
+<!-- order.html -->
+<body>
+    <div class="container">
+        <h1>Checkout</h1>
+        <form id="checkout-form" onsubmit="event.preventDefault(); checkoutOrder(document.getElementById('userId').value);">
+            <label for="fullName">Full Name:</label><br>
+            <input type="text" id="fullName" name="fullName" required><br>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" required><br>
+            <label for="shippingAddress">Shipping Address:</label><br>
+            <input type="text" id="shippingAddress" name="shippingAddress" required><br>
+            <label for="city">City:</label><br>
+            <input type="text" id="city" name="city" required><br>
+            <label for="state">State:</label><br>
+            <input type="text" id="state" name="state" required><br>
+            <label for="zip">Zip Code:</label><br>
+            <input type="text" id="zip" name="zip" required><br>
+        </form>
+    </div>
+
+    <!-- Include the orders.js script here -->
+    <script src="../scripts/order.js"></script>
+</body>
