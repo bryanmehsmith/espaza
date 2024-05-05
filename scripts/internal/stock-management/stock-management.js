@@ -48,10 +48,10 @@ fetch('/products')
             </select>
         </td>
         <td>
-          <input type="text" id="productPrice-${product.id}" value="${product.price}" onBlur="saveChanges('${product.id}', {'price' : this.value})">
+          <input type="number" id="productPrice-${product.id}" value="${product.price}" onBlur="saveChanges('${product.id}', {'price' : this.value})">
         </td>
         <td>
-          <input type="text" id="productQuantity-${product.id}" value="${product.quantity}" onBlur="saveChanges('${product.id}', {'quantity' : this.value})">
+          <input type="number" id="productQuantity-${product.id}" value="${product.quantity}" onBlur="saveChanges('${product.id}', {'quantity' : this.value})">
         </td>
         <td>
           ${product.quantity == 0 ? 'Out of Stock' : 'In Stock'}
@@ -67,3 +67,26 @@ fetch('/products')
     document.querySelector('tbody').innerHTML = productRows;
   })
   .catch(error => console.error('Error:', error));
+
+document.getElementById('search').addEventListener('keyup', function() {
+  let searchValue = this.value.toLowerCase();
+  let rows = document.querySelectorAll('.table tbody tr');
+
+  rows.forEach(row => {
+    let productName = row.querySelector('input[type="text"]').value.toLowerCase();
+    let productCategory = row.querySelector('select[id="productCategory"]').value.toLowerCase();
+    let productPrice = row.querySelector('input[id^="productPrice-"]').value;
+    let productQuantity = row.querySelector('input[id^="productQuantity-"]').value;
+
+    if (
+      productName.indexOf(searchValue) > -1 ||
+      productCategory.indexOf(searchValue) > -1 ||
+      Number(productPrice) === Number(searchValue) ||
+      Number(productQuantity) === Number(searchValue)
+    ) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+});
