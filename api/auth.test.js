@@ -4,9 +4,6 @@ const app = express();
 app.use(express.json());
 app.use('/auth', require('./auth'));
 
-// TODO: Add authentication api
-// Not sure how to test auth /auth/google & /auth/google/callback
-
 describe('get /auth/isLoggedIn', () => {
     it('should return that the user is not logged in', async () => {
         await request(app)
