@@ -61,3 +61,18 @@ fetch('/users')
     document.querySelector('tbody').innerHTML = userRows;
   })
   .catch(error => console.error('Error:', error));
+
+document.getElementById('search').addEventListener('keyup', function() {
+  let searchValue = this.value.toLowerCase();
+  let rows = document.querySelectorAll('.table tbody tr');
+
+  rows.forEach(row => {
+    let userName = row.cells[0].textContent.toLowerCase();
+
+    if (userName.indexOf(searchValue) > -1) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+});
