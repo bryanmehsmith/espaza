@@ -82,13 +82,6 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0D499EBF583C4115A52A75580386A244 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_D074020E62DB4B78888C929C4C60B9BC }}
 
-      - name: Move db folder for safekeeping
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.0.72
-          inlineScript: |
-            az webapp ssh --resource-group espaza_group --name espaza --command "mv /home/site/wwwroot/db /home/site"
-
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -96,10 +89,3 @@ jobs:
           app-name: 'espaza'
           slot-name: 'Production'
           package: .
-
-      - name: Move db folder back
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.0.72
-          inlineScript: |
-            az webapp ssh --resource-group espaza_group --name espaza --command "mv /home/site/db /home/site/wwwroot"
