@@ -10,7 +10,7 @@ const router = express.Router();
 if (!fs.existsSync('./db')){fs.mkdirSync('./db');}
 
 const db = new sqlite3.Database('./db/products.db');
-db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION)");
+db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT)");
 
 const { ensureInternal } = require('./users');
 
@@ -35,8 +35,14 @@ router.get('/', ensureInternal, async (req, res) => {
 router.put('/:id', ensureInternal, async (req, res) => {
     try {
         await new Promise((resolve, reject) => {
-            db.run("UPDATE products SET product_name = ?, category = ?, quantity = ?, price = ? WHERE id = ?",
-                [req.body.product_name, req.body.category, Number(req.body.quantity), Number(req.body.price), req.params.id],
+            db.run(`UPDATE products
+                    SET product_name = COALESCE(?, product_name),
+                        category = COALESCE(?, category),
+                        quantity = COALESCE(?, quantity),
+                        price = COALESCE(?, price),
+                        description = COALESCE(?, description)
+                    WHERE id = ?`,
+                [req.body.product_name, req.body.category, Number(req.body.quantity), Number(req.body.price), req.body.description, req.params.id],
                 function(err) {
                     /* istanbul ignore next */
                 if (err) reject(err);
@@ -72,7 +78,7 @@ router.delete('/:id', ensureInternal, async (req, res) => {
 
 router.post('/', ensureInternal, async (req, res) => {
     try {
-        const { product_name, category, quantity, price } = req.body;
+        const { product_name, category, quantity, price, description } = req.body;
         if ( !product_name || !category || !quantity || !price ) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
@@ -80,8 +86,8 @@ router.post('/', ensureInternal, async (req, res) => {
         const id = uuid.v4();
 
         await new Promise((resolve, reject) => {
-            const sql = "INSERT INTO products (id, product_name, category, quantity, price) VALUES (?, ?, ?, ?, ?)";
-            db.run(sql, [id, product_name, category, quantity, price], function(err) {
+            const sql = "INSERT INTO products (id, product_name, category, quantity, price, description) VALUES (?, ?, ?, ?, ?, ?)";
+            db.run(sql, [id, product_name, category, quantity, price, description], function(err) {
                 /* istanbul ignore next */
                 if (err) reject(err);
                 resolve();

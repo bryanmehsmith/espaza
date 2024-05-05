@@ -20,7 +20,7 @@ beforeAll((done) => {
     user_db = new sqlite3.Database('./db/users.db');
     user_db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", () => {
         user_db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['product', 'Staff'], () => {
-            db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION)", () => {
+            db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT)", () => {
                 db.run('INSERT INTO products (id, product_name, category, quantity, price) VALUES (?, ?, ?, ?, ?)', ['1', 'Apple', 'Fruit', 10, 5.0], () => {
                     db.run('INSERT INTO products (id, product_name, category, quantity, price) VALUES (?, ?, ?, ?, ?)', ['2', 'Beef', 'Meat', 5, 10.0], () => {
                         done();
@@ -35,8 +35,10 @@ afterAll((done) => {
     user_db.run('DELETE FROM users where id = ?', ['product'], () => {
         db.run('DELETE FROM products where id = ?', ['1'], () => {
             db.run('DELETE FROM products where id = ?', ['2'], () => {
-                db.close(() => {
-                    user_db.close(done);
+                db.run('DELETE FROM products where product_name = ?', ['test'], () => {
+                    db.close(() => {
+                        user_db.close(done);
+                    });
                 });
             });
         });
@@ -85,7 +87,7 @@ describe('post /products', () => {
         await request(app)
         .post('/products')
         .set('x-user-id', 'product')
-        .send({ product_name: 'Chicken', category: 'Meat', quantity: 10, price: 10 })
+        .send({ product_name: 'test', category: 'Meat', quantity: 10, price: 10, description: 'this is a test' })
         .expect(201)
         .then((response) => {
             expect(response.body.message).toBe('Product added successfully');

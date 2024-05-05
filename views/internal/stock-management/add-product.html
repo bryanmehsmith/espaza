@@ -4,9 +4,9 @@
             <h1 class="display-4">Add a new product</h1>
             <hr class="my-4">
 
-            <form class="row g-3">
+            <form class="row g-3" onsubmit="submitForm(event)">
                 <div class="col-md-6">
-                  <label for="proudctName" class="form-label">Product Name</label>
+                  <label for="productName" class="form-label">Product Name</label>
                   <input type="text" class="form-control" id="productName">
                 </div>
                 <div class="col-md-6">
@@ -40,11 +40,12 @@
                   </div>
 
                 <div>
-                    <a href="#">
+                    <a>
                         <button class="btn d-flex m-2 py-2 bg-light rounded-pill active">Save</button>
                     </a>
                 </div> 
               </form>
         </div>         
      </section>
+     <script src="/scripts/internal/add-product.js"></script>
 </body>
