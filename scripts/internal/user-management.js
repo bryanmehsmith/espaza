@@ -21,7 +21,8 @@ function deleteUser(id) {
   .then(response => response.json())
   .then(data => {
       console.log('Success:', data);
-      location.reload()
+      var row = document.getElementById('user-row-' + id);
+      row.parentNode.removeChild(row);
   })
   .catch((error) => console.error('Error:', error));
 }
@@ -33,7 +34,7 @@ fetch('/users')
     const requestingUserId = data.requestingUserId;
 
     const userRows = users.map(user => `
-      <tr>
+      <tr  id="user-row-${user.id}">
         <td>${user.name}</td>
         <td>
           <div class="form-check form-check-inline">
