@@ -2,22 +2,34 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
 const uuid = require('uuid');
+const multer  = require('multer');
 require('dotenv').config();
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, uuid.v4() + '_' + file.originalname)
+    }
+})
+
+const upload = multer({ storage: storage });
 
 /* istanbul ignore next */
 if (!fs.existsSync('./db')){fs.mkdirSync('./db');}
 
 const db = new sqlite3.Database('./db/products.db');
-db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT)");
+db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)");
 
 const { ensureInternal } = require('./users');
 
 router.get('/', ensureInternal, async (req, res) => {
     try {
         const products = await new Promise((resolve, reject) => {
-            db.all("SELECT id, product_name, category, quantity, price FROM products", function(err, products) {
+            db.all("SELECT id, product_name, category, quantity, price, image FROM products", function(err, products) {
                 /* istanbul ignore next */
                 if (err) reject(err);
                 resolve(products);
@@ -76,18 +88,21 @@ router.delete('/:id', ensureInternal, async (req, res) => {
     }
 });
 
-router.post('/', ensureInternal, async (req, res) => {
+router.post('/', ensureInternal, upload.single('formFile'), async (req, res) => {
     try {
         const { product_name, category, quantity, price, description } = req.body;
         if ( !product_name || !category || !quantity || !price ) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
-
-        const id = uuid.v4();
+        if (!req.file) {
+            imagePath = null;
+        } else {
+            imagePath = req.file.path;
+        }
 
         await new Promise((resolve, reject) => {
-            const sql = "INSERT INTO products (id, product_name, category, quantity, price, description) VALUES (?, ?, ?, ?, ?, ?)";
-            db.run(sql, [id, product_name, category, quantity, price, description], function(err) {
+            const sql = "INSERT INTO products (id, product_name, category, quantity, price, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            db.run(sql, [uuid.v4(), product_name, category, quantity, price, description, imagePath], function(err) {
                 /* istanbul ignore next */
                 if (err) reject(err);
                 resolve();

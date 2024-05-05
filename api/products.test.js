@@ -20,7 +20,7 @@ beforeAll((done) => {
     user_db = new sqlite3.Database('./db/users.db');
     user_db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", () => {
         user_db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['product', 'Staff'], () => {
-            db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT)", () => {
+            db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)", () => {
                 db.run('INSERT INTO products (id, product_name, category, quantity, price) VALUES (?, ?, ?, ?, ?)', ['1', 'Apple', 'Fruit', 10, 5.0], () => {
                     db.run('INSERT INTO products (id, product_name, category, quantity, price) VALUES (?, ?, ?, ?, ?)', ['2', 'Beef', 'Meat', 5, 10.0], () => {
                         done();
@@ -83,11 +83,16 @@ describe('delete /products/:id', () => {
 });
 
 describe('post /products', () => {
-    it('should add product', async () => {
+    it('should add product with image', async () => {
         await request(app)
         .post('/products')
         .set('x-user-id', 'product')
-        .send({ product_name: 'test', category: 'Meat', quantity: 10, price: 10, description: 'this is a test' })
+        .field('product_name', 'test')
+        .field('category', 'Meat')
+        .field('quantity', 10)
+        .field('price', 10)
+        .field('description', 'this is a test')
+        .attach('formFile', 'static/images/e-spaza_transparent_red.png')
         .expect(201)
         .then((response) => {
             expect(response.body.message).toBe('Product added successfully');
@@ -100,5 +105,20 @@ describe('post /products', () => {
         .set('x-user-id', 'product')
         .send({ category: 'Meat', quantity: 10, price: 10 })
         .expect(400)
+    });
+
+    it('should add product with image', async () => {
+        await request(app)
+        .post('/products')
+        .set('x-user-id', 'product')
+        .field('product_name', 'test')
+        .field('category', 'Meat2')
+        .field('quantity', 102)
+        .field('price', 12)
+        .field('description', 'this is a test')
+        .expect(201)
+        .then((response) => {
+            expect(response.body.message).toBe('Product added successfully');
+        });
     });
 });

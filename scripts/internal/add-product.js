@@ -6,21 +6,19 @@ function submitForm(event) {
     const productQuantity = document.getElementById('productQuantity').value;
     const price = document.getElementById('price').value;
     const productDescription = document.getElementById('productDescription').value;
+    const productImage = document.getElementById('formFile').files[0];
 
-    const product = {
-        product_name: productName,
-        category: productCategory,
-        quantity: productQuantity,
-        price: price,
-        description: productDescription
-    };
+    const formData = new FormData();
+    formData.append('product_name', productName);
+    formData.append('category', productCategory);
+    formData.append('quantity', productQuantity);
+    formData.append('price', price);
+    formData.append('description', productDescription);
+    formData.append('formFile', productImage);
 
     fetch('/products', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(product),
+        body: formData,
     })
     .then(response => response.json())
     .then(data => {
