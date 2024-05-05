@@ -16,6 +16,9 @@ fetch('/auth/isLoggedIn')
                 .then(data => {
                     // Logged in logic
                     const rolesLogged = ['Admin', 'Staff', 'Shopper'];
+                    if (rolesLogged.includes(data.role)) {
+                        document.querySelector('#notifications').style.display = 'block';
+                    }
 
                     // Internal logic
                     const rolesInternal = ['Admin', 'Staff'];

@@ -6,8 +6,8 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <a class="navbar-brand text-center" href="#">
-          <img src="../static/images/e-spaza_transparent_red.png" width="100" height="100" alt="">
+      <a class="navbar-brand text-center" href="/">
+          <img src="../static/images/e-spaza_transparent_red.png" width="120" height="120" alt="">
       </a>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
@@ -20,29 +20,38 @@
           <a class="nav-link">Contact</a>
         </li>
       </ul>
-      <form class="navbar-nav justify-content-center" role="search">
+      <form class="navbar-nav me-auto w-50" role="search">
         <input class="form-control me-2 border-1 w-100 py-3 px-4 rounded-pill" type="search" placeholder="Search" aria-label="Search">
         
         <button type="submit" class = "btn btn-search">
           <i class="fas fa-search fa-2x" style="color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;"></i>
         </button>
       </form>
-      <div class ="navIconsContainer">
-        <a href="#" class="navIcons" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-            <i class="bi bi-cart4"></i>
-        </a>
-      </div>
+
+      <div class="d-flex flex-row align-items-start">
+        <div class="m-2 py-2">
+          <a href="#" class="navIcons" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
+              <i class="bi bi-cart4"></i>
+          </a>
+        </div>
+    
+        <div class="m-2 py-2">
+          <a href = "/auth/google" class="navIcons" id="user-link" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
+              <i class="bi bi-person-fill"></i>
+          </a>
+        </div>
+    
+        <div class="m-2 py-2">
+          <a href="/internal" id="internal-link" class="navIcons" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;display:none">
+              <i class="fas fa-users-cog"></i>
+          </a>
+        </div>
   
-      <div class ="navIconsContainer">
-        <a href = "/auth/google" class="navIcons" id="user-link" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-            <i class="bi bi-person-fill"></i>
-        </a>
-      </div>
-  
-      <div class ="navIconsContainer">
-        <a href="/internal" id="internal-link" class="navIcons" style="font-size:40px;color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;display:none">
-            <i class="fas fa-users-cog	"></i>
-        </a>
+        <div class="m-2 py-2">
+          <a href="/internal" id="notifications" class="navIcons" style="font-size:40px;text-shadow:2px 2px 4px #9b9b9b;display:none">
+              <i class="bi bi-bell-fill"></i>
+          </a>
+        </div>
       </div>
     </div>
   </div>

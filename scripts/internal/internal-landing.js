@@ -20,6 +20,10 @@ fetch('/auth/isLoggedIn')
                         document.querySelector('#stock-management').style.display = 'block';
                     }
 
+                    if (rolesInternal.includes(data.role)) {
+                        document.querySelector('#order-management').style.display = 'block';
+                    }
+
                     // Admin logic
                     const rolesAdmin = ['Admin'];
                     if (rolesAdmin.includes(data.role)) {
