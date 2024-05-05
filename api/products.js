@@ -19,6 +19,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 /* istanbul ignore next */
+if (!fs.existsSync('./uploads')){fs.mkdirSync('./uploads');}
+/* istanbul ignore next */
 if (!fs.existsSync('./db')){fs.mkdirSync('./db');}
 
 const db = new sqlite3.Database('./db/products.db');
