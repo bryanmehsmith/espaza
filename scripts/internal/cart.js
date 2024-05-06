@@ -29,3 +29,26 @@ function removeFromCart(userId, itemId) {
     })
     .catch((error) => console.error('Error:', error));
 }
+
+fetch('/cart/items')
+  .then(response => response.json())
+  .then(data => {
+    const products = data;
+
+    const productRows = products.map(product => `
+      <tr id="product-row-${product.itemId}">
+        <td>
+         ${product.name}
+        </td>
+        <td>
+         ${product.price}
+        </td>
+        <td>
+          ${product.quantity}
+        </td>
+      </tr>
+    `).join('');
+
+    document.querySelector('tbody').innerHTML = productRows;
+  })
+  .catch(error => console.error('Error:', error));

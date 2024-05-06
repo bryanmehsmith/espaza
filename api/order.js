@@ -27,13 +27,13 @@ db.run(`
 `);
 
 // Routes
-router.post('/create', ensureLoggedIn, async (req, res) => {
-    const { userId, itemId, quantity, shippingAddress } = req.body;
-    db.run("INSERT INTO orders (userId, itemId, quantity, shippingAddress) VALUES (?, ?, ?, ?)", [userId, itemId, quantity, shippingAddress], function(err) {
+router.post('/create', /*ensureLoggedIn,*/ async (req, res) => {
+    //const { userId, itemId, quantity, shippingAddress } = req.body;
+    db.run("INSERT INTO orders (userId, itemId, quantity, shippingAddress) VALUES (?, ?, ?, ?)", [req.user, 0, 1, 'None'], function(err, rows) {
         if (err) {
             return console.error(err.message);
         }
-        res.json({ message: 'Order placed' });
+        res.json({ message: 'Order placed', rows });
     });
 });
 
@@ -48,7 +48,7 @@ router.put('/checkout/:id', ensureLoggedIn, async (req, res) => {
 });
 
 router.get('/', ensureLoggedIn, async (req, res) => {
-    const { userId } = req.user;
+    let userId = req.user;
     db.all("SELECT * FROM orders WHERE userId = ?", [userId], (err, rows) => {
         if (err) {
             throw err;

@@ -36,7 +36,6 @@ fetch('/products')
             <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                 <h4>${product.name}</h4>
                 <p>${product.description}</p>
-                <p>${stringData}</p>
                 <div class="d-flex justify-content-between flex-lg-wrap">
                     <p class="text-dark fs-5 fw-bold mb-0">R${product.price} / kg</p>
                     <button type="button" style="width: 100%;" class="btn btn-warning mt-auto shop-item-button" onclick="addToCart('${data.userId}', '${product.id}')"><i class="fa-solid fa-cart-shopping " style="margin-right: 4%;"></i>Add To Cart</button>

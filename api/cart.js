@@ -23,7 +23,7 @@ db.run(`
 `);
 
 // Routes
-router.post('/add', ensureLoggedIn, async (req, res) => {
+/*router.post('/add', ensureLoggedIn, async (req, res) => {
     const { userId, itemId, quantity } = req.body;
     db.run("INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)", [userId, itemId, quantity], function(err) {
         if (err) {
@@ -31,7 +31,76 @@ router.post('/add', ensureLoggedIn, async (req, res) => {
         }
         res.json({ message: 'Item added to cart' });
     });
-});
+});*/
+
+router.post('/add', /*ensureLoggedIn,*/ async (req, res) => {
+    const { userId, itemId, quantity } = req.body;
+
+    let query = "SELECT * FROM cart WHERE userId =? AND itemId =?";
+    let params = [];
+    params.push(`${userId}`, `${itemId}`);
+
+    let cart = {};
+
+
+    try {
+        const items = await new Promise((resolve, reject) => {
+            db.all(query, params, function(err, items) {
+                if (err) reject(err);
+                resolve(items);
+            });
+        });
+        //res.json({ userId, items});
+        cart = items;
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+
+    // If item found in the cart
+    if (cart) {
+
+        query = "UPDATE cart SET quantity = quantity + 1 WHERE itemId =?";
+        params = [];
+        params.push(itemId);
+
+        try {
+            const items = await new Promise((resolve, reject) => {
+                db.all(query, params, function(err, items) {
+                    if (err) reject(err);
+                    resolve(items);
+                });
+            });
+            res.json({ userId, items});
+            //cart = items;
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).json({ error: err.message });
+        }
+
+    } else {
+
+        query = "INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)";
+        params = [];
+        params.push(userId);
+        params.push(itemId);
+        params.push(quantity);
+
+        try {
+            const items = await new Promise((resolve, reject) => {
+                db.all(query, params, function(err, items) {
+                    if (err) reject(err);
+                    resolve(items);
+                });
+            });
+            res.json({ userId, items});
+            //cart = items;
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).json({ error: err.message });
+        }
+    }
+});  
 
 router.post('/remove', ensureLoggedIn, async (req, res) => {
     const { userId, itemId } = req.body;
@@ -43,9 +112,12 @@ router.post('/remove', ensureLoggedIn, async (req, res) => {
     });
 });
 
-router.get('/:userId', /*ensureLoggedIn,*/ async (req, res) => {
-    const { userId } = req.params;
-    db.all("SELECT * FROM cart WHERE userId = ?", [userId], (err, rows) => {
+router.get('/items', /*ensureLoggedIn,*/ async (req, res) => {
+    //let userId = req.user;
+    let userId = "4301aba7-ceab-4727-99e5-c396fb890ad4";
+    // SELECT * FROM cart WHERE userId = ?
+    let query = "SELECT userId, itemId, quantity, name, price FROM cart LEFT OUTER JOIN items ON cart.itemId = items.id WHERE userId = ?"
+    db.all(query, [userId], (err, rows) => {
         if (err) {
             throw err;
         }
