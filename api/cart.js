@@ -43,7 +43,7 @@ router.post('/remove', ensureLoggedIn, async (req, res) => {
     });
 });
 
-router.get('/:userId', ensureLoggedIn, async (req, res) => {
+router.get('/:userId', /*ensureLoggedIn,*/ async (req, res) => {
     const { userId } = req.params;
     db.all("SELECT * FROM cart WHERE userId = ?", [userId], (err, rows) => {
         if (err) {

@@ -14,11 +14,20 @@ db.run(`
     )
 `);
 
+//db.run("INSERT INTO items (id, name, category, price) VALUES ('Banana', 'Fruit', 10)");
+//db.run("INSERT INTO items (id, name, category, price) VALUES (2, 'Banana', 'Fruit', 10)");
+//db.run("INSERT INTO items (id, name, category, price) VALUES (3, 'Cabbage', 'Vegetables', 20)");
+
+//db.run("INSERT INTO items (id, name, category, price) VALUES (4, 'Wors', 'meat', 29)");
+//db.run("INSERT INTO items (id, name, category, price) VALUES (5, 'White Bread', 'bread', 20)");
+
 // Routes
 router.get('/', async (req, res) => {
     const { search, price, category } = req.query;
     let query = "SELECT * FROM items";
     let params = [];
+
+    let userId = req.user;
 
     if (search) {
         query += " WHERE (name LIKE ? OR description LIKE ?)";
@@ -42,7 +51,7 @@ router.get('/', async (req, res) => {
                 resolve(items);
             });
         });
-        res.json(items);
+        res.json({ userId, items});
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ error: err.message });
