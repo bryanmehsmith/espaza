@@ -35,7 +35,9 @@ afterAll((done) => {
     db.run('DELETE FROM cart WHERE userId = ?', ['shopper'], () => {
         db.run('DELETE FROM cart WHERE userId = ?', ['staff'], () => {
             db.run('DELETE FROM users WHERE id = ?', ['shopper'], () => {
-                db.close(done);
+                db.run('DELETE FROM users WHERE id = ?', ['staff'], () => {
+                    db.close(done);
+                });
             });
         });
     });
