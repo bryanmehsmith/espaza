@@ -17,12 +17,14 @@ let db;
 beforeAll((done) => {
     db = new sqlite3.Database('./db/espaza.db');
     db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", () => {
-        db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['shopper', 'Shopper'], () => {
-            db.run('insert into users (id, role) values (?, ?)', ['staff', 'Staff'], () => {
-                db.run("CREATE TABLE IF NOT EXISTS cart (id INTEGER PRIMARY KEY, userId INTEGER, itemId INTEGER, quantity INTEGER, FOREIGN KEY(userId) REFERENCES users(id), FOREIGN KEY(itemId) REFERENCES items(id)", () => {
-                    db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper', 1, 1], () => {
-                        db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper', 2, 1], () => {
-                            done();
+        db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)", () => {
+            db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['shopper', 'Shopper'], () => {
+                db.run('insert into users (id, role) values (?, ?)', ['staff', 'Staff'], () => {
+                    db.run("CREATE TABLE IF NOT EXISTS cart (id INTEGER PRIMARY KEY, userId INTEGER, itemId INTEGER, quantity INTEGER, FOREIGN KEY(userId) REFERENCES users(id), FOREIGN KEY(itemId) REFERENCES items(id)", () => {
+                        db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper', 1, 1], () => {
+                            db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper', 2, 1], () => {
+                                done();
+                            });
                         });
                     });
                 });
