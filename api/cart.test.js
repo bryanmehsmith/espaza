@@ -16,40 +16,80 @@ app.use('/cart', cartRoutes);
 let db;
 beforeAll((done) => {
     db = new sqlite3.Database('./db/espaza.db');
-    db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", () => {
-        db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)", () => {
-            db.run('INSERT INTO products (id, name, category, quantity, price, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)', [1, 'product1', 'category1', 10, 10.00, 'description1', 'image1'], () => {
-                db.run('INSERT INTO products (id, name, category, quantity, price, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)', [2, 'product2', 'category2', 20, 20.00, 'description2', 'image2'], () => {
-                    db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['shopper', 'Shopper'], () => {
-                        db.run('insert into users (id, role) values (?, ?)', ['staff', 'Staff'], () => {
-                            db.run("CREATE TABLE IF NOT EXISTS cart (id INTEGER PRIMARY KEY, userId INTEGER, itemId INTEGER, quantity INTEGER, FOREIGN KEY(userId) REFERENCES users(id), FOREIGN KEY(itemId) REFERENCES items(id)", () => {
-                                db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper', 1, 1], () => {
-                                    db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper', 2, 1], () => {
-                                        done();
-                                    });
-                                });
-                            });
-                        });
+    Promise.all([
+        new Promise((resolve, reject) => {
+            db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", (err) => {
+                if (err) reject(err);
+                db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['shopper', 'Shopper'], (err) => {
+                    if (err) reject(err);
+                    db.run('insert into users (id, role) values (?, ?)', ['staff', 'Staff'], (err) => {
+                        if (err) reject(err);
+                        resolve();
+                    });
+                });
+                resolve();
+            });
+        }),
+        new Promise((resolve, reject) => {
+            db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)", (err) => {
+                if (err) reject(err);
+                db.run('INSERT INTO products (id, name, category, quantity, price, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)', [1, 'product1', 'category1', 10, 10.00, 'description1', 'image1'], (err) => {
+                    if (err) reject(err);
+                    db.run('INSERT INTO products (id, name, category, quantity, price, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)', [2, 'product2', 'category2', 20, 20.00, 'description2', 'image2'], (err) => {
+                        if (err) reject(err);
+                        resolve();
                     });
                 });
             });
+        }),
+        new Promise((resolve, reject) => {
+            db.run("CREATE TABLE IF NOT EXISTS cart (id INTEGER PRIMARY KEY, userId INTEGER, itemId INTEGER, quantity INTEGER, FOREIGN KEY(userId) REFERENCES users(id), FOREIGN KEY(itemId) REFERENCES items(id))", (err) => {
+                if (err) reject(err);
+                resolve();
+            });
+        })
+    ]).then(() => {
+        db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper', 1, 1], (err) => {
+            if (err) {
+                console.error(err);
+                done(err);
+            }
+            db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper', 2, 1], (err) => {
+                if (err) {
+                    console.error(err);
+                    done(err);
+                }
+                done();
+            });
         });
+    }).catch((err) => {
+        console.error(err);
+        done(err);
     });
 }, 20000);
 
-afterAll((done) => {
-    db.run('DELETE FROM cart WHERE userId = ?', ['shopper'], () => {
-        db.run('DELETE FROM cart WHERE userId = ?', ['staff'], () => {
-            db.run('DELETE FROM products WHERE id = ?', [1], () => {
-                db.run('DELETE FROM products WHERE id = ?', [2], () => {
-                    db.run('DELETE FROM users WHERE id = ?', ['shopper'], () => {
-                        db.run('DELETE FROM users WHERE id = ?', ['staff'], () => {
-                            db.close(done);
-                        });
-                    });
-                });
-            });
+function deleteFromTable(table, condition, value) {
+    return new Promise((resolve, reject) => {
+        db.run(`DELETE FROM ${table} WHERE ${condition} = ?`, [value], (err) => {
+            if (err) reject(err);
+            resolve();
         });
+    });
+}
+
+afterAll((done) => {
+    Promise.all([
+        deleteFromTable('cart', 'userId', 'shopper'),
+        deleteFromTable('cart', 'userId', 'staff'),
+        deleteFromTable('products', 'id', 1),
+        deleteFromTable('products', 'id', 2),
+        deleteFromTable('users', 'id', 'shopper'),
+        deleteFromTable('users', 'id', 'staff')
+    ]).then(() => {
+        db.close(done);
+    }).catch((err) => {
+        console.error(err);
+        done(err);
     });
 }, 10000);
 
