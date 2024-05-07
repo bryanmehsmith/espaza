@@ -41,6 +41,15 @@ app.use('/auth', auth);
 app.use('/users', require('./api/users'));
 app.use('/products', require('./api/products'));
 
+// Shopping routes
+const products = require('./api/product'); 
+const cart = require('./api/cart'); 
+const orders = require('./api/order'); 
+
+app.use('/products', products);
+app.use('/cart', cart);
+app.use('/orders', orders);
+
 // Routes
 function addHF(filePath) {
   const head = fs.readFileSync('./views/head.html', 'utf8');
@@ -68,6 +77,10 @@ app.get('/internal/stock-management/add-product', ensureInternal, (req, res) => 
 app.get('/internal/order-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/order-management.html'));});
 app.get('/internal/order-details', ensureInternal, (req, res) => {res.send(addHF('./views/internal/order-details.html'));});
 
+
+// Shopping routes
+app.get('/internal/cart', /*ensureInternal,*/ (req, res) => {res.send(addHF('./views/internal/cart.html'));});
+app.get('/internal/order', /*ensureInternal,*/ (req, res) => {res.send(addHF('./views/internal/order.html'));});
 
 // Admin Routes
 const { ensureAdmin } = require('./api/users');
