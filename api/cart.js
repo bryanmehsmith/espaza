@@ -88,12 +88,14 @@ router.post('/add', /*ensureLoggedIn,*/ async (req, res) => {
         params.push(quantity);
 
         try {
+            
             const items = await new Promise((resolve, reject) => {
                 db.all(query, params, function(err, items) {
                     if (err) reject(err);
                     resolve(items);
                 });
             });
+
             res.json({ userId, items});
             //cart = items;
         } catch (err) {
@@ -103,17 +105,21 @@ router.post('/add', /*ensureLoggedIn,*/ async (req, res) => {
     }
 });  
 
-router.delete('/remove', ensureLoggedIn, async (req, res) => {
-    let itemId = req.body;
+router.delete('/remove/:id', /*ensureLoggedIn,*/ async (req, res) => {
+    let itemId = req.params.id;
+    let userId = req.user;
+
     try {
 
-        await new Promise((resolve, reject) => {
-            db.run("DELETE FROM cart WHERE userId = ? AND itemId = ?", [req.user, itemId], function(err) {
+        db.serialize(()=>{
+        new Promise((resolve, reject) => {
+            db.run('DELETE FROM cart WHERE itemId = ?', [itemId], function(err) {
                 if (err) reject(err);
                 resolve();
             });
         });
         res.status(200).send({ message: 'Item removed from cart' });
+    });
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ message: 'An error occurred' });
@@ -122,8 +128,7 @@ router.delete('/remove', ensureLoggedIn, async (req, res) => {
 
 router.get('/items', /*ensureLoggedIn,*/ async (req, res) => {
     let userId = req.user;
-    //let userId = "4301aba7-ceab-4727-99e5-c396fb890ad4";
-    // SELECT * FROM cart WHERE userId = ?
+
     let query = "SELECT userId, itemId, quantity, name, price FROM cart LEFT OUTER JOIN items ON cart.itemId = items.id WHERE userId = ?"
     db.all(query, [userId], (err, rows) => {
         if (err) {
