@@ -15,7 +15,7 @@ function addToCart(userId, itemId) {
 }
 
 function removeFromCart(itemId) {
-    fetch(`/cart/remove`, {
+    fetch(`/cart/remove/${itemId}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -46,6 +46,9 @@ fetch('/cart/items')
         <td>
           ${product.quantity}
         </td>
+        <td>
+        ${product.quantity * product.price}
+      </td>
         <td>
         <button type="submit" class = "btn d-flex m-2 py-2 fa-2x" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
             <i class="bi bi-trash" onclick="removeFromCart('${product.itemId}')"></i>
