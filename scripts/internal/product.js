@@ -52,12 +52,10 @@ fetch('/products')
             document.getElementById("vegetables").appendChild(productDiv);
         else if (product.category == 'Fruit')
             document.getElementById("fruits").appendChild(productDiv);
-        else if (product.category == 'meat')
+        else if (product.category == 'Meat')
             document.getElementById("meat").appendChild(productDiv);
-        else if (product.category == 'bread')
-            document.getElementById(product.category).appendChild(productDiv);
-
-        //document.getElementById("all-products").appendChild(productDiv);
+        else if (product.category == 'Bread')
+            document.getElementById("bread").appendChild(productDiv);
 
     });
 })

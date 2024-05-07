@@ -17,6 +17,7 @@ db.run(`
         userId INTEGER, 
         itemId INTEGER, 
         quantity INTEGER,
+        bill INTEGER,
         FOREIGN KEY(userId) REFERENCES users(id),
         FOREIGN KEY(itemId) REFERENCES items(id)
     )
@@ -58,7 +59,7 @@ router.post('/add', /*ensureLoggedIn,*/ async (req, res) => {
     }
 
     // If item found in the cart
-    if (cart) {
+    if (cart.length > 0) {
 
         query = "UPDATE cart SET quantity = quantity + 1 WHERE itemId =?";
         params = [];
@@ -102,19 +103,26 @@ router.post('/add', /*ensureLoggedIn,*/ async (req, res) => {
     }
 });  
 
-router.post('/remove', ensureLoggedIn, async (req, res) => {
-    const { userId, itemId } = req.body;
-    db.run("DELETE FROM cart WHERE userId = ? AND itemId = ?", [userId, itemId], function(err) {
-        if (err) {
-            return console.error(err.message);
-        }
-        res.json({ message: 'Item removed from cart' });
-    });
+router.delete('/remove', ensureLoggedIn, async (req, res) => {
+    let itemId = req.body;
+    try {
+
+        await new Promise((resolve, reject) => {
+            db.run("DELETE FROM cart WHERE userId = ? AND itemId = ?", [req.user, itemId], function(err) {
+                if (err) reject(err);
+                resolve();
+            });
+        });
+        res.status(200).send({ message: 'Item removed from cart' });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'An error occurred' });
+    }
 });
 
 router.get('/items', /*ensureLoggedIn,*/ async (req, res) => {
-    //let userId = req.user;
-    let userId = "4301aba7-ceab-4727-99e5-c396fb890ad4";
+    let userId = req.user;
+    //let userId = "4301aba7-ceab-4727-99e5-c396fb890ad4";
     // SELECT * FROM cart WHERE userId = ?
     let query = "SELECT userId, itemId, quantity, name, price FROM cart LEFT OUTER JOIN items ON cart.itemId = items.id WHERE userId = ?"
     db.all(query, [userId], (err, rows) => {
