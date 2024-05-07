@@ -1,13 +1,43 @@
 <!-- cart.html -->
 <body>
-    <div class="container">
-        <h1>Cart</h1>
-        <div id="cart">
-            <!-- Cart items will be dynamically inserted here -->
+    <section>
+        <div class="container">
+            <h1 class="display-4">Cart Items</h1>
+            <hr class="my-4">
+            <div class="row mb-2 d-flex mb-2">
+                <div class="col-sm-5 ms-auto p-2">
+                    <div class="text-sm-end">
+                        <button type="button" class="btn">
+                            <i class="bi bi-file-earmark-excel-fill fa-2x" style="color:rgb(175, 21, 21);"></i>
+                        </button>
+                        <button type="button" class="btn">
+                            <i class="bi bi-file-pdf-fill fa-2x" style="color:rgb(175, 21, 21);"></i>
+                            </i></button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button onclick="window.location.href='order.html'">Proceed to Checkout</button>
-    </div>
+    </section>
 
-    <!-- Include the cart.js script here -->
-    <script src="../scripts/cart.js"></script>
+    <div class="container">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                <th scope="col">Product Name</th>
+                <th scope="col">Price (ZAR)</th>
+                <th scope="col">Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+          <br>
+        <div>
+            <a href="/internal/checkout">
+                <button class="btn d-flex m-2 py-2 bg-light rounded-pill active" onclick="createOrder('4632e3b4-76f3-403a-874f-5cbf40bbe143', '123 Street, City, Country')">Purchase</button>
+            </a>
+        </div> 
+    </div>
+    <script src="/scripts/internal/order.js"></script>
+    <script src="/scripts/internal/cart.js"></script>
 </body>

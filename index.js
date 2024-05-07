@@ -70,7 +70,7 @@ app.get('/internal', ensureInternal, (req, res) => {res.send(addHF('./views/inte
 app.get('/internal/stock-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/stock-management.html'));});
 
 // Shopping routes
-app.get('/internal/order', /*ensureInternal,*/ (req, res) => {res.send(addHF('./views/internal/order.html'));});
+app.get('/internal/cart', /*ensureInternal,*/ (req, res) => {res.send(addHF('./views/internal/cart.html'));});
 app.get('/internal/checkout', /*ensureInternal,*/ (req, res) => {res.send(addHF('./views/internal/checkout.html'));});
 
 // Admin Routes

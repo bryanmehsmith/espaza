@@ -16,24 +16,51 @@ db.run(`
         id INTEGER PRIMARY KEY, 
         userId INTEGER, 
         itemId INTEGER, 
-        quantity INTEGER,
-        orderDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+        totalPrice INTEGER,
+        date DATETIME DEFAULT CURRENT_TIMESTAMP,
         status TEXT DEFAULT 'pending',
         paymentStatus TEXT DEFAULT 'unpaid',
-        shippingAddress TEXT,
         FOREIGN KEY(userId) REFERENCES users(id),
         FOREIGN KEY(itemId) REFERENCES items(id)
     )
 `);
 
+db.run(`
+    CREATE TABLE IF NOT EXISTS order_items (
+        id INTEGER PRIMARY KEY, 
+        userId INTEGER, 
+        itemId INTEGER, 
+        orderId INTEGER, 
+        quantity INTEGER, 
+        price INTEGER,
+        FOREIGN KEY(userId) REFERENCES users(id),
+        FOREIGN KEY(itemId) REFERENCES items(id),
+        FOREIGN KEY(itemId) REFERENCES orders(id)
+    )
+`);
+
 // Routes
-router.post('/create', /*ensureLoggedIn,*/ async (req, res) => {
-    //const { userId, itemId, quantity, shippingAddress } = req.body;
-    db.run("INSERT INTO orders (userId, itemId, quantity, shippingAddress) VALUES (?, ?, ?, ?)", [req.user, 0, 1, 'None'], function(err, rows) {
+router.post('/create', ensureLoggedIn, async (req, res) => {
+    const { itemId, totalPrice } = req.body;
+    let userId = req.user;
+    db.run("INSERT INTO orders (userId, itemId, totalPrice) VALUES (?, ?, ?)", [userId, itemId, totalPrice], function(err) {
         if (err) {
             return console.error(err.message);
         }
-        res.json({ message: 'Order placed', rows });
+        // Return the orderId
+        res.json({ message: 'Order placed', orderId: this.lastID });
+    });
+});
+
+router.post('/add', ensureLoggedIn, async (req, res) => {
+    const { orderId, itemId, quantity, price } = req.body;
+    let userId = req.user;
+    db.run("INSERT INTO orders (userId, itemId, orderId, quantity, price) VALUES (?, ?, ?, ?, ?)", [userId, itemId, orderId, quantity, price], function(err) {
+        if (err) {
+            return console.error(err.message);
+        }
+        // Return the orderId
+        res.json({ message: 'Order placed', orderId: this.lastID });
     });
 });
 

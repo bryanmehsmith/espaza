@@ -23,18 +23,7 @@ db.run(`
     )
 `);
 
-// Routes
-/*router.post('/add', ensureLoggedIn, async (req, res) => {
-    const { userId, itemId, quantity } = req.body;
-    db.run("INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)", [userId, itemId, quantity], function(err) {
-        if (err) {
-            return console.error(err.message);
-        }
-        res.json({ message: 'Item added to cart' });
-    });
-});*/
-
-router.post('/add', /*ensureLoggedIn,*/ async (req, res) => {
+router.post('/add', ensureLoggedIn, async (req, res) => {
     const { userId, itemId, quantity } = req.body;
 
     let query = "SELECT * FROM cart WHERE userId =? AND itemId =?";
@@ -120,9 +109,9 @@ router.delete('/remove', ensureLoggedIn, async (req, res) => {
     }
 });
 
-router.get('/items', /*ensureLoggedIn,*/ async (req, res) => {
+router.get('/items', ensureLoggedIn, async (req, res) => {
     let userId = req.user;
-    //let userId = "4301aba7-ceab-4727-99e5-c396fb890ad4";
+    
     // SELECT * FROM cart WHERE userId = ?
     let query = "SELECT userId, itemId, quantity, name, price FROM cart LEFT OUTER JOIN items ON cart.itemId = items.id WHERE userId = ?"
     db.all(query, [userId], (err, rows) => {
