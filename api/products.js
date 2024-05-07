@@ -23,7 +23,7 @@ if (!fs.existsSync('./uploads')){fs.mkdirSync('./uploads');}
 /* istanbul ignore next */
 if (!fs.existsSync('./db')){fs.mkdirSync('./db');}
 
-const db = new sqlite3.Database('./db/products.db');
+const db = new sqlite3.Database('./db/espaza.db');
 db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)");
 
 const { ensureInternal } = require('./users');

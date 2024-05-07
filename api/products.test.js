@@ -16,8 +16,8 @@ let db;
 let user_db;
 
 beforeAll((done) => {
-    db = new sqlite3.Database('./db/products.db');
-    user_db = new sqlite3.Database('./db/users.db');
+    db = new sqlite3.Database('./db/espaza.db');
+    user_db = new sqlite3.Database('./db/espaza.db');
     user_db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", () => {
         user_db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['product', 'Staff'], () => {
             db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)", () => {

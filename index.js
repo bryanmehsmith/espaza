@@ -17,7 +17,7 @@ if (!fs.existsSync('./db')){
 app.use(session({
   store: new SQLiteStore({
     dir: './db',
-    db: 'session.db'
+    db: 'espaza.db'
   }),
   secret: process.env.SECRET_KEY,
   resave: false,
