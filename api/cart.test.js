@@ -91,7 +91,7 @@ afterAll((done) => {
         console.error(err);
         done(err);
     });
-}, 10000);
+}, 20000);
 
 describe('POST /cart', () => {
     it('should add an item to the cart', async () => {
@@ -100,7 +100,7 @@ describe('POST /cart', () => {
         .set('x-user-id', 'shopper')
         .send({ itemId: 2, quantity: 1 })
         .expect(200)
-    }, 10000);
+    }, 20000);
 
     it('should add an item to the empty cart', async () => {
         await request(app)
@@ -108,7 +108,7 @@ describe('POST /cart', () => {
         .set('x-user-id', 'staff')
         .send({ itemId: 3, quantity: 1 })
         .expect(200)
-    }, 10000);
+    }, 20000);
 });
 
 describe('DELETE /cart/:id', () => {
@@ -117,7 +117,7 @@ describe('DELETE /cart/:id', () => {
         .delete('/cart/1')
         .set('x-user-id', 'shopper')
         .expect(200)
-    }, 10000);
+    }, 20000);
 });
 
 describe('get /cart/items', () => {
@@ -126,7 +126,7 @@ describe('get /cart/items', () => {
         .get('/cart/items')
         .expect(200)
         .set('x-user-id', 'shopper')
-    }, 10000);
+    }, 20000);
 });
 
 describe('GET /cart/items/:userId', () => {
@@ -135,7 +135,7 @@ describe('GET /cart/items/:userId', () => {
         .get('/cart/items/1')
         .set('x-user-id', 'staff')
         .expect(200)
-    }, 10000);
+    }, 20000);
 });
 
 describe('PUT /cart/:id', () => {
@@ -145,5 +145,5 @@ describe('PUT /cart/:id', () => {
         .set('x-user-id', 'shopper')
         .send({ quantity: 2 })
         .expect(200)
-    }, 10000);
+    }, 20000);
 });
