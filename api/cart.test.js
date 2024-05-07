@@ -20,9 +20,9 @@ beforeAll((done) => {
         new Promise((resolve, reject) => {
             db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", (err) => {
                 if (err) reject(err);
-                db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['shopper', 'Shopper'], (err) => {
+                db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['shopper-cart', 'Shopper'], (err) => {
                     if (err) reject(err);
-                    db.run('insert into users (id, role) values (?, ?)', ['staff', 'Staff'], (err) => {
+                    db.run('insert into users (id, role) values (?, ?)', ['staff-cart', 'Staff'], (err) => {
                         if (err) reject(err);
                         resolve();
                     });
@@ -33,9 +33,9 @@ beforeAll((done) => {
         new Promise((resolve, reject) => {
             db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)", (err) => {
                 if (err) reject(err);
-                db.run('INSERT INTO products (id, name, category, quantity, price, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)', [1, 'product1', 'category1', 10, 10.00, 'description1', 'image1'], (err) => {
+                db.run('INSERT INTO products (id, name, category, quantity, price, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)', ['1-cart', 'product1', 'category1', 10, 10.00, 'description1', 'image1'], (err) => {
                     if (err) reject(err);
-                    db.run('INSERT INTO products (id, name, category, quantity, price, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)', [2, 'product2', 'category2', 20, 20.00, 'description2', 'image2'], (err) => {
+                    db.run('INSERT INTO products (id, name, category, quantity, price, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)', ['2-cart', 'product2', 'category2', 20, 20.00, 'description2', 'image2'], (err) => {
                         if (err) reject(err);
                         resolve();
                     });
@@ -49,12 +49,12 @@ beforeAll((done) => {
             });
         })
     ]).then(() => {
-        db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper', 1, 1], (err) => {
+        db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper-cart', '1-cart', 1], (err) => {
             if (err) {
                 console.error(err);
                 done(err);
             }
-            db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper', 2, 1], (err) => {
+            db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper-cart', '2-cart', 1], (err) => {
                 if (err) {
                     console.error(err);
                     done(err);
@@ -79,12 +79,12 @@ function deleteFromTable(table, condition, value) {
 
 afterAll((done) => {
     Promise.all([
-        deleteFromTable('cart', 'userId', 'shopper'),
-        deleteFromTable('cart', 'userId', 'staff'),
-        deleteFromTable('products', 'id', 1),
-        deleteFromTable('products', 'id', 2),
-        deleteFromTable('users', 'id', 'shopper'),
-        deleteFromTable('users', 'id', 'staff')
+        deleteFromTable('cart', 'userId', 'shopper-cart'),
+        deleteFromTable('cart', 'userId', 'staff-cart'),
+        deleteFromTable('products', 'id', '1-cart'),
+        deleteFromTable('products', 'id', '2-cart'),
+        deleteFromTable('users', 'id', 'shopper-cart'),
+        deleteFromTable('users', 'id', 'staff-cart')
     ]).then(() => {
         db.close(done);
     }).catch((err) => {
@@ -97,16 +97,16 @@ describe('POST /cart', () => {
     it('should add an item to the cart', async () => {
         await request(app)
         .post('/cart')
-        .set('x-user-id', 'shopper')
-        .send({ itemId: 2, quantity: 1 })
+        .set('x-user-id', 'shopper-cart')
+        .send({ itemId: '2-cart', quantity: 1 })
         .expect(200)
     }, 20000);
 
     it('should add an item to the empty cart', async () => {
         await request(app)
         .post('/cart')
-        .set('x-user-id', 'staff')
-        .send({ itemId: 3, quantity: 1 })
+        .set('x-user-id', 'staff-cart')
+        .send({ itemId: '3-cart', quantity: 1 })
         .expect(200)
     }, 20000);
 });
@@ -114,8 +114,8 @@ describe('POST /cart', () => {
 describe('DELETE /cart/:id', () => {
     it('should delete product', async () => {
         await request(app)
-        .delete('/cart/1')
-        .set('x-user-id', 'shopper')
+        .delete('/cart/1-cart')
+        .set('x-user-id', 'shopper-cart')
         .expect(200)
     }, 20000);
 });
@@ -125,15 +125,15 @@ describe('get /cart/items', () => {
         await request(app)
         .get('/cart/items')
         .expect(200)
-        .set('x-user-id', 'shopper')
+        .set('x-user-id', 'shopper-cart')
     }, 20000);
 });
 
 describe('GET /cart/items/:userId', () => {
     it('should get all items in the cart for a user', async () => {
         await request(app)
-        .get('/cart/items/1')
-        .set('x-user-id', 'staff')
+        .get('/cart/items/1-cart')
+        .set('x-user-id', 'staff-cart')
         .expect(200)
     }, 20000);
 });
@@ -141,8 +141,8 @@ describe('GET /cart/items/:userId', () => {
 describe('PUT /cart/:id', () => {
     it('should update product', async () => {
         await request(app)
-        .put('/cart/2')
-        .set('x-user-id', 'shopper')
+        .put('/cart/2-cart')
+        .set('x-user-id', 'shopper-cart')
         .send({ quantity: 2 })
         .expect(200)
     }, 20000);
