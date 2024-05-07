@@ -1,6 +1,6 @@
 
 function addToCart(userId, itemId) {
-    fetch(`/cart/add`, {
+    fetch(`/cart`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -10,7 +10,6 @@ function addToCart(userId, itemId) {
     .then(response => response.json())
     .then(data => {
         console.log('Success:', data);
-        location.reload();
     })
     .catch((error) => console.error('Error:', error));
 }
@@ -20,7 +19,7 @@ fetch('/products')
 .then(response => response.json())
 .then(data => {
     // Loop through the products and display them
-    data.items.forEach(product => {
+    data.products.forEach(product => {
         // Create a new div for the product
         let productDiv = document.createElement('div');
         productDiv.className = 'product col-lg-3';
@@ -30,7 +29,7 @@ fetch('/products')
         productDiv.innerHTML = `
         <div class="rounded position-relative">
             <div>
-                <img src="../static/images/${product.image}.jpg" class="img-fluid w-100 rounded-top" alt="" width="50" height="50">
+                <img src="/${product.image}" class="img-fluid w-100 rounded-top" alt="" width="50" height="50">
             </div>
             <div class="text-white bg-danger px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">${product.category}</div>
             <div class="p-4 border border-secondary border-top-0 rounded-bottom">
