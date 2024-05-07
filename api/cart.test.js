@@ -40,9 +40,13 @@ beforeAll((done) => {
 afterAll((done) => {
     db.run('DELETE FROM cart WHERE userId = ?', ['shopper'], () => {
         db.run('DELETE FROM cart WHERE userId = ?', ['staff'], () => {
-            db.run('DELETE FROM users WHERE id = ?', ['shopper'], () => {
-                db.run('DELETE FROM users WHERE id = ?', ['staff'], () => {
-                    db.close(done);
+            db.run('DELETE FROM products WHERE id = ?', [1], () => {
+                db.run('DELETE FROM products WHERE id = ?', [2], () => {
+                    db.run('DELETE FROM users WHERE id = ?', ['shopper'], () => {
+                        db.run('DELETE FROM users WHERE id = ?', ['staff'], () => {
+                            db.close(done);
+                        });
+                    });
                 });
             });
         });
