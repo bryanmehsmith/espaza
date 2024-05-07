@@ -13,7 +13,7 @@ router.use(cookieParser());
 /* istanbul ignore next */
 if (!fs.existsSync('./db')){fs.mkdirSync('./db');}
 
-const db = new sqlite3.Database('./db/users.db');
+const db = new sqlite3.Database('./db/espaza.db');
 db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)");
 
 /* istanbul ignore next */

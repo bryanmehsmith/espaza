@@ -15,7 +15,7 @@ app.use('/users', require('./users'));
 let db;
 
 beforeAll((done) => {
-    db = new sqlite3.Database('./db/users.db');
+    db = new sqlite3.Database('./db/espaza.db');
     db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", () => {
         db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['1', 'Shopper'], () => {
             db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['2', 'Staff'], () => {
