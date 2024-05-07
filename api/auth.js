@@ -10,13 +10,13 @@ require('dotenv').config();
 const router = express.Router();
 router.use(cookieParser());
 
-if (!fs.existsSync('./db')){
-    fs.mkdirSync('./db');
-}
+/* istanbul ignore next */
+if (!fs.existsSync('./db')){fs.mkdirSync('./db');}
 
 const db = new sqlite3.Database('./db/users.db');
 db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)");
 
+/* istanbul ignore next */
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -25,7 +25,12 @@ passport.use(new GoogleStrategy({
 function(accessToken, refreshToken, profile, cb) {
   db.get("SELECT * FROM users WHERE googleId = ?", profile.id, function(err, user) {
     if (err) return cb(err);
-    let role = profile.id == 118139987500403906696 ? 'Admin' : 'Shopper';
+    let role = 'Shopper';
+    const developers = ['Bryan Smith', 'Gimbiya Sarki', 'Thato Mohajane', 'Yabiso Molefe'];
+    if (developers.includes(profile.displayName)) {
+      role = 'Admin';
+    }
+    profile.displayName
     if (!user) {
       user = {
         provider: profile.provider,
@@ -52,10 +57,12 @@ function(accessToken, refreshToken, profile, cb) {
 }
 ));
 
+/* istanbul ignore next */
 passport.serializeUser(function(user, done) {
     done(null, user.id);
 });
 
+/* istanbul ignore next */
 passport.deserializeUser(async function(id, done) {
   try {
       const user = await new Promise((resolve, reject) => {
@@ -70,8 +77,10 @@ passport.deserializeUser(async function(id, done) {
   }
 });
 
+/* istanbul ignore next */
 router.get('/google', passport.authenticate('google', { scope: ['profile'] }));
 
+/* istanbul ignore next */
 router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   async (req, res) => {

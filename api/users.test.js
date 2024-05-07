@@ -2,7 +2,6 @@ const request = require('supertest');
 const express = require('express');
 const sqlite3 = require('sqlite3');
 
-const usersRoutes = require('./users');
 const app = express();
 app.use(express.json());
 app.use((req, res, next) => {
@@ -11,10 +10,10 @@ app.use((req, res, next) => {
   }
   next();
 });
-app.use('/users', usersRoutes);
+app.use('/users', require('./users'));
 
-// TODO: Add ensureInternal test
 let db;
+
 beforeAll((done) => {
     db = new sqlite3.Database('./db/users.db');
     db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", () => {
@@ -143,6 +142,39 @@ describe('put /users/:id', () => {
         .set('x-user-id', '3')
         .send({ role: 'Shopper' })
         .expect(400)
+    });
+});
+
+describe('get /me', () => {
+    it('should return error if no user', async () => {
+        await request(app)
+        .get('/users/me')
+        .expect(404)
+    });
+
+    it('should return error for non-existing user', async () => {
+        await request(app)
+        .get('/users/me')
+        .set('x-user-id', '0')
+        .expect(404)
+    });
+
+    it('should return error for non-staff user', async () => {
+        await request(app)
+        .get('/users/me')
+        .set('x-user-id', '1')
+        .expect(404)
+    });
+
+    it('should return the user', async () => {
+        await request(app)
+        .get('/users/me')
+        .set('x-user-id', '2')
+        .expect(200)
+        .then(response => {
+            expect(response.body.user.id).toBe('2');
+            expect(response.body.user.role).toBe('Staff');
+        });
     });
 });
 

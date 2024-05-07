@@ -132,3 +132,6 @@ dist
 # Ignore DB to prevent overwrites
 db/*.json
 db/*.db
+
+# Ignore uploads folder
+uploads/
