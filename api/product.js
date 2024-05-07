@@ -14,11 +14,6 @@ db.run(`
     )
 `);
 
-//db.run("INSERT INTO items (id, name, category, price) VALUES ('Banana', 'Fruit', 10)");
-/*db.run("INSERT INTO items (id, name, category, price) VALUES (1, 'Banana', 'Fruit', 10)");
-db.run("INSERT INTO items (id, name, category, price) VALUES (2, 'Cabbage', 'Vegetables', 20)");
-db.run("INSERT INTO items (id, name, category, price) VALUES (3, 'Wors', 'Meat', 29)");
-db.run("INSERT INTO items (id, name, category, price) VALUES (4, 'White Bread', 'Bread', 20)");*/
 // Routes
 router.get('/', async (req, res) => {
     const { search, price, category } = req.query;

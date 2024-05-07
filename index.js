@@ -71,7 +71,7 @@ app.get('/internal/stock-management', ensureInternal, (req, res) => {res.send(ad
 
 // Shopping routes
 app.get('/internal/cart', /*ensureInternal,*/ (req, res) => {res.send(addHF('./views/internal/cart.html'));});
-app.get('/internal/checkout', /*ensureInternal,*/ (req, res) => {res.send(addHF('./views/internal/checkout.html'));});
+app.get('/internal/order', /*ensureInternal,*/ (req, res) => {res.send(addHF('./views/internal/order.html'));});
 
 // Admin Routes
 const { ensureAdmin } = require('./api/users');

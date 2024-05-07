@@ -41,9 +41,9 @@ db.run(`
 
 // Routes
 router.post('/create', ensureLoggedIn, async (req, res) => {
-    const { itemId, totalPrice } = req.body;
+    //const { itemId, totalPrice } = req.body;
     let userId = req.user;
-    db.run("INSERT INTO orders (userId, itemId, totalPrice) VALUES (?, ?, ?)", [userId, itemId, totalPrice], function(err) {
+    db.run("INSERT INTO orders (userId) VALUES (?)", [userId], function(err) {
         if (err) {
             return console.error(err.message);
         }
@@ -52,10 +52,10 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
     });
 });
 
-router.post('/add', ensureLoggedIn, async (req, res) => {
+router.post('/add', /*ensureLoggedIn,*/ async (req, res) => {
     const { orderId, itemId, quantity, price } = req.body;
     let userId = req.user;
-    db.run("INSERT INTO orders (userId, itemId, orderId, quantity, price) VALUES (?, ?, ?, ?, ?)", [userId, itemId, orderId, quantity, price], function(err) {
+    db.run("INSERT INTO order_items (userId, itemId, orderId, quantity, price) VALUES (?, ?, ?, ?, ?)", [userId, itemId, orderId, quantity, price], function(err) {
         if (err) {
             return console.error(err.message);
         }
@@ -77,6 +77,16 @@ router.put('/checkout/:id', ensureLoggedIn, async (req, res) => {
 router.get('/', ensureLoggedIn, async (req, res) => {
     let userId = req.user;
     db.all("SELECT * FROM orders WHERE userId = ?", [userId], (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        res.json(rows);
+    });
+});
+
+router.get('/orders/items', ensureLoggedIn, async (req, res) => {
+    let userId = req.user;
+    db.all("SELECT * FROM order_items WHERE userId = ?", [userId], (err, rows) => {
         if (err) {
             throw err;
         }

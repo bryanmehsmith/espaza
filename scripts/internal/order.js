@@ -13,21 +13,19 @@ function createOrder() {
         const items = data;
 
         // Create an order
-        fetch(`/order/create`, {
+        fetch(`/orders/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ itemId: items.id, totalPrice: items.bill }),
         })
         .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            const orderId = data.orderId;
+        .then(data1 => {
+            const orderId = data1.orderId;
 
             // Add items to an order
-            items.slice(1).forEach(item => {
-                fetch(`/order/add`, {
+            const itemPromises = items.map(item => {
+                return fetch(`/orders/add`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -35,13 +33,17 @@ function createOrder() {
                     body: JSON.stringify({ orderId: orderId, itemId: item.id, quantity: item.quantity, price: item.price }),
                 })
                 .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
+                .then(data2 => {
+                    console.log('Success:', data2);
                 })
                 .catch((error) => console.error('Error:', error));
             });
 
-            window.location.href = "/internal/checkout";
+            Promise.all(itemPromises)
+            .then(() => {
+                window.location.href = "/internal/checkout";
+            })
+            .catch((error) => console.error('Error:', error));
         })
         .catch((error) => console.error('Error:', error));
     })
@@ -78,3 +80,29 @@ function makePayment(orderId) {
     })
     .catch((error) => console.error('Error:', error));
 }
+
+fetch('/orders/items')
+  .then(response => response.json())
+  .then(data => {
+    const products = data;
+
+    const productRows = products.map(product => `
+      <tr id="product-row-${product.itemId}">
+        <td>
+         ${product.name}
+        </td>
+        <td>
+         ${product.price}
+        </td>
+        <td>
+          ${product.quantity}
+        </td>
+        <td>
+        ${product.quantity * product.price}
+      </td>
+      </tr>
+    `).join('');
+
+    document.querySelector('tbody').innerHTML = productRows;
+  })
+  .catch(error => console.error('Error:', error));
