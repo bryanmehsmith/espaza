@@ -24,20 +24,56 @@ if (!fs.existsSync('./uploads')){fs.mkdirSync('./uploads');}
 if (!fs.existsSync('./db')){fs.mkdirSync('./db');}
 
 const db = new sqlite3.Database('./db/espaza.db');
-db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)");
+db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)");
 
 const { ensureInternal } = require('./users');
 
-router.get('/', ensureInternal, async (req, res) => {
+router.get('/', async (req, res) => {
+    const { search, price, category } = req.query;
+    let params = [];
+
+    const user = await new Promise((resolve, reject) => {
+        db.get("SELECT * FROM users WHERE id = ?", req.user, function(err, user) {
+            /* istanbul ignore next */
+            if (err) reject(err);
+            resolve(user);
+        });
+    });
+
+    let userId = req.user;
+
+    let query;
+    const roles = ['Admin', 'Staff'];
+    if (user && roles.includes(user.role)) {
+        query = "SELECT id, name, category, quantity, price, description, image FROM products";
+    } else {
+        query = "SELECT id, name, category, price, description, image FROM products"
+    }
+
+    if (search) {
+        query += " WHERE (lower(name) LIKE lower(?) OR lower(description) LIKE lower(?))";
+        params.push(`%${search}%`, `%${search}%`);
+    }
+
+    if (price) {
+        query += (params.length ? " AND" : " WHERE") + " price <= ?";
+        params.push(price);
+    }
+
+    if (category) {
+        query += (params.length ? " AND" : " WHERE") + " lower(category) = lower(?)";
+        params.push(category);
+    }
+
     try {
         const products = await new Promise((resolve, reject) => {
-            db.all("SELECT id, product_name, category, quantity, price, image FROM products", function(err, products) {
+            db.all(query, params, function(err, products) {
                 /* istanbul ignore next */
                 if (err) reject(err);
                 resolve(products);
             });
         });
-        res.json({ products });
+        res.json({ userId, products });
     } catch (err) {
         /* istanbul ignore next */
         console.error(err.message);
@@ -50,13 +86,13 @@ router.put('/:id', ensureInternal, async (req, res) => {
     try {
         await new Promise((resolve, reject) => {
             db.run(`UPDATE products
-                    SET product_name = COALESCE(?, product_name),
+                    SET name = COALESCE(?, name),
                         category = COALESCE(?, category),
                         quantity = COALESCE(?, quantity),
                         price = COALESCE(?, price),
                         description = COALESCE(?, description)
                     WHERE id = ?`,
-                [req.body.product_name, req.body.category, Number(req.body.quantity), Number(req.body.price), req.body.description, req.params.id],
+                [req.body.name, req.body.category, Number(req.body.quantity), Number(req.body.price), req.body.description, req.params.id],
                 function(err) {
                     /* istanbul ignore next */
                 if (err) reject(err);
@@ -92,8 +128,8 @@ router.delete('/:id', ensureInternal, async (req, res) => {
 
 router.post('/', ensureInternal, upload.single('formFile'), async (req, res) => {
     try {
-        const { product_name, category, quantity, price, description } = req.body;
-        if ( !product_name || !category || !quantity || !price ) {
+        const { name, category, quantity, price, description } = req.body;
+        if ( !name || !category || !quantity || !price ) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
         if (!req.file) {
@@ -103,8 +139,8 @@ router.post('/', ensureInternal, upload.single('formFile'), async (req, res) => 
         }
 
         await new Promise((resolve, reject) => {
-            const sql = "INSERT INTO products (id, product_name, category, quantity, price, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            db.run(sql, [uuid.v4(), product_name, category, quantity, price, description, imagePath], function(err) {
+            const sql = "INSERT INTO products (id, name, category, quantity, price, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            db.run(sql, [uuid.v4(), name, category, quantity, price, description, imagePath], function(err) {
                 /* istanbul ignore next */
                 if (err) reject(err);
                 resolve();

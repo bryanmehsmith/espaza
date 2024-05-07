@@ -17,13 +17,14 @@ let user_db;
 
 beforeAll((done) => {
     db = new sqlite3.Database('./db/espaza.db');
-    user_db = new sqlite3.Database('./db/espaza.db');
-    user_db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", () => {
-        user_db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['product', 'Staff'], () => {
-            db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, product_name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)", () => {
-                db.run('INSERT INTO products (id, product_name, category, quantity, price) VALUES (?, ?, ?, ?, ?)', ['1', 'Apple', 'Fruit', 10, 5.0], () => {
-                    db.run('INSERT INTO products (id, product_name, category, quantity, price) VALUES (?, ?, ?, ?, ?)', ['2', 'Beef', 'Meat', 5, 10.0], () => {
-                        done();
+    db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", () => {
+        db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['product', 'Staff'], () => {
+            db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['shopper', 'Shopper'], () => {
+                db.run("CREATE TABLE IF NOT EXISTS products (id TEXT, name TEXT, category TEXT, quantity INTEGER, price DOUBLE PRECISION, description TEXT, image TEXT)", () => {
+                    db.run('INSERT INTO products (id, name, category, quantity, price) VALUES (?, ?, ?, ?, ?)', ['1', 'Apple', 'Fruit', 10, 5.0], () => {
+                        db.run('INSERT INTO products (id, name, category, quantity, price) VALUES (?, ?, ?, ?, ?)', ['2', 'Beef', 'Meat', 5, 10.0], () => {
+                            done();
+                        });
                     });
                 });
             });
@@ -32,12 +33,12 @@ beforeAll((done) => {
 }, 20000);
 
 afterAll((done) => {
-    user_db.run('DELETE FROM users where id = ?', ['product'], () => {
-        db.run('DELETE FROM products where id = ?', ['1'], () => {
-            db.run('DELETE FROM products where id = ?', ['2'], () => {
-                db.run('DELETE FROM products where product_name = ?', ['test'], () => {
-                    db.close(() => {
-                        user_db.close(done);
+    db.run('DELETE FROM users where id = ?', ['product'], () => {
+        db.run('DELETE FROM users where id = ?', ['shopper'], () => {
+            db.run('DELETE FROM products where id = ?', ['1'], () => {
+                db.run('DELETE FROM products where id = ?', ['2'], () => {
+                    db.run('DELETE FROM products where name = ?', ['test'], () => {
+                        db.close(done);
                     });
                 });
             });
@@ -46,13 +47,67 @@ afterAll((done) => {
 }, 10000);
 
 describe('get /products', () => {
-    it('should return all products', async () => {
+    it('should return all products as user', async () => {
         await request(app)
         .get('/products')
-        .set('x-user-id', 'product')
         .expect(200)
+        .set('x-user-id', 'shopper')
         .then((response) => {
             expect(response.body.products.length).toBeGreaterThanOrEqual(2);
+        });
+    });
+
+    it('should return all products as Staff', async () => {
+        await request(app)
+        .get('/products')
+        .expect(200)
+        .set('x-user-id', 'product')
+        .then((response) => {
+            expect(response.body.products.length).toBeGreaterThanOrEqual(2);
+        });
+    });
+
+    it('should return items that match the search query', async () => {
+        await request(app)
+        .get('/products?search=apple')
+        .expect(200)
+        .set('x-user-id', 'shopper')
+        .then((response) => {
+            expect(response.body.products.length).toBeGreaterThanOrEqual(1);
+            expect(response.body.products[0].name).toEqual('Apple');
+        });
+    });
+
+    it('should return items that match the price query', async () => {
+        await request(app)
+        .get('/products?price=10')
+        .expect(200)
+        .set('x-user-id', 'shopper')
+        .then((response) => {
+            expect(response.body.products.length).toBeGreaterThanOrEqual(2);
+        });
+    });
+
+    it('should return items that match the category query', async () => {
+        await request(app)
+        .get('/products?category=fruit')
+        .expect(200)
+        .set('x-user-id', 'shopper')
+        .then((response) => {
+            expect(response.body.products.length).toBe(1);
+            expect(response.body.products[0].category).toEqual('Fruit');
+        });
+    });
+
+    it('should return items that match multiple queries', async () => {
+        await request(app)
+        .get('/products?search=apple&category=fruit&price=10')
+        .expect(200)
+        .set('x-user-id', 'shopper')
+        .then((response) => {
+            expect(response.body.products.length).toBe(1);
+            expect(response.body.products[0].category).toEqual('Fruit');
+            expect(response.body.products[0].price).toEqual(5);
         });
     });
 });
@@ -62,7 +117,7 @@ describe('put /products/:id', () => {
         await request(app)
         .put('/products/1')
         .set('x-user-id', 'product')
-        .send({ product_name: 'Apple', category: 'Fruit', quantity: 20, price: 5 })
+        .send({ name: 'Apple', category: 'Fruit', quantity: 20, price: 5 })
         .expect(200)
         .then((response) => {
             expect(response.body.message).toBe('Product updated successfully');
@@ -87,7 +142,7 @@ describe('post /products', () => {
         await request(app)
         .post('/products')
         .set('x-user-id', 'product')
-        .field('product_name', 'test')
+        .field('name', 'test')
         .field('category', 'Meat')
         .field('quantity', 10)
         .field('price', 10)
@@ -99,7 +154,7 @@ describe('post /products', () => {
         });
     });
 
-    it('should return error for missing product_name', async () => {
+    it('should return error for missing name', async () => {
         await request(app)
         .post('/products')
         .set('x-user-id', 'product')
@@ -111,7 +166,7 @@ describe('post /products', () => {
         await request(app)
         .post('/products')
         .set('x-user-id', 'product')
-        .field('product_name', 'test')
+        .field('name', 'test')
         .field('category', 'Meat2')
         .field('quantity', 102)
         .field('price', 12)
