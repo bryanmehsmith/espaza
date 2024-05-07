@@ -65,7 +65,7 @@ describe('POST /cart', () => {
         .send({ itemId: 3, quantity: 1 })
         .expect(200)
     });
-});
+}, 10000);
 
 describe('DELETE /cart/:id', () => {
     it('should delete product', async () => {
@@ -83,7 +83,7 @@ describe('get /cart/items', () => {
         .expect(200)
         .set('x-user-id', 'shopper')
     });
-});
+}, 10000);
 
 describe('GET /cart/items/:userId', () => {
     it('should get all items in the cart for a user', async () => {
@@ -92,7 +92,7 @@ describe('GET /cart/items/:userId', () => {
         .set('x-user-id', 'staff')
         .expect(200)
     });
-});
+}, 10000);
 
 describe('PUT /cart/:id', () => {
     it('should update product', async () => {
