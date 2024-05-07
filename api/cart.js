@@ -113,8 +113,8 @@ router.post('/remove', ensureLoggedIn, async (req, res) => {
 });
 
 router.get('/items', /*ensureLoggedIn,*/ async (req, res) => {
-    //let userId = req.user;
-    let userId = "4301aba7-ceab-4727-99e5-c396fb890ad4";
+    let userId = req.user;
+    //let userId = "4301aba7-ceab-4727-99e5-c396fb890ad4";
     // SELECT * FROM cart WHERE userId = ?
     let query = "SELECT userId, itemId, quantity, name, price FROM cart LEFT OUTER JOIN items ON cart.itemId = items.id WHERE userId = ?"
     db.all(query, [userId], (err, rows) => {
