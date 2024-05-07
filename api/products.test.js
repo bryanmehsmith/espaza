@@ -13,7 +13,6 @@ app.use((req, res, next) => {
 app.use('/products', require('./products'));
 
 let db;
-let user_db;
 
 beforeAll((done) => {
     db = new sqlite3.Database('./db/espaza.db');
