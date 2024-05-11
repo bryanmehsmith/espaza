@@ -21,7 +21,7 @@
      </section>
 
     <div class="container">
-        <table class="table table-hover align-middle">
+        <table class="table table-hover align-middle" id="ordersTable">
             <thead>
               <tr>
                 <th scope="col">Order ID</th>
@@ -104,5 +104,11 @@
             </tbody>
           </table>
     </div>
+    
+    <script>
+        $(document).ready(function() {
+            $("#ordersTable").DataTable();
+        });
+    </script>
      
 </body>
