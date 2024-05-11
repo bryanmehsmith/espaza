@@ -36,3 +36,39 @@ login {
     color: rgb(175, 21, 21);
 
 }
+
+.ordersTable_wrapper{
+   margin-top: auto;
+}
+
+.dt-buttons{
+    
+    float: right !important;
+    margin-bottom: 1rem;
+}
+
+.buttons-copy{
+    color: black;
+    border-radius: 8px;
+}
+
+.buttons-excel{
+    color: black;
+    border-radius: 8px;
+}
+
+.buttons-csv{
+    color: black;
+    border-radius: 8px;
+}
+
+.buttons-pdf{
+    color: black;
+    border-radius: 8px;
+}
+
+.dt-search {
+    float: left !important;
+    margin-bottom: 1rem;
+    
+ }

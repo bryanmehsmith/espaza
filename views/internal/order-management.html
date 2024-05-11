@@ -3,25 +3,12 @@
         <div class="container">
             <h1 class="display-4">Order Management Console</h1>
             <hr class="my-4">
-            
-            <div class="row mb-2 d-flex mb-2">
-                <div class="col-sm-5 ms-auto p-2">
-                    <div class="text-sm-end">
-                        <button type="button" class="btn">
-                            <i class="bi bi-file-earmark-excel-fill fa-2x" style="color:rgb(175, 21, 21);"></i>
-                        </button>
-                        <button type="button" class="btn">
-                            <i class="bi bi-file-pdf-fill fa-2x" style="color:rgb(175, 21, 21);"></i>
-                            </i></button>
-                    </div>
-                </div>
-            </div>
            
         </div>         
      </section>
 
     <div class="container">
-        <table class="table table-hover align-middle">
+        <table class="table table-hover align-middle" id="ordersTable">
             <thead>
               <tr>
                 <th scope="col">Order ID</th>
@@ -87,7 +74,7 @@
                         </div>  
                     </td>
                     <td>
-                        <a href="/internal/order-details">
+                        <a href="/order-details">
                             <button type="submit" class = "btn d-flex m-2 py-2" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
                                 <i class="bi bi-eye-fill fa-2x"></i>
                             </button>
@@ -104,5 +91,19 @@
             </tbody>
           </table>
     </div>
+    
+    <script>
+        $(document).ready(function(){
+            $("#ordersTable").DataTable({
+                dom: 'Bfrtip',
+                buttons:[
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
+            })
+        })
+    </script>
      
 </body>
