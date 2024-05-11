@@ -2,7 +2,6 @@ const request = require('supertest');
 const express = require('express');
 const sqlite3 = require('sqlite3');
 
-const usersRoutes = require('./users');
 const app = express();
 app.use(express.json());
 app.use((req, res, next) => {
@@ -11,12 +10,12 @@ app.use((req, res, next) => {
   }
   next();
 });
-app.use('/users', usersRoutes);
+app.use('/users', require('./users'));
 
-// TODO: Add ensureInternal test
 let db;
+
 beforeAll((done) => {
-    db = new sqlite3.Database('./db/users.db');
+    db = new sqlite3.Database('./db/espaza.db');
     db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)", () => {
         db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['1', 'Shopper'], () => {
             db.run('INSERT INTO users (id, role) VALUES (?, ?)', ['2', 'Staff'], () => {

@@ -17,7 +17,7 @@ if (!fs.existsSync('./db')){
 app.use(session({
   store: new SQLiteStore({
     dir: './db',
-    db: 'session.db'
+    db: 'espaza.db'
   }),
   secret: process.env.SECRET_KEY,
   resave: false,
@@ -39,6 +39,9 @@ app.use(setUser);
 const auth = require('./api/auth')
 app.use('/auth', auth);
 app.use('/users', require('./api/users'));
+app.use('/products', require('./api/products'));
+app.use('/cart', require('./api/cart'));
+app.use('/orders', require('./api/order'));
 
 // Routes
 function addHF(filePath) {
@@ -54,19 +57,19 @@ app.get('/', (req, res) => {res.send(addHF('./views/index.html'));})
 
 // Logged in Routes
 const { ensureExists } = require('./api/users');
+app.get('/order-details', ensureExists, (req, res) => {res.send(addHF('./views/order-details.html'));});
+app.get('/cart', ensureExists, (req, res) => {res.send(addHF('./views/cart.html'));});
+app.get('/order', ensureExists, (req, res) => {res.send(addHF('./views/order.html'));});
 
 // Internal Routes
 const { ensureInternal } = require('./api/users');
 app.get('/internal', ensureInternal, (req, res) => {res.send(addHF('./views/internal/internal-landing.html'));});
-app.get('/internal/stock-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/stock-management.html'));});
+app.get('/internal/stock-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/stock-management/stock-management.html'));});
+app.get('/internal/stock-management/add-product', ensureInternal, (req, res) => {res.send(addHF('./views/internal/stock-management/add-product.html'));});
 app.get('/internal/order-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/order-management.html'));});
-app.get('/internal/add-product', ensureInternal, (req, res) => {res.send(addHF('./views/internal/add-product.html'));});
-app.get('/internal/order-details', ensureInternal, (req, res) => {res.send(addHF('./views/internal/order-details.html'));});
-
 
 // Admin Routes
 const { ensureAdmin } = require('./api/users');
-
 app.get('/internal/user-management', ensureAdmin, (req, res) => {res.send(addHF('./views/internal/user-management.html'));});
 
 port = process.env.PORT || 8080
