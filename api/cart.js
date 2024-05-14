@@ -11,7 +11,6 @@ db.run(`
         userId INTEGER,
         itemId INTEGER,
         quantity INTEGER,
-        bill INTEGER,
         FOREIGN KEY(userId) REFERENCES users(id),
         FOREIGN KEY(itemId) REFERENCES items(id)
     )
@@ -21,7 +20,7 @@ router.post('/', ensureExists, async (req, res) => {
     const { itemId, quantity } = req.body;
     const userId = req.user
 
-    let query = "SELECT id, userId, itemId, quantity, bill FROM cart WHERE userId =? AND itemId =?";
+    let query = "SELECT id, userId, itemId, quantity FROM cart WHERE userId =? AND itemId =?";
     let params = [userId, itemId];
 
     let cart = {};
@@ -145,7 +144,7 @@ router.put('/:id', ensureExists, async (req, res) => {
 router.get('/items/:id', ensureInternal, async (req, res) => {
     let itemId = req.params.id;
 
-    let query = "SELECT id, userId, itemId, quantity, bill FROM cart WHERE userId = ?"
+    let query = "SELECT id, userId, itemId, quantity FROM cart WHERE userId = ?"
     db.all(query, [itemId], (err, rows) => {
         /* istanbul ignore next */
         if (err) { throw err}
