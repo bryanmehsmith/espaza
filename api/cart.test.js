@@ -106,7 +106,7 @@ describe('POST /cart', () => {
         await request(app)
         .post('/cart')
         .set('x-user-id', 'staff-cart')
-        .send({ itemId: '3-cart', quantity: 1 })
+        .send({ itemId: '2-cart', quantity: 1 })
         .expect(200)
     }, 20000);
 });
