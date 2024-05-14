@@ -65,6 +65,20 @@ fetch('/products')
     `).join('');
 
     document.querySelector('tbody').innerHTML = productRows;
+
+    //reporting
+    $(document).ready(function(){
+      $("#stockManagementTable").DataTable({
+          dom: 'Bfrtip',
+          searching: false,
+          buttons:[
+              'copyHtml5',
+              'excelHtml5',
+              'csvHtml5',
+              'pdfHtml5'
+          ]
+      })
+  })
   })
   .catch(error => console.error('Error:', error));
 
