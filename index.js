@@ -44,11 +44,13 @@ app.use('/users', require('./api/users'));
 // Shopping routes
 const products = require('./api/product'); 
 const cart = require('./api/cart'); 
-const orders = require('./api/order'); 
+const orders = require('./api/orders'); 
+const notifications = require('./api/notifications');
 
 app.use('/products', products);
 app.use('/cart', cart);
 app.use('/orders', orders);
+app.use('/notifications', notifications);
 
 // Routes
 function addHF(filePath) {
@@ -77,6 +79,8 @@ app.get('/internal/stock-management/add-product', ensureInternal, (req, res) => 
 app.get('/internal/order-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/order-management.html'));});
 app.get('/internal/order-details', ensureInternal, (req, res) => {res.send(addHF('./views/internal/order-details.html'));});
 
+// Notification Routes
+app.get('/internal/notifications', ensureInternal, (req, res) => {res.send(addHF('./views/internal/notifications.html'));});
 
 // Shopping routes
 app.get('/internal/cart', /*ensureInternal,*/ (req, res) => {res.send(addHF('./views/internal/cart.html'));});

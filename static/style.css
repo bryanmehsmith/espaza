@@ -36,3 +36,13 @@ login {
     color: rgb(175, 21, 21);
 
 }
+
+/* Styles for unread notifications */
+.unread {
+    background-color: #ffc107; /* Change to whatever color you want for unread notifications */
+}
+
+/* Styles for read notifications */
+.read {
+    background-color: #f8f9fa; /* Change to whatever color you want for read notifications */
+}
