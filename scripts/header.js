@@ -35,23 +35,31 @@ fetch('/auth/isLoggedIn')
     });
 
 async function searchProd() {
-    /*let input = document.getElementById('searchbar').value
-    input = input.toLowerCase();*/
-    //body: JSON.stringify(reqBody),
-
-    let reqBody = { search: 'bana' }
-    let id = 'bana';
-    var formData = new FormData();
-    formData.append('search', 'bana');
+    const apiUrl = '/products';
+    let input = document.getElementById('searchbar').value
+    input = input.toLowerCase();
     // Fetch products from the backend
-    await fetch(`/products`, {
-        method: 'GET',
-        mode: 'cors',
-        credentials: "include",
-        body: formData,
+    //fetch(`/products`)
+    await fetch(apiUrl, {
+        method: 'POST',
+        body: JSON.stringify({
+        search: input,
+        price: null,
+        category: null,
+        }),
+        headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        },
     })
     .then(response => response.json())
     .then(data => {
+        // Clear data
+        document.getElementById('all-products').innerHTML = "";
+        document.getElementById('vegetables').innerHTML = "";
+        document.getElementById('fruits').innerHTML = "";
+        document.getElementById('bread').innerHTML = "";
+        document.getElementById('meat').innerHTML = "";
+
         // Loop through the products and display them
         data.items.forEach(product => {
             // Create a new div for the product
@@ -99,14 +107,3 @@ async function searchProd() {
     })
     .catch((error) => console.error('Error:', error));
 }
-
-const downloadBtn = document.querySelector("#search");
-
-downloadBtn.addEventListener("click", async () => {
-  try {
-    await searchProd();
-    console.log("Download complete", response);
-  } catch (error) {
-    console.error(`Download error: ${error.message}`);
-  }
-});

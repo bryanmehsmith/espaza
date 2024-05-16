@@ -30,12 +30,8 @@ function removeFromCart(itemId) {
     .catch((error) => console.error('Error:', error));
 }
 
-function getData(){
+function createOrder(){
   const url1 = "/orders/create";
-  //const url2 = "/cart/items";
-  //const url3 = "/orders/add";
-
-  //const responses = await Promise.all([fetch(url1), fetch(url2)])
 
   const responses1 = fetch(url1, {
     method: 'POST',
@@ -44,106 +40,15 @@ function getData(){
         'Content-Type': 'application/json'
     }
 });
-/*  const responses2 = await fetch(url2, {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-    }
- });*/
 
   const data1 = responses1.json()
- // const data2 = await responses2.json()
-
-  let orderId = data1;
-  let items = data2;
-  
-
-  /*const response3 = await fetch(url3)
-  const data3 = await response1.json()*/
-            // Add items to an order
-
-  /*const it = async forEach.map(item => {
-    response3 = await fetch(url3)
-  });*/
-          // Add items to an order
-  /*const itemPromises = items.map(item => {
-    return fetch(`/orders/add`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ orderId: orderId, itemId: item.id, quantity: item.quantity, price: item.price }),
-    })
-    .then(response => response.json())
-    .then(data2 => {
-        console.log('Success:', data2);
-    })
-    .catch((error) => console.error('Error:', error));
-  });
-
-  Promise.all(itemPromises)
-  .then(() => {
-    window.location.href = "/internal/checkout";
-  })*/
-}
-
-async function createOrder() {
-  // Fetch the items from the cart
-  await fetch(`/cart/items`, {
-      method: 'GET',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-  })
-  .then(response => response.json())
-  .then(data => async() => {
-      const items = data;
-
-      // Create an order
-      await fetch(`/orders/create`, {
-          method: 'POST',
-          headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-          },
-      })
-      .then(response => response.json())
-      .then(data1 => {
-          const orderId = data1.orderId;
-
-          // Add items to an order
-          const itemPromises = items.map(item => async() =>{
-              return await fetch(`/orders/add`, {
-                  method: 'POST',
-                  headers: {
-                      'Accept': 'application/json',
-                      'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({ orderId: orderId, itemId: item.id, quantity: item.quantity, price: item.price }),
-              })
-              .then(response => response.json())
-              .then(data2 => {
-                  console.log('Success:', data2);
-              })
-              .catch((error) => console.error('Error:', error));
-          });
-
-          Promise.all(itemPromises)
-          .then(() => {
-              window.location.href = "/internal/checkout";
-          })
-          .catch((error) => console.error('Error:', error));
-      })
-      .catch((error) => console.error('Error:', error));
-  })
-  .catch((error) => console.error('Error:', error));
 }
 
 fetch('/cart/items')
   .then(response => response.json())
   .then(data => {
     const products = data;
-    let totalPrice = 0;
+    let totalPrice = 0.00;
 
     const productRows = products.map(product => `
       <tr id="product-row-${product.itemId}">
@@ -173,6 +78,6 @@ fetch('/cart/items')
         return result + item.price * item.quantity;
     }, 0)
 
-    document.getElementById("price").innerHTML = "Total Amout: ZAR" + totalPrice;
+    document.getElementById("price").innerHTML = "Total Amout: ZAR" + totalPrice.toString() + ".00";
   })
   .catch(error => console.error('Error:', error));

@@ -60,6 +60,6 @@ fetch('/orders/items')
       return result + item.price * item.quantity;
   }, 0)
 
-  document.getElementById("total").innerHTML = "Total Amout: ZAR" + totalPrice;
+  document.getElementById("total").innerHTML = "Total Amout: ZAR" + totalPrice + ".00";
   })
   .catch(error => console.error('Error:', error));

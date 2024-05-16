@@ -18,7 +18,7 @@ db.run(`
         totalPrice INTEGER,
         date DATETIME DEFAULT CURRENT_TIMESTAMP,
         status TEXT DEFAULT 'pending',
-        paymentStatus TEXT DEFAULT 'unpaid',
+        paymentStatus TEXT DEFAULT 'paid',
         FOREIGN KEY(userId) REFERENCES users(id)
     )
 `);
@@ -39,17 +39,6 @@ db.run(`
 `);
 
 // Routes
-/*router.post('/create', ensureLoggedIn, async (req, res) => {
-    //const { itemId, totalPrice } = req.body;
-    let userId = req.user;
-    db.run("INSERT INTO orders (userId) VALUES (?)", [userId], function(err) {
-        if (err) {
-            return console.error(err.message);
-        }
-        // Return the orderId
-        res.json({ message: 'Order placed', orderId: this.lastID });
-    });
-});*/
 
 router.post('/create', ensureLoggedIn, async (req, res) => {
     
@@ -70,11 +59,11 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
                 resolve(items);
             });
         });
-        //res.json({ userId, items});
         cart = items;
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ error: err.message });
+        return;
     }
 
     // If item found in the cart
@@ -92,15 +81,15 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
                     resolve(items);
                 });
             });
-            //res.json({ userId, items});
-            //orderId = this.lastID;
         } catch (err) {
             console.error(err.message);
             res.status(500).json({ error: err.message });
+            return;
         }
 
         if (orderId < 0) {
             res.status(500).json({ message: "Can't create order" });
+            return;
         }
 
 
@@ -125,6 +114,7 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
             } catch (err) {
                 console.error(err.message);
                 res.status(500).json({ error: err.message });
+                return;
             }
 
         });
@@ -142,11 +132,10 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
                     resolve(updateItems);
                 });
             });
-            //res.json({ userId, items});
-            //cart = items;
         } catch (err) {
             console.error(err.message);
             res.status(500).json({ error: err.message });
+            return;
         }
 
 
@@ -163,21 +152,21 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
                     resolve(updateItems);
                 });
             });
-            //res.json({ message: 'Order placed'});
-            //cart = items;
         } catch (err) {
             console.error(err.message);
             res.status(500).json({ error: err.message });
+            return;
         }
 
 
     } else {
         res.status(500).json({ message: "Can't create order, no items" });
+        return;
     }
 
 });
 
-router.post('/add', /*ensureLoggedIn,*/ async (req, res) => {
+router.post('/add', ensureLoggedIn, async (req, res) => {
     const { orderId, itemId, quantity, price } = req.body;
     let userId = req.user;
     db.run("INSERT INTO order_items (userId, itemId, orderId, quantity, price) VALUES (?, ?, ?, ?, ?)", [userId, itemId, orderId, quantity, price], function(err) {
@@ -200,8 +189,7 @@ router.put('/checkout/:id', ensureLoggedIn, async (req, res) => {
 });
 
 router.get('/', ensureLoggedIn, async (req, res) => {
-    let userId = req.user;
-    db.all("SELECT * FROM orders WHERE userId = ?", [userId], (err, rows) => {
+    db.all("SELECT * FROM orders", (err, rows) => {
         if (err) {
             throw err;
         }
