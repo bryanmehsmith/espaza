@@ -14,21 +14,8 @@ function addToCart(userId, itemId) {
     .catch((error) => console.error('Error:', error));
 }
 
-const apiUrl = '/products';
-let input = document.getElementById('searchbar').value
-input = input.toLowerCase();
 // Fetch products from the backend
-fetch(apiUrl, {
-    method: 'POST',
-    body: JSON.stringify({
-      search: input,
-      price: null,
-      category: null,
-    }),
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-    },
-  })
+fetch('/products')
 .then(response => response.json())
 .then(data => {
     // Loop through the products and display them
@@ -76,7 +63,4 @@ fetch(apiUrl, {
          }
     });
 })
-.catch((error) => 
-    console.error(error.message)
-    //console.error('Error:', error)
-);
+.catch((error) => console.error('Error:', error));

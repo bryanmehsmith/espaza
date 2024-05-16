@@ -36,15 +36,12 @@ function setUser(req, res, next) {
 app.use(setUser);
 
 // API routes
-app.use('/auth',  require('./api/auth'));
+const auth = require('./api/auth')
+app.use('/auth', auth);
 app.use('/users', require('./api/users'));
 app.use('/products', require('./api/products'));
-
-// Shopping routes
-app.use('/products', require('./api/product'));
 app.use('/cart', require('./api/cart'));
 app.use('/orders', require('./api/order'));
-app.use('/notifications', require('./api/notifications'));
 
 // Routes
 function addHF(filePath) {
@@ -70,14 +67,6 @@ app.get('/internal', ensureInternal, (req, res) => {res.send(addHF('./views/inte
 app.get('/internal/stock-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/stock-management/stock-management.html'));});
 app.get('/internal/stock-management/add-product', ensureInternal, (req, res) => {res.send(addHF('./views/internal/stock-management/add-product.html'));});
 app.get('/internal/order-management', ensureInternal, (req, res) => {res.send(addHF('./views/internal/order-management.html'));});
-app.get('/internal/order-details', ensureInternal, (req, res) => {res.send(addHF('./views/internal/order-details.html'));});
-
-// Notification Routes
-app.get('/internal/notifications', ensureInternal, (req, res) => {res.send(addHF('./views/internal/notifications.html'));});
-
-// Shopping routes
-app.get('/internal/cart', /*ensureInternal,*/ (req, res) => {res.send(addHF('./views/internal/cart.html'));});
-app.get('/internal/order', /*ensureInternal,*/ (req, res) => {res.send(addHF('./views/internal/order.html'));});
 
 // Admin Routes
 const { ensureAdmin } = require('./api/users');

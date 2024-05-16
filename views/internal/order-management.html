@@ -14,7 +14,7 @@
                 <th scope="col">Order ID</th>
                 <th scope="col">Order Date</th>
                 <th scope="col">Payment Status</th>
-                <th scope="col">Total(ZAR)</th>
+                <th scope="col">Total</th>
                 <th scope="col">Order Status</th>
                 <th scope="col">Update Order Details</th>
                 <th scope="col">View Order Details</th>
@@ -91,6 +91,19 @@
             </tbody>
           </table>
     </div>
-    <script src="/scripts/internal/order-management.js"></script>
+    
+    <script>
+        $(document).ready(function(){
+            $("#ordersTable").DataTable({
+                dom: 'Bfrtip',
+                buttons:[
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
+            })
+        })
+    </script>
      
 </body>
