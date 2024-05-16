@@ -1,55 +1,5 @@
 // order.js
 
-function createOrder() {
-    // Fetch the items from the cart
-    fetch(`/cart/items`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        const items = data;
-
-        // Create an order
-        fetch(`/orders/create`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data1 => {
-            const orderId = data1.orderId;
-
-            // Add items to an order
-            const itemPromises = items.map(item => {
-                return fetch(`/orders/add`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ orderId: orderId, itemId: item.id, quantity: item.quantity, price: item.price }),
-                })
-                .then(response => response.json())
-                .then(data2 => {
-                    console.log('Success:', data2);
-                })
-                .catch((error) => console.error('Error:', error));
-            });
-
-            Promise.all(itemPromises)
-            .then(() => {
-                window.location.href = "/internal/checkout";
-            })
-            .catch((error) => console.error('Error:', error));
-        })
-        .catch((error) => console.error('Error:', error));
-    })
-    .catch((error) => console.error('Error:', error));
-}
-
 function checkoutOrder(userId) {
     fetch(`/order/checkout`, {
         method: 'GET',
@@ -85,6 +35,7 @@ fetch('/orders/items')
   .then(response => response.json())
   .then(data => {
     const products = data;
+    let totalPrice = 0;
 
     const productRows = products.map(product => `
       <tr id="product-row-${product.itemId}">
@@ -104,5 +55,11 @@ fetch('/orders/items')
     `).join('');
 
     document.querySelector('tbody').innerHTML = productRows;
+
+    totalPrice = products.reduce(function(result, item){
+      return result + item.price * item.quantity;
+  }, 0)
+
+  document.getElementById("total").innerHTML = "Total Amout: ZAR" + totalPrice;
   })
   .catch(error => console.error('Error:', error));

@@ -15,13 +15,11 @@ db.run(`
     CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY, 
         userId INTEGER, 
-        itemId INTEGER, 
         totalPrice INTEGER,
         date DATETIME DEFAULT CURRENT_TIMESTAMP,
         status TEXT DEFAULT 'pending',
         paymentStatus TEXT DEFAULT 'unpaid',
-        FOREIGN KEY(userId) REFERENCES users(id),
-        FOREIGN KEY(itemId) REFERENCES items(id)
+        FOREIGN KEY(userId) REFERENCES users(id)
     )
 `);
 
@@ -29,7 +27,8 @@ db.run(`
     CREATE TABLE IF NOT EXISTS order_items (
         id INTEGER PRIMARY KEY, 
         userId INTEGER, 
-        itemId INTEGER, 
+        itemId INTEGER,
+        name TEXT,
         orderId INTEGER, 
         quantity INTEGER, 
         price INTEGER,
@@ -40,7 +39,7 @@ db.run(`
 `);
 
 // Routes
-router.post('/create', ensureLoggedIn, async (req, res) => {
+/*router.post('/create', ensureLoggedIn, async (req, res) => {
     //const { itemId, totalPrice } = req.body;
     let userId = req.user;
     db.run("INSERT INTO orders (userId) VALUES (?)", [userId], function(err) {
@@ -50,6 +49,132 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
         // Return the orderId
         res.json({ message: 'Order placed', orderId: this.lastID });
     });
+});*/
+
+router.post('/create', ensureLoggedIn, async (req, res) => {
+    
+    let userId = req.user;
+
+    let query = "SELECT userId, itemId, quantity, name, price FROM cart LEFT OUTER JOIN items ON cart.itemId = items.id WHERE userId = ?";
+    let params = [userId];
+
+    let cart = {};
+    let orderId = -1;
+    let totalPrice = 0;
+
+
+    try {
+        const items = await new Promise((resolve, reject) => {
+            db.all(query, params, function(err, items) {
+                if (err) reject(err);
+                resolve(items);
+            });
+        });
+        //res.json({ userId, items});
+        cart = items;
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+
+    // If item found in the cart
+    if (cart.length > 0) {
+
+        // Create an order with partial details, will update it later
+        query = "INSERT INTO orders (userId) VALUES (?)";
+        params = [userId];
+
+        try {
+            await new Promise((resolve, reject) => {
+                db.run(query, params, function(err, items) {
+                    if (err) reject(err);
+                    orderId = this.lastID;
+                    resolve(items);
+                });
+            });
+            //res.json({ userId, items});
+            //orderId = this.lastID;
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).json({ error: err.message });
+        }
+
+        if (orderId < 0) {
+            res.status(500).json({ message: "Can't create order" });
+        }
+
+
+        // Add items to an order 
+        query = "INSERT INTO order_items (userId, itemId, name, orderId, quantity, price) VALUES (?, ?, ?, ?, ?, ?)";
+        params = [];
+
+        cart.forEach(item => {
+            
+            let { userId, itemId, quantity, name, price } = item;
+            params = [userId, itemId, name, orderId, quantity, price];
+
+            try {
+                new Promise((resolve, reject) => {
+                    db.run(query, params, function(err, items) {
+                        if (err) reject(err);
+                        resolve(items);
+                    });
+                });
+                // Sum up the bill amount
+                totalPrice += price * quantity;
+            } catch (err) {
+                console.error(err.message);
+                res.status(500).json({ error: err.message });
+            }
+
+        });
+
+
+        // Update the bill amount
+        query = "UPDATE orders SET totalPrice =? WHERE userId =? AND id =?";
+        params = [totalPrice, userId, orderId];
+    
+    
+        try {
+            const updatePromise = await new Promise((resolve, reject) => {
+                db.all(query, params, function(err, updateItems) {
+                    if (err) reject(err);
+                    resolve(updateItems);
+                });
+            });
+            //res.json({ userId, items});
+            //cart = items;
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).json({ error: err.message });
+        }
+
+
+        // Delete what is left in the cart for the user
+        query = "DELETE FROM cart WHERE userId =?";
+        params = [userId];
+    
+    
+        try {
+            const updatePromise = await new Promise((resolve, reject) => {
+                db.run(query, params, function(err, updateItems) {
+                    if (err) reject(err);
+                    res.json({ message: 'Order placed'});
+                    resolve(updateItems);
+                });
+            });
+            //res.json({ message: 'Order placed'});
+            //cart = items;
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).json({ error: err.message });
+        }
+
+
+    } else {
+        res.status(500).json({ message: "Can't create order, no items" });
+    }
+
 });
 
 router.post('/add', /*ensureLoggedIn,*/ async (req, res) => {
@@ -84,9 +209,31 @@ router.get('/', ensureLoggedIn, async (req, res) => {
     });
 });
 
-router.get('/orders/items', ensureLoggedIn, async (req, res) => {
+router.get('/items', ensureLoggedIn, async (req, res) => {
     let userId = req.user;
-    db.all("SELECT * FROM order_items WHERE userId = ?", [userId], (err, rows) => {
+
+    query = "SELECT rowid from orders order by ROWID DESC limit 1";
+    params = [userId];
+
+    let orderId = -1;
+
+    try {
+        await new Promise((resolve, reject) => {
+            db.all(query, function(err, items) {
+                if (err) reject(err);
+                orderId = items[0].id;
+                resolve(items);
+            });
+        });
+        //res.json({ userId, items});
+        //orderId = this.lastID;
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+        return;
+    }
+
+    db.all("SELECT * FROM order_items WHERE userId = ? AND orderId =?", [userId, orderId], (err, rows) => {
         if (err) {
             throw err;
         }

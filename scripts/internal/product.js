@@ -16,7 +16,7 @@ function addToCart(userId, itemId) {
 }
 
 // Fetch products from the backend
-fetch('/products')
+fetch(`/products`)
 .then(response => response.json())
 .then(data => {
     // Loop through the products and display them

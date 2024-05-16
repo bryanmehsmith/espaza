@@ -14,16 +14,16 @@
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Shop</a>
+          <a class="nav-link" href="/">Shop</a>
         </li>
         <li class="nav-item">
           <a class="nav-link">Contact</a>
         </li>
       </ul>
       <form class="navbar-nav me-auto w-50" role="search">
-        <input class="form-control me-2 border-1 w-100 py-3 px-4 rounded-pill" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control me-2 border-1 w-100 py-3 px-4 rounded-pill" id="searchbar" type="search"  onkeyup="searchProd()" placeholder="Search" aria-label="Search">
         
-        <button type="submit" class = "btn btn-search">
+        <button type="submit" class = "btn btn-search" id="#search">
           <i class="fas fa-search fa-2x" style="color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;"></i>
         </button>
       </form>

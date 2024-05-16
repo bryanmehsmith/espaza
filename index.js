@@ -39,7 +39,7 @@ app.use(setUser);
 const auth = require('./api/auth')
 app.use('/auth', auth);
 app.use('/users', require('./api/users'));
-app.use('/products', require('./api/products'));
+//app.use('/products', require('./api/products'));
 
 // Shopping routes
 const products = require('./api/product'); 
