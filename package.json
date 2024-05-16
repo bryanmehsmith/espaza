@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "start:watch": "nodemon index.js",
-    "test": "jest --passWithNoTests --coverage"
+    "test": "jest --passWithNoTests --coverage --detectOpenHandles"
   },
   "repository": {
     "type": "git",

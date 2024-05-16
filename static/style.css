@@ -46,3 +46,39 @@ login {
 .read {
     background-color: #f8f9fa; /* Change to whatever color you want for read notifications */
 }
+
+.ordersTable_wrapper{
+   margin-top: auto;
+}
+
+.dt-buttons{
+    
+    float: right !important;
+    margin-bottom: 1rem;
+}
+
+.buttons-copy{
+    color: black;
+    border-radius: 8px;
+}
+
+.buttons-excel{
+    color: black;
+    border-radius: 8px;
+}
+
+.buttons-csv{
+    color: black;
+    border-radius: 8px;
+}
+
+.buttons-pdf{
+    color: black;
+    border-radius: 8px;
+}
+
+.dt-search {
+    float: left !important;
+    margin-bottom: 1rem;
+    
+ }

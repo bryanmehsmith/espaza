@@ -35,6 +35,7 @@ fetch('/auth/isLoggedIn')
                     const rolesLogged = ['Admin', 'Staff', 'Shopper'];
                     if (rolesLogged.includes(data.role)) {
                         document.querySelector('#notifications').style.display = 'block';
+                        document.querySelector('#cart').href = '/cart';
                         fetchUnreadNotificationsCount();
                         setInterval(fetchUnreadNotificationsCount, 60000);
                     }

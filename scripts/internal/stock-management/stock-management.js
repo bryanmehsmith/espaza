@@ -37,7 +37,7 @@ fetch('/products')
     const productRows = products.map(product => `
       <tr id="product-row-${product.id}">
         <td>
-          <input type="text" id="product-name-${product.id}" value="${product.product_name}" onBlur="saveChanges('${product.id}', {'product_name' : this.value})">
+          <input type="text" id="product-name-${product.id}" value="${product.name}" onBlur="saveChanges('${product.id}', {'name' : this.value})">
         </td>
         <td class="col-md-6">
             <select id="productCategory" class="form-select" onBlur="saveChanges('${product.id}', {'category' : this.value})">
@@ -65,6 +65,20 @@ fetch('/products')
     `).join('');
 
     document.querySelector('tbody').innerHTML = productRows;
+
+    //reporting
+    $(document).ready(function(){
+      $("#stockManagementTable").DataTable({
+          dom: 'Bfrtip',
+          searching: false,
+          buttons:[
+              'copyHtml5',
+              'excelHtml5',
+              'csvHtml5',
+              'pdfHtml5'
+          ]
+      })
+  })
   })
   .catch(error => console.error('Error:', error));
 
