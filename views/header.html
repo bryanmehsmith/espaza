@@ -47,11 +47,13 @@
           </a>
         </div>
   
-        <div class="m-2 py-2">
-          <a href="/internal" id="notifications" class="navIcons" style="font-size:40px;text-shadow:2px 2px 4px #9b9b9b;display:none">
+        <div class="m-2 py-2 position-relative">
+          <a href="/internal/notifications" id="notifications" class="navIcons" style="font-size:40px;text-shadow:2px 2px 4px #9b9b9b;display:none">
               <i class="bi bi-bell-fill"></i>
+              <span id="unreadCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:12px;"></span>
           </a>
-        </div>
+      </div>
+
       </div>
     </div>
   </div>
@@ -60,3 +62,4 @@
 </header>
 
 <script src="/scripts/header.js"></script>
+<script src="/scripts/notification.js"></script>

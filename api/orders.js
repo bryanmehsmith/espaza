@@ -52,7 +52,7 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
     });
 });
 
-router.post('/add', /*ensureLoggedIn,*/ async (req, res) => {
+router.post('/add', ensureLoggedIn, async (req, res) => {
     const { orderId, itemId, quantity, price } = req.body;
     let userId = req.user;
     db.run("INSERT INTO order_items (userId, itemId, orderId, quantity, price) VALUES (?, ?, ?, ?, ?)", [userId, itemId, orderId, quantity, price], function(err) {
@@ -64,13 +64,22 @@ router.post('/add', /*ensureLoggedIn,*/ async (req, res) => {
     });
 });
 
-router.put('/checkout/:id', ensureLoggedIn, async (req, res) => {
+router.put('/checkout/:id', /*ensureLoggedIn,*/ async (req, res) => {
     const { id } = req.params;
     db.run("UPDATE orders SET paymentStatus = 'paid', status = 'packing' WHERE id = ?", [id], function(err) {
         if (err) {
             return console.error(err.message);
         }
-        res.json({ message: 'Payment successful, order is now being packed' });
+        // Send a notification to the user
+        const userId = '6cddb75d-9a62-4904-886e-7ddab60857a9'
+        //const userId = req.user;
+        const message = `Your order #${id} is now being packed.`;
+        db.run("INSERT INTO notifications (userId, orderId, message) VALUES (?, ?, ?)", [userId, id, message], function(err) {
+            if (err) {
+                return console.error(err.message);
+            }
+            res.json({ message: 'Payment successful, order is now being packed' });
+        });
     });
 });
 
