@@ -36,12 +36,12 @@ function setUser(req, res, next) {
 app.use(setUser);
 
 // API routes
-const auth = require('./api/auth')
-app.use('/auth', auth);
+app.use('/auth', require('./api/auth'));
 app.use('/users', require('./api/users'));
 app.use('/products', require('./api/products'));
 app.use('/cart', require('./api/cart'));
-app.use('/orders', require('./api/order'));
+app.use('/orders', require('./api/orders'));
+app.use('/notifications', require('./api/notifications'));
 
 // Routes
 function addHF(filePath) {
@@ -60,6 +60,7 @@ const { ensureExists } = require('./api/users');
 app.get('/order-details', ensureExists, (req, res) => {res.send(addHF('./views/order-details.html'));});
 app.get('/cart', ensureExists, (req, res) => {res.send(addHF('./views/cart.html'));});
 app.get('/order', ensureExists, (req, res) => {res.send(addHF('./views/order.html'));});
+app.get('/notifications-list', ensureExists, (req, res) => {res.send(addHF('./views/notifications.html'));});
 
 // Internal Routes
 const { ensureInternal } = require('./api/users');
