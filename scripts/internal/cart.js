@@ -79,5 +79,17 @@ fetch('/cart/items')
     }, 0)
 
     document.getElementById("price").innerHTML = "Total Amout: ZAR" + totalPrice.toString() + ".00";
+
+    // Get the purchase button
+    let purchaseButton = document.getElementById('btn-purchase');
+
+    // Check if products array is empty
+    if (products.length === 0) {
+        // If it's empty, hide the purchase button
+        purchaseButton.hidden = true;
+    } else {
+        // If it's not empty, show the purchase button
+        purchaseButton.hidden = false;
+    }
   })
   .catch(error => console.error('Error:', error));

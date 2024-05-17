@@ -148,7 +148,7 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
             const updatePromise = await new Promise((resolve, reject) => {
                 db.run(query, params, function(err, updateItems) {
                     if (err) reject(err);
-                    res.json({ message: 'Order placed'});
+                    //res.json({ message: 'Order placed'});
                     resolve(updateItems);
                 });
             });
@@ -157,7 +157,24 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
             res.status(500).json({ error: err.message });
             return;
         }
-
+        
+        // Send a notification to the user
+        const id  = orderId;
+        db.run("UPDATE orders SET paymentStatus = 'paid', status = 'packing' WHERE id = ?", [id], function(err) {
+            if (err) {
+                return console.error(err.message);
+            }
+            
+            //const userId = '6cddb75d-9a62-4904-886e-7ddab60857a9'
+            const userId = req.user;
+            const message = `Your order #${id} is now being packed.`;
+            db.run("INSERT INTO notifications (userId, orderId, message) VALUES (?, ?, ?)", [userId, id, message], function(err) {
+                if (err) {
+                    return console.error(err.message);
+                }
+                res.json({ message: 'Payment successful, order is now being packed' });
+            });
+        });
 
     } else {
         res.status(500).json({ message: "Can't create order, no items" });
@@ -178,21 +195,21 @@ router.post('/add', ensureLoggedIn, async (req, res) => {
     });
 });
 
-router.put('/checkout/:id', /*ensureLoggedIn,*/ async (req, res) => {
-    const { id } = req.params;
-    db.run("UPDATE orders SET paymentStatus = 'paid', status = 'packing' WHERE id = ?", [id], function(err) {
+router.put('/update/:id', ensureLoggedIn, async (req, res) => {
+    const id = req.params.id;
+    let status = req.body.status;
+    db.run("UPDATE orders SET status = ? WHERE id = ?", [status, id], function(err) {
         if (err) {
             return console.error(err.message);
         }
         // Send a notification to the user
-        const userId = '6cddb75d-9a62-4904-886e-7ddab60857a9'
-        //const userId = req.user;
-        const message = `Your order #${id} is now being packed.`;
+        const userId = req.user;
+        const message = "Your order " + id + " is now being " + status + ".";
         db.run("INSERT INTO notifications (userId, orderId, message) VALUES (?, ?, ?)", [userId, id, message], function(err) {
             if (err) {
                 return console.error(err.message);
             }
-            res.json({ message: 'Payment successful, order is now being packed' });
+            res.json({ message: 'Order is now being ' + status});
         });
     });
 });

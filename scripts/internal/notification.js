@@ -18,7 +18,7 @@ function fetchNotifications() {
 
                 const notificationItem = template.content.cloneNode(true);
 
-                notificationItem.querySelector('.orderId').textContent = notification.orderId;
+                //notificationItem.querySelector('.orderId').textContent = notification.orderId;
                 notificationItem.querySelector('.message').textContent = notification.message;
                 notificationItem.querySelector('.timestamp').textContent = formatTimestamp(notification.createdAt);
 
