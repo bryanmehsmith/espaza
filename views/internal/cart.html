@@ -6,6 +6,14 @@
             <hr class="my-4">
             <div class="row mb-2 d-flex mb-2">
                 <div class="col-sm-5 ms-auto p-2">
+                    <div class="text-sm-end">
+                        <button type="button" class="btn">
+                            <i class="bi bi-file-earmark-excel-fill fa-2x" style="color:rgb(175, 21, 21);"></i>
+                        </button>
+                        <button type="button" class="btn">
+                            <i class="bi bi-file-pdf-fill fa-2x" style="color:rgb(175, 21, 21);"></i>
+                            </i></button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -29,10 +37,10 @@
             <p id="price"></p>
         </div> 
         <div>
-            <a href="/internal/order">
-                <button class="btn d-flex m-2 py-2 bg-light rounded-pill active" id="btn-purchase" hidden="hidden" onclick="createOrder()">Purchase</button>
+            <a href="/order">
+                <button class="btn d-flex m-2 py-2 bg-light rounded-pill active" onclick="createOrder()">Purchase</button>
             </a>
         </div> 
     </div>
-    <script src="/scripts/internal/cart.js"></script>
+    <script src="/scripts/cart.js"></script>
 </body>
