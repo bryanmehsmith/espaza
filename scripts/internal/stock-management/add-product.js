@@ -9,7 +9,7 @@ function submitForm(event) {
     const productImage = document.getElementById('formFile').files[0];
 
     const formData = new FormData();
-    formData.append('product_name', productName);
+    formData.append('name', productName);
     formData.append('category', productCategory);
     formData.append('quantity', productQuantity);
     formData.append('price', price);

@@ -37,12 +37,38 @@ login {
 
 }
 
-/* Styles for unread notifications */
-.unread {
-    background-color: #ffc107; /* Change to whatever color you want for unread notifications */
+.ordersTable_wrapper{
+   margin-top: auto;
 }
 
-/* Styles for read notifications */
-.read {
-    background-color: #f8f9fa; /* Change to whatever color you want for read notifications */
+.dt-buttons{
+    
+    float: right !important;
+    margin-bottom: 1rem;
 }
+
+.buttons-copy{
+    color: black;
+    border-radius: 8px;
+}
+
+.buttons-excel{
+    color: black;
+    border-radius: 8px;
+}
+
+.buttons-csv{
+    color: black;
+    border-radius: 8px;
+}
+
+.buttons-pdf{
+    color: black;
+    border-radius: 8px;
+}
+
+.dt-search {
+    float: left !important;
+    margin-bottom: 1rem;
+    
+ }
