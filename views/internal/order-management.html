@@ -3,107 +3,70 @@
         <div class="container">
             <h1 class="display-4">Order Management Console</h1>
             <hr class="my-4">
-           
+            
+            <div class="row mb-2 d-flex mb-2">
+                <div class="col-sm-5 ms-auto p-2">
+                    <div class="text-sm-end">
+                        <button type="button" class="btn">
+                            <i class="bi bi-file-earmark-excel-fill fa-2x" style="color:rgb(175, 21, 21);"></i>
+                        </button>
+                        <button type="button" class="btn">
+                            <i class="bi bi-file-pdf-fill fa-2x" style="color:rgb(175, 21, 21);"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>         
-     </section>
+    </section>
 
     <div class="container">
-        <table class="table table-hover align-middle" id="ordersTable">
+        <table class="table table-hover align-middle">
             <thead>
-              <tr>
-                <th scope="col">Order ID</th>
-                <th scope="col">Order Date</th>
-                <th scope="col">Payment Status</th>
-                <th scope="col">Total</th>
-                <th scope="col">Order Status</th>
-                <th scope="col">Update Order Details</th>
-                <th scope="col">View Order Details</th>
-                <th scope="col">Delete Order</th>
-              </tr>
-            </thead>
-            <tbody>
                 <tr>
-                    <td>#12554</td>
-                    <td >2024-05-03</td>
-                    <td>Awaiting payment</td>
-                    <td>R500.50</td>
-                    <td>Processing</td>
-                    <td>
-                        <!-- Button trigger edit modal -->
-                        <button class = "btn d-flex m-2 py-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-                            <i class="bi bi-pencil-square fa-2x"></i>
-                        </button>
-  
-                        <!-- Modal -->
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Update Order Details</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container">
-                                <form class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="paymentStatus" class="form-label">Payment Status</label>
-                                        <select id="productCategory" class="form-select">
-                                          <option selected>Awaiting payment</option>
-                                          <option>Payment received</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="orderStatus" class="form-label">Order Status</label>
-                                        <select id="orderStatus" class="form-select">
-                                          <option selected>Awaiting payment</option>
-                                          <option>Processing</option>
-                                          <option>Ready for collection</option>
-                                          <option>Collected</option>
-                                        </select>
-                                    </div>
-                                  </form>
-
-        
-                        </div>
-                        <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save Changes</button>
-                        </div>
-                        </div>
-                        </div>
-                        </div>  
-                    </td>
-                    <td>
-                        <a href="/order-details">
-                            <button type="submit" class = "btn d-flex m-2 py-2" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-                                <i class="bi bi-eye-fill fa-2x"></i>
-                            </button>
-                        </a>
-                        
-                    </td>
-
-                    <td>
-                        <button type="submit" class = "btn d-flex m-2 py-2" style= "color:rgb(175, 21, 21);text-shadow:2px 2px 4px #9b9b9b;">
-                            <i class="bi bi-trash fa-2x"></i>
-                          </button>
-                    </td>
+                    <th scope="col">Order ID</th>
+                    <th scope="col">Order Date</th>
+                    <th scope="col">Payment Status</th>
+                    <th scope="col">Total(ZAR)</th>
+                    <th scope="col">Order Status</th>
                 </tr>
+            </thead>
+            <tbody id="orderTableBody">
+                <!-- The rows will be populated by JavaScript -->
             </tbody>
-          </table>
+        </table>
     </div>
-    
-    <script>
-        $(document).ready(function(){
-            $("#ordersTable").DataTable({
-                dom: 'Bfrtip',
-                buttons:[
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                ]
-            })
-        })
-    </script>
-     
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Update Order Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form class="row g-3">
+                            
+                            <div class="col-md-6">
+                                <label for="orderStatus" class="form-label">Order Status</label>
+                                <select id="orderStatus" class="form-select">
+                                    <option selected>Packing</option>
+                                    <option>Processing</option>
+                                    <option>Ready for collection</option>
+                                    <option>Collected</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id=".btn.btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/scripts/internal/order-management.js"></script>
 </body>
