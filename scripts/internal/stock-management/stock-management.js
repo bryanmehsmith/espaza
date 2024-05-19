@@ -75,9 +75,7 @@ fetch('/products')
             'copyHtml5',
             'excelHtml5',
             'csvHtml5',
-            'pdfHtml5'{
-              title: 'stock-management'
-            }
+            'pdfHtml5'
         ]
     })
 })
