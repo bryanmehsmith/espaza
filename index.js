@@ -36,7 +36,8 @@ function setUser(req, res, next) {
 app.use(setUser);
 
 // API routes
-app.use('/auth', require('./api/auth'));
+const auth = require('./api/auth')
+app.use('/auth', auth);
 app.use('/users', require('./api/users'));
 //app.use('/products', require('./api/products'));
 
