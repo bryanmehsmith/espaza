@@ -38,12 +38,6 @@ app.use(setUser);
 // API routes
 app.use('/auth', require('./api/auth'));
 app.use('/users', require('./api/users'));
-<<<<<<< HEAD
-app.use('/products', require('./api/products'));
-app.use('/cart', require('./api/cart'));
-app.use('/orders', require('./api/orders'));
-app.use('/notifications', require('./api/notifications'));
-=======
 //app.use('/products', require('./api/products'));
 
 // Shopping routes
@@ -56,7 +50,6 @@ app.use('/products', products);
 app.use('/cart', cart);
 app.use('/orders', orders);
 app.use('/notifications', notifications);
->>>>>>> d5e0b42058731e97261a3a2510026b5ba991b476
 
 // Routes
 function addHF(filePath) {
@@ -72,13 +65,6 @@ app.get('/', (req, res) => {res.send(addHF('./views/index.html'));})
 
 // Logged in Routes
 const { ensureExists } = require('./api/users');
-<<<<<<< HEAD
-app.get('/order-details', ensureExists, (req, res) => {res.send(addHF('./views/order-details.html'));});
-app.get('/cart', ensureExists, (req, res) => {res.send(addHF('./views/cart.html'));});
-app.get('/order', ensureExists, (req, res) => {res.send(addHF('./views/order.html'));});
-app.get('/notifications-list', ensureExists, (req, res) => {res.send(addHF('./views/notifications.html'));});
-=======
->>>>>>> d5e0b42058731e97261a3a2510026b5ba991b476
 
 // Internal Routes
 const { ensureInternal } = require('./api/users');
