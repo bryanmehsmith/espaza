@@ -65,6 +65,23 @@ fetch('/products')
     `).join('');
 
     document.querySelector('tbody').innerHTML = productRows;
+
+     //reporting
+   $(document).ready(function(){
+    $("#stockManagementTable").DataTable({
+        dom: 'Bfrtip',
+        searching: false,
+        buttons:[
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'{
+              title: 'stock-management'
+            }
+        ]
+    })
+})
+
   })
   .catch(error => console.error('Error:', error));
 
@@ -89,19 +106,5 @@ document.getElementById('search').addEventListener('keyup', function() {
       row.style.display = "none";
     }
   });
-
-  //reporting
-  $(document).ready(function(){
-    $("#stockManagementTable").DataTable({
-        dom: 'Bfrtip',
-        searching: false,
-        buttons:[
-            'copyHtml5',
-            'excelHtml5',
-            'csvHtml5',
-            'pdfHtml5'
-        ]
-    })
-})
 
 });
