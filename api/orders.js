@@ -41,11 +41,7 @@ db.run(`
 // Routes
 
 router.post('/create', ensureLoggedIn, async (req, res) => {
-<<<<<<< HEAD
-
-=======
     
->>>>>>> d5e0b42058731e97261a3a2510026b5ba991b476
     let userId = req.user;
 
     let query = "SELECT userId, itemId, quantity, name, price FROM cart LEFT OUTER JOIN items ON cart.itemId = items.id WHERE userId = ?";
@@ -102,11 +98,7 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
         params = [];
 
         cart.forEach(item => {
-<<<<<<< HEAD
-
-=======
             
->>>>>>> d5e0b42058731e97261a3a2510026b5ba991b476
             let { userId, itemId, quantity, name, price } = item;
             params = [userId, itemId, name, orderId, quantity, price];
 
@@ -131,13 +123,8 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
         // Update the bill amount
         query = "UPDATE orders SET totalPrice =? WHERE userId =? AND id =?";
         params = [totalPrice, userId, orderId];
-<<<<<<< HEAD
-
-
-=======
     
     
->>>>>>> d5e0b42058731e97261a3a2510026b5ba991b476
         try {
             const updatePromise = await new Promise((resolve, reject) => {
                 db.all(query, params, function(err, updateItems) {
@@ -155,22 +142,13 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
         // Delete what is left in the cart for the user
         query = "DELETE FROM cart WHERE userId =?";
         params = [userId];
-<<<<<<< HEAD
-
-
-=======
     
     
->>>>>>> d5e0b42058731e97261a3a2510026b5ba991b476
         try {
             const updatePromise = await new Promise((resolve, reject) => {
                 db.run(query, params, function(err, updateItems) {
                     if (err) reject(err);
-<<<<<<< HEAD
-                    res.json({ message: 'Order placed'});
-=======
                     //res.json({ message: 'Order placed'});
->>>>>>> d5e0b42058731e97261a3a2510026b5ba991b476
                     resolve(updateItems);
                 });
             });
@@ -179,9 +157,6 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
             res.status(500).json({ error: err.message });
             return;
         }
-<<<<<<< HEAD
-
-=======
         
         // Send a notification to the user
         const id  = orderId;
@@ -200,7 +175,6 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
                 res.json({ message: 'Payment successful, order is now being packed' });
             });
         });
->>>>>>> d5e0b42058731e97261a3a2510026b5ba991b476
 
     } else {
         res.status(500).json({ message: "Can't create order, no items" });
@@ -221,37 +195,21 @@ router.post('/add', ensureLoggedIn, async (req, res) => {
     });
 });
 
-<<<<<<< HEAD
-router.put('/checkout/:id', /*ensureLoggedIn,*/ async (req, res) => {
-    const { id } = req.params;
-    db.run("UPDATE orders SET paymentStatus = 'paid', status = 'packing' WHERE id = ?", [id], function(err) {
-=======
 router.put('/update/:id', ensureLoggedIn, async (req, res) => {
     const id = req.params.id;
     let status = req.body.status;
     db.run("UPDATE orders SET status = ? WHERE id = ?", [status, id], function(err) {
->>>>>>> d5e0b42058731e97261a3a2510026b5ba991b476
         if (err) {
             return console.error(err.message);
         }
         // Send a notification to the user
-<<<<<<< HEAD
-        const userId = '6cddb75d-9a62-4904-886e-7ddab60857a9'
-        //const userId = req.user;
-        const message = `Your order #${id} is now being packed.`;
-=======
         const userId = req.user;
         const message = "Your order " + id + " is now being " + status + ".";
->>>>>>> d5e0b42058731e97261a3a2510026b5ba991b476
         db.run("INSERT INTO notifications (userId, orderId, message) VALUES (?, ?, ?)", [userId, id, message], function(err) {
             if (err) {
                 return console.error(err.message);
             }
-<<<<<<< HEAD
-            res.json({ message: 'Payment successful, order is now being packed' });
-=======
             res.json({ message: 'Order is now being ' + status});
->>>>>>> d5e0b42058731e97261a3a2510026b5ba991b476
         });
     });
 });
