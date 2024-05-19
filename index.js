@@ -43,8 +43,8 @@ app.use('/users', require('./api/users'));
 
 // Shopping routes
 const products = require('./api/products'); 
-const cart = require('./api/cart'); 
-const orders = require('./api/orders'); 
+const cart = require('./api/cart');
+const orders = require('./api/orders');
 const notifications = require('./api/notifications');
 
 app.use('/products', products);
