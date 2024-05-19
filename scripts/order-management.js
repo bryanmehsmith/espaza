@@ -28,6 +28,7 @@ fetch('/orders')
   })
   .catch(error => console.error('Error:', error));
 
+  //reporting
 $(document).ready(function(){
   $("#ordersTable").DataTable({
       dom: 'Bfrtip',
