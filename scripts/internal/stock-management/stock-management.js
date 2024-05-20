@@ -78,8 +78,8 @@ fetch('/products')
             exportOptions: {
               format: {
                 body: function(inner, rowidx, colidx, node) {
-                  if ($(node).find("input[type='text']").length > 0) {
-                    return $(node).find("input[type='text']").val();
+                  if ($(node).find("input").length > 0) {
+                    return $(node).find("input").val();
                   } else if ($(node).find("select").length > 0) {
                     return $(node).find("select option:selected").text();
                   } else if ($(node).find("input[type='radio']:checked").length > 0) {
@@ -107,18 +107,6 @@ fetch('/products')
                     return $(node).find("input").val();
                   } else if ($(node).find("select").length > 0) {
                     return $(node).find("select option:selected").text();
-                  } else {
-                    return $(node).text();
-                  }
-                }
-              }
-            }exportOptions: {
-              format: {
-                body: function(inner, rowidx, colidx, node) {
-                  if ($(node).find("input[type='text']").length > 0) {
-                    return $(node).find("input[type='text']").val();
-                  } else if ($(node).find("select").length > 0) {
-                    return $(node).find("select option:selected").text();
                   } else if ($(node).find("input[type='radio']:checked").length > 0) {
                     return $(node).find("input[type='radio']:checked").val();
                   } else if ($(node).find(".form-check-inline input[type='checkbox']:checked").length > 0) {
@@ -140,9 +128,9 @@ fetch('/products')
             exportOptions: {
               format: {
                 body: function(inner, rowidx, colidx, node) {
-                  if ($(node).find("input[type='text']").length > 0) {
-                    return $(node).find("input[type='text']").val();
-                  } else if ($(node).find("select").length > 0) {
+                  if ($(node).find("input").length > 0) {
+                    return $(node).find("input").val();
+                  }else if ($(node).find("select").length > 0) {
                     return $(node).find("select option:selected").text();
                   } else if ($(node).find("input[type='radio']:checked").length > 0) {
                     return $(node).find("input[type='radio']:checked").val();
