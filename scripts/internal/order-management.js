@@ -59,10 +59,8 @@ fetch('/orders')
     `}).join('');
 
     document.querySelector('tbody').innerHTML = productRows;
-    
-  })
 
-  //reporting
+    //reporting
   $(document).ready(function(){
     $("#ordersTable").DataTable({
         dom: 'Bfrtip',
@@ -73,6 +71,8 @@ fetch('/orders')
             'pdfHtml5'
         ]
     })
+  })
+
   })
 
   .catch(error => console.error('Error:', error));
