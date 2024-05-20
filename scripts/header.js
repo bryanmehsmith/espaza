@@ -54,7 +54,7 @@ fetch('/auth/isLoggedIn')
     });
 
 async function searchProd() {
-    const apiUrl = '/products';
+    const apiUrl = '/products/search';
     let input = document.getElementById('searchbar').value
     input = input.toLowerCase();
     // Fetch products from the backend
@@ -90,7 +90,7 @@ async function searchProd() {
             productDiv.innerHTML = `
             <div class="rounded position-relative">
                 <div>
-                    <img src="../static/images/${product.image}.jpg" class="img-fluid w-100 rounded-top" alt="" width="50" height="50">
+                    <img src="/${product.image}" class="img-fluid w-100 rounded-top" alt="" width="50" height="50">
                 </div>
                 <div class="text-white bg-danger px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">${product.category}</div>
                 <div class="p-4 border border-secondary border-top-0 rounded-bottom">
