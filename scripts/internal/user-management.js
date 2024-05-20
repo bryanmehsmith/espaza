@@ -65,14 +65,86 @@ fetch('/users')
       $("#usersTable").DataTable({
           dom: 'Bfrtip',
           searching: false,
-          buttons:[
-              'copyHtml5',
-              'excelHtml5',
-              'csvHtml5',
-              'pdfHtml5'
+          buttons: [
+            {
+              extend: 'copyHtml5',
+              title: 'users-report',
+              exportOptions: {
+                format: {
+                  body: function(inner, rowidx, colidx, node) {
+                    if ($(node).find("input[type='text']").length > 0) {
+                      return $(node).find("input[type='text']").val();
+                    } else if ($(node).find("select").length > 0) {
+                      return $(node).find("select option:selected").text();
+                    } else if ($(node).find("input[type='radio']:checked").length > 0) {
+                      return $(node).find("input[type='radio']:checked").val();
+                    } else if ($(node).find(".form-check-inline input[type='checkbox']:checked").length > 0) {
+                      return $(node).find(".form-check-inline input[type='checkbox']:checked").map(function() {
+                        return $(this).val();
+                      }).get().join(", ");
+                    } else if ($(node).find("input[type='checkbox']:checked").length > 0) {
+                      return $(node).find("input[type='checkbox']:checked").val();
+                    } else {
+                      return $(node).text();
+                    }
+                  }
+                }
+              }
+            },
+            {
+              extend: 'excelHtml5',
+              title: 'users-report',
+              exportOptions: {
+                format: {
+                  body: function(inner, rowidx, colidx, node) {
+                    if ($(node).find("input[type='text']").length > 0) {
+                      return $(node).find("input[type='text']").val();
+                    } else if ($(node).find("select").length > 0) {
+                      return $(node).find("select option:selected").text();
+                    } else if ($(node).find("input[type='radio']:checked").length > 0) {
+                      return $(node).find("input[type='radio']:checked").val();
+                    } else if ($(node).find(".form-check-inline input[type='checkbox']:checked").length > 0) {
+                      return $(node).find(".form-check-inline input[type='checkbox']:checked").map(function() {
+                        return $(this).val();
+                      }).get().join(", ");
+                    } else if ($(node).find("input[type='checkbox']:checked").length > 0) {
+                      return $(node).find("input[type='checkbox']:checked").val();
+                    } else {
+                      return $(node).text();
+                    }
+                  }
+                }
+              }
+            },
+            {
+              extend: 'pdfHtml5',
+              title: 'users-report',
+              exportOptions: {
+                format: {
+                  body: function(inner, rowidx, colidx, node) {
+                    if ($(node).find("input[type='text']").length > 0) {
+                      return $(node).find("input[type='text']").val();
+                    } else if ($(node).find("select").length > 0) {
+                      return $(node).find("select option:selected").text();
+                    } else if ($(node).find("input[type='radio']:checked").length > 0) {
+                      return $(node).find("input[type='radio']:checked").val();
+                    } else if ($(node).find(".form-check-inline input[type='checkbox']:checked").length > 0) {
+                      return $(node).find(".form-check-inline input[type='checkbox']:checked").map(function() {
+                        return $(this).val();
+                      }).get().join(", ");
+                    } else if ($(node).find("input[type='checkbox']:checked").length > 0) {
+                      return $(node).find("input[type='checkbox']:checked").val();
+                    } else {
+                      return $(node).text();
+                    }
+                  }
+                }
+              }
+            }
           ]
-      })
-    })
+      });
+  });
+  
   })
   .catch(error => console.error('Error:', error));
 
