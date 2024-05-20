@@ -156,4 +156,41 @@ router.post('/', ensureInternal, upload.single('formFile'), async (req, res) => 
     }
 });
 
+router.post('/search', async (req, res) => {
+    const { search, price, category } = req.body;
+    let query = "SELECT * FROM products";
+    let params = [];
+
+    let userId = req.user;
+    let search1 = req.params.id;
+
+    if (search) {
+        query += " WHERE (name LIKE ? OR description LIKE ?)";
+        params.push(`%${search}%`, `%${search}%`);
+    }
+
+    if (price) {
+        query += (params.length ? " AND" : " WHERE") + " price <= ?";
+        params.push(price);
+    }
+
+    if (category) {
+        query += (params.length ? " AND" : " WHERE") + " category = ?";
+        params.push(category);
+    }
+
+    try {
+        const items = await new Promise((resolve, reject) => {
+            db.all(query, params, function(err, items) {
+                if (err) reject(err);
+                resolve(items);
+            });
+        });
+        res.json({ userId, items});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 module.exports = router;
