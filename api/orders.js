@@ -44,7 +44,7 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
     
     let userId = req.user;
 
-    let query = "SELECT userId, itemId, quantity, name, price FROM cart LEFT OUTER JOIN items ON cart.itemId = items.id WHERE userId = ?";
+    let query = "SELECT userId, itemId, cart.quantity, name, price FROM cart LEFT OUTER JOIN products ON cart.itemId = products.id WHERE userId = ?";
     let params = [userId];
 
     let cart = {};

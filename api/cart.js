@@ -19,7 +19,8 @@ db.run(`
         quantity INTEGER,
         bill INTEGER,
         FOREIGN KEY(userId) REFERENCES users(id),
-        FOREIGN KEY(itemId) REFERENCES items(id)
+        FOREIGN KEY(itemId) REFERENCES items(id),
+        FOREIGN KEY(itemId) REFERENCES products(id)
     )
 `);
 
@@ -119,7 +120,7 @@ router.get('/items', ensureLoggedIn, async (req, res) => {
     let userId = req.user;
     
     // SELECT * FROM cart WHERE userId = ?
-    let query = "SELECT userId, itemId, quantity, name, price FROM cart LEFT OUTER JOIN items ON cart.itemId = items.id WHERE userId = ?"
+    let query = "SELECT userId, itemId, cart.quantity, name, price FROM cart LEFT OUTER JOIN products ON cart.itemId = products.id WHERE userId = ?"
     db.all(query, [userId], (err, rows) => {
         if (err) {
             throw err;

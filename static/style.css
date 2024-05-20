@@ -72,3 +72,11 @@ login {
     margin-bottom: 1rem;
     
  }
+
+.unread {
+    background-color: #07ff51;
+}
+
+.read {
+    background-color: #f8f9fa;
+}
