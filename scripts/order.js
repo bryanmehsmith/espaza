@@ -63,3 +63,29 @@ fetch('/orders/items')
   document.getElementById("total").innerHTML = "Total Amout: ZAR" + totalPrice + ".00";
   })
   .catch(error => console.error('Error:', error));
+
+  router.put('/:id/status', ensureLoggedIn, async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+    db.run("UPDATE orders SET status = ? WHERE id = ?", [status, id], function(err) {
+        if (err) {
+            return console.error(err.message);
+        }
+        // Send notification to the customer
+        db.get("SELECT userId FROM orders WHERE id = ?", [id], (err, row) => {
+            if (err) {
+                throw err;
+            }
+            const userId = row.userId;
+            const message = `Your order #${id} status has been updated to ${status}`;
+            fetch(`/notifications`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, orderId: id, message }),
+            });
+        });
+        res.json({ message: 'Order status updated' });
+    });
+});
