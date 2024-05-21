@@ -1,6 +1,6 @@
 
 function addToCart(userId, itemId) {
-    fetch(`/cart/add`, {
+    fetch(`/cart`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
