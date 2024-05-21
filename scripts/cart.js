@@ -1,5 +1,5 @@
 function addToCart(userId, itemId) {
-  fetch(`/cart/add`, {
+  fetch(`/cart`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ function addToCart(userId, itemId) {
 }
 
 function removeFromCart(itemId) {
-  fetch(`/cart/remove/${itemId}`, {
+  fetch(`/cart/${itemId}`, {
       method: 'DELETE',
       headers: {
           'Content-Type': 'application/json',
