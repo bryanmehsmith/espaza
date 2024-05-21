@@ -26,16 +26,5 @@ fetch('/orders')
 
     document.querySelector('tbody').innerHTML = productRows;
   })
-  .catch(error => console.error('Error:', error));
 
-$(document).ready(function(){
-  $("#ordersTable").DataTable({
-      dom: 'Bfrtip',
-      buttons:[
-          'copyHtml5',
-          'excelHtml5',
-          'csvHtml5',
-          'pdfHtml5'
-      ]
-  })
-})
+  .catch(error => console.error('Error:', error));

@@ -4,7 +4,6 @@ const router = express.Router();
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database('./db/espaza.db');
 
-
 async function ensureLoggedIn(req, res, next) {
     if (!req.user) {
         res.status(404).json();
@@ -12,7 +11,6 @@ async function ensureLoggedIn(req, res, next) {
     }
     next();
 }
-
 
 db.run(`
     CREATE TABLE IF NOT EXISTS notifications (
@@ -27,7 +25,6 @@ db.run(`
     )
 `);
 
-
 router.post('/', ensureLoggedIn, async (req, res) => {
     const { userId, orderId, message } = req.body;
     db.run("INSERT INTO notifications (userId, orderId, message) VALUES (?, ?, ?)", [userId, orderId, message], function(err) {
@@ -37,7 +34,6 @@ router.post('/', ensureLoggedIn, async (req, res) => {
         res.json({ message: 'Notification created' });
     });
 });
-
 
 router.get('/', ensureLoggedIn, async (req, res) => {
     let userId = req.user;
@@ -49,7 +45,6 @@ router.get('/', ensureLoggedIn, async (req, res) => {
     });
 });
 
-
 router.put('/:id/read', ensureLoggedIn, async (req, res) => {
     const { id } = req.params;
     db.run("UPDATE notifications SET isRead = 1 WHERE id = ?", [id], function(err) {
@@ -59,6 +54,5 @@ router.put('/:id/read', ensureLoggedIn, async (req, res) => {
         res.json({ message: 'Notification marked as read' });
     });
 });
-
 
 module.exports = router;

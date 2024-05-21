@@ -66,19 +66,91 @@ fetch('/products')
 
     document.querySelector('tbody').innerHTML = productRows;
 
-    //reporting
-    $(document).ready(function(){
-      $("#stockManagementTable").DataTable({
-          dom: 'Bfrtip',
-          searching: false,
-          buttons:[
-              'copyHtml5',
-              'excelHtml5',
-              'csvHtml5',
-              'pdfHtml5'
-          ]
-      })
-  })
+   //reporting
+   $(document).ready(function(){
+    $("#stockManagementTable").DataTable({
+        dom: 'Bfrtip',
+        searching: false,
+        buttons:[
+          {
+            extend: 'copyHtml5',
+            title: 'stock-report',
+            exportOptions: {
+              format: {
+                body: function(inner, rowidx, colidx, node) {
+                  if ($(node).find("input").length > 0) {
+                    return $(node).find("input").val();
+                  } else if ($(node).find("select").length > 0) {
+                    return $(node).find("select option:selected").text();
+                  } else if ($(node).find("input[type='radio']:checked").length > 0) {
+                    return $(node).find("input[type='radio']:checked").val();
+                  } else if ($(node).find(".form-check-inline input[type='checkbox']:checked").length > 0) {
+                    return $(node).find(".form-check-inline input[type='checkbox']:checked").map(function() {
+                      return $(this).val();
+                    }).get().join(", ");
+                  } else if ($(node).find("input[type='checkbox']:checked").length > 0) {
+                    return $(node).find("input[type='checkbox']:checked").val();
+                  } else {
+                    return $(node).text();
+                  }
+                }
+              }
+            }
+          },
+          {
+            extend: 'excelHtml5',
+            title: 'stock-report',
+            exportOptions: {
+              format: {
+                body: function(inner, rowidx, colidx, node) {
+                  if ($(node).find("input").length > 0) {
+                    return $(node).find("input").val();
+                  } else if ($(node).find("select").length > 0) {
+                    return $(node).find("select option:selected").text();
+                  } else if ($(node).find("input[type='radio']:checked").length > 0) {
+                    return $(node).find("input[type='radio']:checked").val();
+                  } else if ($(node).find(".form-check-inline input[type='checkbox']:checked").length > 0) {
+                    return $(node).find(".form-check-inline input[type='checkbox']:checked").map(function() {
+                      return $(this).val();
+                    }).get().join(", ");
+                  } else if ($(node).find("input[type='checkbox']:checked").length > 0) {
+                    return $(node).find("input[type='checkbox']:checked").val();
+                  } else {
+                    return $(node).text();
+                  }
+                }
+              }
+            }
+          },
+          {
+            extend: 'pdfHtml5',
+            title: 'stock-report',
+            exportOptions: {
+              format: {
+                body: function(inner, rowidx, colidx, node) {
+                  if ($(node).find("input").length > 0) {
+                    return $(node).find("input").val();
+                  }else if ($(node).find("select").length > 0) {
+                    return $(node).find("select option:selected").text();
+                  } else if ($(node).find("input[type='radio']:checked").length > 0) {
+                    return $(node).find("input[type='radio']:checked").val();
+                  } else if ($(node).find(".form-check-inline input[type='checkbox']:checked").length > 0) {
+                    return $(node).find(".form-check-inline input[type='checkbox']:checked").map(function() {
+                      return $(this).val();
+                    }).get().join(", ");
+                  } else if ($(node).find("input[type='checkbox']:checked").length > 0) {
+                    return $(node).find("input[type='checkbox']:checked").val();
+                  } else {
+                    return $(node).text();
+                  }
+                }
+              }
+            }
+          }
+        ]
+    })
+})
+
   })
   .catch(error => console.error('Error:', error));
 
@@ -103,4 +175,5 @@ document.getElementById('search').addEventListener('keyup', function() {
       row.style.display = "none";
     }
   });
+
 });
