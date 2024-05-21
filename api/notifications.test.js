@@ -17,8 +17,7 @@ let db;
 
 beforeAll((done) => {
   db = new sqlite3.Database('./db/espaza.db');
-  db.run(`
-    CREATE TABLE IF NOT EXISTS notifications (
+  db.run(`CREATE TABLE IF NOT EXISTS notifications (
       id INTEGER PRIMARY KEY,
       userId INTEGER,
       orderId INTEGER,
@@ -27,8 +26,7 @@ beforeAll((done) => {
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY(userId) REFERENCES users(id),
       FOREIGN KEY(orderId) REFERENCES orders(id)
-    )
-  `, done);
+    )`, done);
 }, 20000);
 
 afterAll((done) => {
@@ -49,7 +47,8 @@ describe('POST /notifications', () => {
         userId: 1,
         orderId: 1,
         message: 'Your order is being processed',
-      });
+      })
+      .set('x-user-id', '1');
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.message).toEqual('Notification created');
