@@ -176,3 +176,51 @@ describe('post /products', () => {
         });
     });
 });
+
+describe('POST /products/search', () => {
+    it('should return a list of products', async () => {
+        const response = await request(app)
+            .post('/products/search')
+            .send({
+                search: 'apple',
+                price: 5.0,
+                category: 'fruit'
+            });
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('items');
+    });
+
+    it('should return a list of products', async () => {
+        const response = await request(app)
+            .post('/products/search')
+            .send({
+                search: 'apple'
+            });
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('items');
+    });
+
+    it('should return a list of products', async () => {
+        const response = await request(app)
+            .post('/products/search')
+            .send({
+                price: 5.0
+            });
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('items');
+    });
+
+    it('should return a list of products', async () => {
+        const response = await request(app)
+            .post('/products/search')
+            .send({
+                category: 'fruit'
+            });
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('items');
+    });
+});

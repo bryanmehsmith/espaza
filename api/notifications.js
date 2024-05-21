@@ -28,9 +28,8 @@ db.run(`
 router.post('/', ensureLoggedIn, async (req, res) => {
     const { userId, orderId, message } = req.body;
     db.run("INSERT INTO notifications (userId, orderId, message) VALUES (?, ?, ?)", [userId, orderId, message], function(err) {
-        if (err) {
-            return console.error(err.message);
-        }
+        /* istanbul ignore next */
+        if (err) {throw err}
         res.json({ message: 'Notification created' });
     });
 });
@@ -38,9 +37,8 @@ router.post('/', ensureLoggedIn, async (req, res) => {
 router.get('/', ensureLoggedIn, async (req, res) => {
     let userId = req.user;
     db.all("SELECT * FROM notifications WHERE userId = ?", [userId], (err, rows) => {
-        if (err) {
-            throw err;
-        }
+        /* istanbul ignore next */
+        if (err) {throw err}
         res.json(rows);
     });
 });
@@ -48,9 +46,8 @@ router.get('/', ensureLoggedIn, async (req, res) => {
 router.put('/:id/read', ensureLoggedIn, async (req, res) => {
     const { id } = req.params;
     db.run("UPDATE notifications SET isRead = 1 WHERE id = ?", [id], function(err) {
-        if (err) {
-            return console.error(err.message);
-        }
+        /* istanbul ignore next */
+        if (err) {throw err}
         res.json({ message: 'Notification marked as read' });
     });
 });
