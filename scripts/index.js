@@ -14,6 +14,18 @@ function addToCart(userId, itemId) {
     .catch((error) => console.error('Error:', error));
 }
 
+function checkLoginAndAddToCart(userId, productId) {
+    fetch('/auth/isLoggedIn')
+    .then(response => response.json())
+    .then(data => {
+        if (data.loggedIn) {
+            addToCart(userId, productId);
+        } else {
+            window.location.href = '/auth/google';
+        }
+    });
+  }
+
 // Fetch products from the backend
 fetch('/products')
 .then(response => response.json())
@@ -23,7 +35,6 @@ fetch('/products')
         // Create a new div for the product
         let productDiv = document.createElement('div');
         productDiv.className = 'product col-lg-3';
-        let stringData = JSON.stringify(data);
 
         if (product.quantity > 0) {
             // Add the product details to the div
@@ -38,7 +49,7 @@ fetch('/products')
                     <p>${product.description}</p>
                     <div class="d-flex justify-content-between flex-lg-wrap">
                         <p class="text-dark fs-5 fw-bold mb-0">R${product.price} / kg</p>
-                        <button type="button" style="width: 100%;" class="btn btn-warning mt-auto shop-item-button" onclick="addToCart('${data.userId}', '${product.id}')"><i class="fa-solid fa-cart-shopping " style="margin-right: 4%;"></i>Add To Cart</button>
+                        <button type="button" style="width: 100%;" class="btn btn-warning mt-auto shop-item-button" onclick="checkLoginAndAddToCart('${data.userId}', '${product.id}')"><i class="fa-solid fa-cart-shopping " style="margin-right: 4%;"></i>Add To Cart</button>
                     </div>
                 </div>
             </div>
