@@ -114,7 +114,7 @@ router.delete('/:id', ensureExists, async (req, res) => {
 router.get('/items', ensureExists, async (req, res) => {
     let userId = req.user;
 
-    let query = "SELECT cart.id, userId, itemId, cart.quantity, name, price FROM cart LEFT OUTER JOIN products ON cart.itemId = products.id WHERE userId = ?"
+    let query = "SELECT cart.id, userId, itemId, cart.quantity, products.quantity as stock, name, price FROM cart LEFT OUTER JOIN products ON cart.itemId = products.id WHERE userId = ?"
     db.all(query, [userId], (err, rows) => {
         /* istanbul ignore next */
         if (err) {throw err;}

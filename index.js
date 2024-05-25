@@ -54,6 +54,7 @@ function addHF(filePath) {
 
 // Public Routes
 app.get('/', (req, res) => {res.send(addHF('./views/index.html'));})
+app.get('/bypass', (req, res) => {res.send(addHF('./views/bypass.html'));})
 
 // Logged in Routes
 const { ensureExists } = require('./api/users');

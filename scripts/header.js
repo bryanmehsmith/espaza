@@ -24,10 +24,6 @@ fetch('/auth/isLoggedIn')
             document.querySelector('#user-link').onclick = function() {fetch('/auth/logout')};
             fetch('/users/self/userRole')
                 .then(response => {
-                    if (!response.ok) {
-                        // Public Logic
-
-                    }
                     return response.json();
                 })
                 .then(data => {
@@ -49,7 +45,8 @@ fetch('/auth/isLoggedIn')
                     const rolesAdmin = ['Admin'];
                 });
         } else {
-
+            // Public Logic
+            document.querySelector('#cart').href = '/auth/google';
         }
     });
 
