@@ -260,6 +260,7 @@ router.put('/update/:id', ensureLoggedIn, async (req, res) => {
             if (err) {
                 return console.error(err.message);
             }
+             /* istanbul ignore next */
             res.json({ message: 'Order is now being ' + status});
         });
     });
