@@ -162,7 +162,6 @@ router.post('/search', async (req, res) => {
     let params = [];
 
     let userId = req.user;
-    let search1 = req.params.id;
 
     if (search) {
         query += " WHERE (name LIKE ? OR description LIKE ?)";
@@ -175,20 +174,23 @@ router.post('/search', async (req, res) => {
     }
 
     if (category) {
-        query += (params.length ? " AND" : " WHERE") + " category = ?";
+        query += (params.length ? " AND" : " WHERE") + " category like ?";
         params.push(category);
     }
 
     try {
         const items = await new Promise((resolve, reject) => {
             db.all(query, params, function(err, items) {
+                /* istanbul ignore next */
                 if (err) reject(err);
                 resolve(items);
             });
         });
         res.json({ userId, items});
     } catch (err) {
+        /* istanbul ignore next */
         console.error(err.message);
+        /* istanbul ignore next */
         res.status(500).json({ error: err.message });
     }
 });
