@@ -10,6 +10,12 @@ function saveChanges(itemId, payload) {
   .then(data => {
     console.log('Success:', data);
     var totalCell = document.getElementById('product-total-' + itemId);
+
+    var priceCell = document.getElementById("price");
+    var totalAllPrice = Number(priceCell.innerHTML.replace("Total Amount: ZAR", "").replace(".00", "")) - Number(totalCell.textContent);
+    totalAllPrice = totalAllPrice + Number(payload.quantity * document.getElementById('product-price-' + itemId).textContent);
+    priceCell.innerHTML = "Total Amount: ZAR" + totalAllPrice.toString() + ".00";
+
     totalCell.textContent = payload.quantity * document.getElementById('product-price-' + itemId).textContent;
 })
   .catch((error) => console.error('Error:', error));
@@ -95,7 +101,7 @@ fetch('/cart/items')
       return result + item.price * item.quantity;
   }, 0)
 
-  document.getElementById("price").innerHTML = "Total Amout: ZAR" + totalPrice.toString() + ".00";
+  document.getElementById("price").innerHTML = "Total Amount: ZAR" + totalPrice.toString() + ".00";
 
   // Get the purchase button
   let purchaseButton = document.getElementById('btn-purchase');
