@@ -1,0 +1,24 @@
+<div class="container">
+    <h2>Select your role</h2>
+    <button class="btn btn-primary" id="shopper-button" onclick="bypassShopper()">Shopper</button>
+    <button class="btn btn-primary" id="staff-button" onclick="bypassStaff()">Staff</button>
+    <button class="btn btn-primary" id="admin-button" onclick="bypassAdmin()">Admin</button>
+  </div>
+  
+  <script>
+    function bypassShopper() {
+      window.location.href = '/auth/bypassShopper';
+    }
+  </script>
+
+  <script>
+    function bypassStaff() {
+      window.location.href = '/auth/bypassStaff';
+    }
+  </script>
+
+  <script>
+    function bypassAdmin() {
+      window.location.href = '/auth/bypassAdmin';
+    }
+  </script>

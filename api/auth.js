@@ -2,6 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
+const MockStrategy = require('passport-mock-strategy');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const uuid = require('uuid');
@@ -15,6 +16,54 @@ if (!fs.existsSync('./db')){fs.mkdirSync('./db');}
 
 const db = new sqlite3.Database('./db/espaza.db');
 db.run("CREATE TABLE IF NOT EXISTS users (id TEXT, googleId TEXT, name TEXT, role TEXT)");
+
+/* istanbul ignore next */ /*No tests on these as they are to setup test users for marking*/
+db.get("SELECT * FROM users WHERE id = ?", 'shopperId', function(err, user) {
+  if (err) throw err;
+  if (!user) {
+    const newUser = {
+      id: 'shopperId',
+      googleId: 'shopperGoogleId',
+      name: 'Shopper Name',
+      role: 'Shopper'
+    };
+    db.run("INSERT INTO users (id, googleId, name, role) VALUES (?, ?, ?, ?)", newUser.id, newUser.googleId, newUser.name, newUser.role, function(err) {
+      if (err) throw err;
+    });
+  }
+});
+
+/* istanbul ignore next */ /*No tests on these as they are to setup test users for marking*/
+db.get("SELECT * FROM users WHERE id = ?", 'staffId', function(err, user) {
+  if (err) throw err;
+  if (!user) {
+    const newUser = {
+      id: 'staffId',
+      googleId: 'staffGoogleId',
+      name: 'Staff Name',
+      role: 'Staff'
+    };
+    db.run("INSERT INTO users (id, googleId, name, role) VALUES (?, ?, ?, ?)", newUser.id, newUser.googleId, newUser.name, newUser.role, function(err) {
+      if (err) throw err;
+    });
+  }
+});
+
+/* istanbul ignore next */ /*No tests on these as they are to setup test users for marking*/
+db.get("SELECT * FROM users WHERE id = ?", 'adminId', function(err, user) {
+  if (err) throw err;
+  if (!user) {
+    const newUser = {
+      id: 'adminId',
+      googleId: 'adminGoogleId',
+      name: 'Admin Name',
+      role: 'Admin'
+    };
+    db.run("INSERT INTO users (id, googleId, name, role) VALUES (?, ?, ?, ?)", newUser.id, newUser.googleId, newUser.name, newUser.role, function(err) {
+      if (err) throw err;
+    });
+  }
+});
 
 /* istanbul ignore next */
 passport.use(new GoogleStrategy({
@@ -30,7 +79,6 @@ function(accessToken, refreshToken, profile, cb) {
     if (developers.includes(profile.displayName)) {
       role = 'Admin';
     }
-    profile.displayName
     if (!user) {
       user = {
         provider: profile.provider,
@@ -120,6 +168,54 @@ router.get('/logout', (req, res) => {
   res.clearCookie('access_token');
   res.json({ loggedOut: true });
   req.session.destroy();
+});
+
+passport.use(new MockStrategy({
+  name: 'bypassShopper',
+  user: {
+    id: 'shopperId',
+    googleId: 'shopperGoogleId',
+    name: 'Shopper Name',
+    role: 'Shopper'
+  }
+}));
+
+/* istanbul ignore next */ /*No tests on these as they are to setup test users for marking*/
+router.get('/bypassShopper', passport.authenticate('bypassShopper'), (req, res) => {
+  res.cookie('access_token', 'fakeShopperId', { httpOnly: true, sameSite: 'strict' });
+  res.redirect('/');
+});
+
+passport.use(new MockStrategy({
+  name: 'bypassStaff',
+  user: {
+    id: 'staffId',
+    googleId: 'staffGoogleId',
+    name: 'Staff Name',
+    role: 'Staff'
+  }
+}));
+
+/* istanbul ignore next */ /*No tests on these as they are to setup test users for marking*/
+router.get('/bypassStaff', passport.authenticate('bypassStaff'), (req, res) => {
+  res.cookie('access_token', 'fakeStaffId', { httpOnly: true, sameSite: 'strict' });
+  res.redirect('/');
+});
+
+passport.use(new MockStrategy({
+  name: 'bypassAdmin',
+  user: {
+    id: 'adminId',
+    googleId: 'adminGoogleId',
+    name: 'Admin Name',
+    role: 'Admin'
+  }
+}));
+
+/* istanbul ignore next */ /*No tests on these as they are to setup test users for marking*/
+router.get('/bypassAdmin', passport.authenticate('bypassAdmin'), (req, res) => {
+  res.cookie('access_token', 'fakeAdminId', { httpOnly: true, sameSite: 'strict' });
+  res.redirect('/');
 });
 
 module.exports = router;

@@ -21,6 +21,12 @@ function saveChanges(itemId, payload) {
   .catch((error) => console.error('Error:', error));
 }
 
+function checkMaxValueAndSaveChanges(itemId, min, max, value) {
+  const inputValue = Math.max(Math.min(value, max), min);
+  document.getElementById(`productQuantity-${itemId}`).value = inputValue;
+  saveChanges(itemId, {'quantity' : inputValue});
+}
+
 function addToCart(userId, itemId) {
   fetch(`/cart`, {
       method: 'POST',
@@ -82,7 +88,7 @@ fetch('/cart/items')
          ${product.price}
         </td>
         <td>
-          <input type="number" id="productQuantity-${product.itemId}" value="${product.quantity}" onChange="saveChanges('${product.itemId}', {'quantity' : this.value})">
+          <input type="number" id="productQuantity-${product.itemId}" value="${product.quantity}" min="1" max="${product.stock}" onChange="checkMaxValueAndSaveChanges('${product.itemId}', '1', '${product.stock}', this.value)">
         </td>
         <td id="product-total-${product.itemId}">
           ${product.quantity * product.price}
