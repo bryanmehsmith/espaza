@@ -47,22 +47,31 @@ beforeAll((done) => {
                 if (err) reject(err);
                 resolve();
             });
+        }),
+        new Promise((resolve, reject) => {
+            db.run("CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY, userId INTEGER, totalPrice INTEGER, date DATETIME,  status TEXT, paymentStatus TEXT, FOREIGN KEY(userId) REFERENCES users(id))", (err) => {
+                if (err) reject(err);
+                resolve();
+            });
         })
     ]).then(() => {
         db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper-cart', '1-cart', 1], (err) => {
             if (err) {
                 console.error(err);
                 done(err);
+                return;
             }
             db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper-cart', '2-cart', 1], (err) => {
                 if (err) {
                     console.error(err);
                     done(err);
+                    return;
                 }
                 db.run('INSERT INTO orders (userId) VALUES (?)', ['shopper-cart'], (err) => {
                     if (err) {
                         console.error(err);
                         done(err);
+                        return;
                     }
                     done();
                 });
@@ -74,11 +83,31 @@ beforeAll((done) => {
     });
 }, 20000);
 
-afterAll((done) => {
-    db.run('DELETE FROM orders WHERE userId = ? AND itemId = ?', [1, 1], () => {
-        db.close(done);
+function deleteFromTable(table, condition, value) {
+    return new Promise((resolve, reject) => {
+        db.run(`DELETE FROM ${table} WHERE ${condition} = ?`, [value], (err) => {
+            if (err) reject(err);
+            resolve();
+        });
     });
-}, 10000);
+}
+
+afterAll((done) => {
+    Promise.all([
+        deleteFromTable('cart', 'userId', 'shopper-cart'),
+        deleteFromTable('cart', 'userId', 'staff-cart'),
+        deleteFromTable('products', 'id', '1-cart'),
+        deleteFromTable('products', 'id', '2-cart'),
+        deleteFromTable('users', 'id', 'shopper-cart'),
+        deleteFromTable('users', 'id', 'staff-cart'),
+        deleteFromTable('orders', 'id', 'shopper-cart')
+    ]).then(() => {
+        db.close(done);
+    }).catch((err) => {
+        console.error(err);
+        done(err);
+    });
+}, 20000);
 
 describe('POST /orders/create', () => {
     it('should create a new order', async () => {
