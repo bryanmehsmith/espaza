@@ -119,7 +119,7 @@ describe('POST /orders/create', () => {
     it('should create a new order', async () => {
         const res = await request(app).post('/orders/create').set('x-user-id', 'shopper-cart');
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual('Payment successful, order is now being packed');
+        expect(res.body.message).toEqual('Payment successful, order is now being Packed');
     });
 });
 
@@ -133,9 +133,9 @@ describe('POST /orders/add', () => {
 
 describe('PUT /orders/update/:id', () => {
     it('should update the order status and trigger a notification', async () => {
-        const res = await request(app).put('/orders/update/1').set('x-user-id', '1').send({ status: 'packed'});
+        const res = await request(app).put('/orders/update/1').set('x-user-id', '1').send({ status: 'Packed'});
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual('Order is now being packed');
+        expect(res.body.message).toEqual('Order is now Packed');
     });
 });
 

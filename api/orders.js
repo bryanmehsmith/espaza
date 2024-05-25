@@ -212,13 +212,13 @@ router.post('/create', ensureLoggedIn, async (req, res) => {
             }
             
             const userId = req.user;
-            const message = `Your order #${id} is now being packed.`;
+            const message = `Your order #${id} is now being Packed.`;
             db.run("INSERT INTO notifications (userId, orderId, message) VALUES (?, ?, ?)", [userId, id, message], function(err) {
                 /* istanbul ignore next */
                 if (err) {
                     return console.error(err.message);
                 }
-                res.json({ message: 'Payment successful, order is now being packed' });
+                res.json({ message: 'Payment successful, order is now being Packed' });
             });
         });
 
@@ -254,14 +254,14 @@ router.put('/update/:id', ensureLoggedIn, async (req, res) => {
         }
         // Send a notification to the user
         const userId = req.user;
-        const message = "Your order " + id + " is now being " + status + ".";
+        const message = "Your order #" + id + " is now " + status + ".";
         db.run("INSERT INTO notifications (userId, orderId, message) VALUES (?, ?, ?)", [userId, id, message], function(err) {
             /* istanbul ignore next */
             if (err) {
                 return console.error(err.message);
             }
              /* istanbul ignore next */
-            res.json({ message: 'Order is now being ' + status});
+            res.json({ message: 'Order is now ' + status});
         });
     });
 });
