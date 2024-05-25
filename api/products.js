@@ -47,7 +47,7 @@ router.get('/', async (req, res) => {
     if (user && roles.includes(user.role)) {
         query = "SELECT id, name, category, quantity, price, description, image FROM products";
     } else {
-        query = "SELECT id, name, category, price, description, image FROM products"
+        query = "SELECT id, name, category, quantity, price, description, image FROM products"
     }
 
     if (search) {
