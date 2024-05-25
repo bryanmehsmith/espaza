@@ -82,7 +82,7 @@ fetch('/cart/items')
          ${product.price}
         </td>
         <td>
-          <input type="number" id="productQuantity-${product.itemId}" value="${product.quantity}" onChange="saveChanges('${product.itemId}', {'quantity' : this.value})">
+          <input type="number" id="productQuantity-${product.itemId}" value="${product.quantity}" min="1" max="${product.stock}" onChange="saveChanges('${product.itemId}', {'quantity' : this.value})">
         </td>
         <td id="product-total-${product.itemId}">
           ${product.quantity * product.price}
