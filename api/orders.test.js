@@ -53,6 +53,12 @@ beforeAll((done) => {
                 if (err) reject(err);
                 resolve();
             });
+        }),
+        new Promise((resolve, reject) => {
+            db.run("CREATE TABLE IF NOT EXISTS notifications (id INTEGER PRIMARY KEY, userId INTEGER, orderId INTEGER, message TEXT, isRead INTEGER, createdAt DATETIME, FOREIGN KEY(userId) REFERENCES users(id), FOREIGN KEY(orderId) REFERENCES orders(id))", (err) => {
+                if (err) reject(err);
+                resolve();
+            });
         })
     ]).then(() => {
         db.run('INSERT INTO cart (userId, itemId, quantity) VALUES (?, ?, ?)', ['shopper-cart', '1-cart', 1], (err) => {
